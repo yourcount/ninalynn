@@ -583,27 +583,22 @@ function mobileNavLink(item, path) {
 
 function renderHero(page) {
   return `
-    <section class="relative min-h-screen flex items-center justify-center pt-20">
-      <div class="absolute inset-0 z-0 overflow-hidden">
-        <video class="w-full h-full object-cover opacity-40 scale-105" autoplay muted loop playsinline preload="auto">
-          <source src="https://ninalynn.nl/wp-content/uploads/2021/01/Slider_short.mp4" type="video/mp4"/>
-        </video>
-        <div class="absolute inset-0 bg-gradient-to-b from-parchment/20 via-transparent to-parchment"></div>
+    <section class="relative min-h-screen flex items-center justify-center pt-20 px-6">
+      <div class="absolute inset-0 z-0 flex items-center justify-center">
+        <div class="w-4/5 max-w-5xl h-[68vh] min-h-[28rem] max-h-[52rem] arch-frame overflow-hidden opacity-60">
+          <video class="w-full h-full object-cover" autoplay muted loop playsinline preload="auto">
+            <source src="https://ninalynn.nl/wp-content/uploads/2021/01/Slider_short.mp4" type="video/mp4"/>
+          </video>
+        </div>
       </div>
-      <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
-        <div class="relative inline-block py-16 px-8 md:py-20 md:px-24">
-          <div class="absolute inset-0 bg-white/40 backdrop-blur-md organic-window border border-white/30 -z-10 shadow-2xl"></div>
-          ${page.eyebrow ? `<p class="font-handwriting text-lavender text-lg md:text-xl mb-4">${page.eyebrow}</p>` : ''}
-          <h1 class="font-headline text-4xl md:text-7xl text-on-surface leading-tight max-w-4xl">${page.title || ''}</h1>
-          <p class="font-body text-base md:text-lg italic text-on-surface-variant max-w-2xl mx-auto mt-6 mb-10 leading-relaxed">${page.intro || ''}</p>
-          <div class="flex flex-wrap items-center justify-center gap-4">
-            ${(page.primaryCtas || []).map(cta => `<a class="btn-pill font-body tracking-wider text-sm" href="${cta.href}">${cta.label}</a>`).join('')}
-          </div>
-          ${(page.secondaryCtas || []).length ? `
-            <div class="flex flex-wrap items-center justify-center gap-4 mt-6">
-              ${page.secondaryCtas.map(cta => `<a class="btn-ghost font-body" href="${cta.href}">${cta.label}</a>`).join('')}
-            </div>
-          ` : ''}
+      <div class="relative z-10 text-center max-w-2xl">
+        ${page.eyebrow ? `<span class="font-handwriting text-2xl text-sage block mb-6">${page.eyebrow}</span>` : ''}
+        <h1 class="font-headline text-5xl md:text-8xl mb-6 typewriter-cursor">${page.title || ''}</h1>
+        <p class="font-body italic text-on-surface-variant mb-12 text-sm md:text-base bg-parchment/60 backdrop-blur-sm p-4 rounded-lg inline-block">
+          ${page.intro || ''}
+        </p>
+        <div class="flex flex-wrap items-center justify-center gap-4">
+          ${(page.primaryCtas || []).map(cta => `<a class="btn-pill font-body text-xs uppercase tracking-widest" href="${cta.href}">${cta.label}</a>`).join('')}
         </div>
       </div>
       <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 opacity-40 animate-bounce">

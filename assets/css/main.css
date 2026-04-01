@@ -104,3 +104,14 @@ body {
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .mobile-menu.open { transform: translateX(0); }
+
+.arch-frame {
+    border-radius: 12rem 12rem 2rem 2rem;
+}
+
+.typewriter-cursor::after {
+    content: "|";
+    animation: blink-caret .75s step-end infinite;
+    color: #C5A3D1;
+    margin-left: 0.12em;
+}
