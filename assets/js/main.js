@@ -433,7 +433,9 @@ function renderPage({ page, menu, footerLinks, path, lang }) {
         <button class="self-end mb-8" id="menu-close" aria-label="Menu sluiten">
           <span class="material-symbols-outlined text-2xl">close</span>
         </button>
-        ${menu.map(item => mobileNavLink(item, path)).join('')}
+        <div class="flex flex-col gap-6">
+          ${menu.map(item => mobileNavLink(item, path)).join('')}
+        </div>
         <a class="font-handwriting text-xl hover:text-lavender transition-colors" href="${page.switchHref}">${page.switchLabel}</a>
         <div class="flex gap-6 mt-auto">
           <span class="material-symbols-outlined text-lavender">filter_vintage</span>
@@ -481,7 +483,7 @@ function renderHome(page, lang) {
   return `
     ${renderHero(page)}
     <div class="w-48 mx-auto divider-motif my-0"></div>
-    <section class="py-24 md:py-32 px-6 max-w-5xl mx-auto relative">
+    <section class="py-24 md:py-32 px-6 max-w-5xl mx-auto relative editorial-divider">
       <div class="absolute -left-10 top-0 opacity-15 hidden lg:block botanical-float pointer-events-none">
         <span class="material-symbols-outlined text-8xl text-sage">local_florist</span>
       </div>
@@ -490,14 +492,14 @@ function renderHome(page, lang) {
           <span class="font-handwriting text-lavender block text-lg md:text-xl mb-2">${page.tour.kicker}</span>
           <h2 class="font-headline text-3xl md:text-4xl text-on-surface">${page.tour.heading}</h2>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-0 border-y border-sage/20">
+        <div class="tour-ledger grid grid-cols-1 md:grid-cols-12 gap-0">
           <div class="hidden md:contents font-handwriting text-sage text-xs">
             <div class="md:col-span-3 py-4 border-r border-sage/15 px-6">${lang === 'nl' ? 'Datum' : 'Date'}</div>
             <div class="md:col-span-5 py-4 border-r border-sage/15 px-6">${lang === 'nl' ? 'Locatie' : 'Venue'}</div>
             <div class="md:col-span-4 py-4 px-6 text-right">${lang === 'nl' ? 'Toegang' : 'Access'}</div>
           </div>
           ${page.tour.rows.map(row => `
-            <div class="md:col-span-12 group hover:bg-sage/5 transition-colors grid grid-cols-1 md:grid-cols-12 items-center border-t border-sage/15">
+            <div class="tour-row md:col-span-12 group hover:bg-sage/5 transition-colors grid grid-cols-1 md:grid-cols-12 items-center">
               <div class="md:col-span-3 pt-8 md:py-8 px-6 md:border-r border-sage/15">
                 <span class="font-body text-xs text-sage block tracking-widest">${row.date}</span>
               </div>
@@ -514,7 +516,7 @@ function renderHome(page, lang) {
       </div>
       <div class="w-48 mx-auto divider-motif mt-24"></div>
     </section>
-    <section class="py-24 md:py-40 relative overflow-hidden">
+    <section class="py-24 md:py-40 relative overflow-hidden editorial-divider flower-press-corners">
       <div class="absolute top-10 right-10 opacity-10 pointer-events-none botanical-float">
         <span class="material-symbols-outlined text-[200px] text-lavender">wb_iridescent</span>
       </div>
@@ -547,7 +549,7 @@ function renderHome(page, lang) {
       </div>
     </section>
     <div class="divider-gradient max-w-4xl mx-auto"></div>
-    <section class="py-24 md:py-32 px-6 bg-surface-container-low/50">
+    <section class="py-24 md:py-32 px-6 bg-surface-container-low/50 editorial-divider">
       <div class="max-w-7xl mx-auto">
         <div class="mb-16 md:mb-24 text-center reveal-up">
           <h2 class="font-headline text-4xl md:text-5xl mb-4">${page.shopFeature.heading}</h2>
@@ -571,14 +573,70 @@ function renderHome(page, lang) {
   `;
 }
 
+function isItemActive(item, path) {
+  if (path === item.href || path.startsWith(item.href)) return true;
+  return (item.children || []).some(child => path === child.href || path.startsWith(child.href));
+}
+
 function navLink(item, path) {
-  const active = path === item.href;
-  return `<a class="font-body text-sm ${active ? 'text-lavender' : 'text-on-surface'} hover:text-lavender transition-colors" href="${item.href}">${item.label}</a>`;
+  const active = isItemActive(item, path);
+  const hasChildren = Array.isArray(item.children) && item.children.length;
+  if (!hasChildren) {
+    return `<a class="font-body text-sm ${active ? 'text-lavender' : 'text-on-surface'} hover:text-lavender transition-colors" href="${item.href}">${item.label}</a>`;
+  }
+
+  return `
+    <div class="relative group">
+      <a class="font-body text-sm inline-flex items-center gap-2 ${active ? 'text-lavender' : 'text-on-surface'} hover:text-lavender transition-colors" href="${item.href}">
+        <span>${item.label}</span>
+        <span class="material-symbols-outlined text-base leading-none submenu-caret">expand_more</span>
+      </a>
+      <div class="absolute left-1/2 top-full pt-4 -translate-x-1/2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto transition-all duration-300">
+        <div class="min-w-[220px] rounded-[28px] border border-sage/15 bg-parchment/95 backdrop-blur-xl shadow-[0_20px_60px_rgba(58,50,45,0.12)] px-5 py-5">
+          <div class="flex flex-col gap-3">
+            ${item.children.map(child => {
+              const childActive = path === child.href || path.startsWith(child.href);
+              return `<a class="font-body text-[13px] leading-relaxed ${childActive ? 'text-lavender' : 'text-on-surface-variant'} hover:text-lavender transition-colors" href="${child.href}">${child.label}</a>`;
+            }).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 function mobileNavLink(item, path) {
-  const active = path === item.href;
-  return `<a class="font-body text-xl ${active ? 'text-lavender' : ''} hover:text-lavender transition-colors" href="${item.href}">${item.label}</a>`;
+  const active = isItemActive(item, path);
+  const hasChildren = Array.isArray(item.children) && item.children.length;
+  if (!hasChildren) {
+    return `<a class="font-body text-xl ${active ? 'text-lavender' : ''} hover:text-lavender transition-colors" href="${item.href}">${item.label}</a>`;
+  }
+
+  return `
+    <div class="mobile-subnav border-b border-sage/10 pb-5">
+      <button class="mobile-subnav-toggle w-full flex items-center justify-between gap-4 text-left" type="button" aria-expanded="${active ? 'true' : 'false'}">
+        <span class="font-body text-xl ${active ? 'text-lavender' : ''}">${item.label}</span>
+        <span class="material-symbols-outlined text-xl text-on-surface-variant transition-transform duration-300 ${active ? 'rotate-180' : ''}">expand_more</span>
+      </button>
+      <div class="mobile-subnav-panel ${active ? '' : 'hidden'} pt-4 pl-4">
+        <div class="flex flex-col gap-4">
+          <a class="font-body text-sm uppercase tracking-[0.18em] ${path === item.href ? 'text-lavender' : 'text-on-surface-variant'} hover:text-lavender transition-colors" href="${item.href}">${item.label}</a>
+          ${item.children.map(child => {
+            const childActive = path === child.href || path.startsWith(child.href);
+            return `<a class="font-body text-base ${childActive ? 'text-lavender' : 'text-on-surface-variant'} hover:text-lavender transition-colors" href="${child.href}">${child.label}</a>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function escapeHtml(text) {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
 function renderHero(page) {
@@ -591,17 +649,208 @@ function renderHero(page) {
           </video>
         </div>
       </div>
+      <div class="absolute inset-x-0 top-28 bottom-0 z-10 pointer-events-none flex justify-center">
+        <div class="w-[82%] max-w-[1150px] h-full relative">
+          ${renderHeroBloom('left')}
+          ${renderHeroBloom('right')}
+        </div>
+      </div>
       <div class="relative z-10 text-center max-w-2xl mx-auto pt-[18vh]">
         ${page.eyebrow ? `<span class="font-handwriting text-xl md:text-2xl text-sage/80 block mb-5">${page.eyebrow}</span>` : ''}
-        <h1 class="font-headline text-5xl md:text-7xl mb-5"><span class="typewriter-anim">${page.title || ''}</span></h1>
+        <h1 class="font-headline text-5xl md:text-7xl mb-5"><span class="typewriter-anim typewriter-target" data-text="${escapeHtml(page.title || '')}"></span></h1>
         <p class="font-body italic text-on-surface-variant mb-8 text-xs md:text-sm bg-parchment/75 backdrop-blur-sm px-5 py-3 rounded-sm inline-block max-w-[36rem]">
           ${page.intro || ''}
         </p>
         <div class="flex flex-wrap items-center justify-center gap-4">
-          ${(page.primaryCtas || []).map(cta => `<a class="btn-pill font-body text-[10px] uppercase tracking-[0.25em] px-7 py-3" href="${cta.href}">${cta.label}</a>`).join('')}
+          ${(page.primaryCtas || []).map(cta => `<a class="btn-pill btn-pill-hero font-body text-[10px] uppercase tracking-[0.25em] px-7 py-3" href="${cta.href}">${cta.label}</a>`).join('')}
         </div>
       </div>
     </section>
+  `;
+}
+
+function renderHeroBloom(side) {
+  const sideClass = side === 'right'
+    ? 'right-0 translate-x-[85%] md:translate-x-[92%]'
+    : 'left-0 -translate-x-[85%] md:-translate-x-[92%]';
+  const mirrored = side === 'right' ? '-scale-x-100' : '';
+  return `
+    <div class="hero-bloom-wrap absolute bottom-0 ${sideClass} ${mirrored} origin-bottom pointer-events-none">
+      <div class="relative w-[170px] md:w-[220px] h-[300px] md:h-[390px] overflow-visible">
+        <svg class="hero-bloom-svg absolute inset-x-0 bottom-0 z-10 w-full h-full overflow-visible" viewBox="0 0 185 330" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <g class="grass-cluster" stroke="#8BA88E" stroke-linecap="round" opacity="0.75">
+            <path class="grass-blade" d="M8 326C12 298 12 274 10 248C8 220 10 194 16 164" stroke-width="0.9"/>
+            <path class="grass-blade" d="M16 326C22 286 26 246 34 198" stroke-width="1.1"/>
+            <path class="grass-blade" d="M24 326C30 292 38 258 50 214" stroke-width="0.95"/>
+            <path class="grass-blade" d="M34 326C36 270 46 224 54 174" stroke-width="1.1"/>
+            <path class="grass-blade" d="M42 326C40 294 42 264 48 230C54 198 60 176 72 150" stroke-width="0.85"/>
+            <path class="grass-blade" d="M52 326C58 286 64 248 74 206" stroke-width="1.05"/>
+            <path class="grass-blade" d="M56 326C62 274 68 226 80 178" stroke-width="1.5"/>
+            <path class="grass-blade" d="M66 326C74 296 82 264 94 228" stroke-width="0.9"/>
+            <path class="grass-blade" d="M76 326C82 288 90 254 102 216" stroke-width="1"/>
+            <path class="grass-blade" d="M82 326C90 278 104 232 118 186" stroke-width="1.2"/>
+            <path class="grass-blade" d="M92 326C98 298 110 270 124 238" stroke-width="0.85"/>
+            <path class="grass-blade" d="M102 326C112 286 126 246 142 210" stroke-width="1"/>
+            <path class="grass-blade" d="M110 326C118 276 132 236 146 192" stroke-width="1.5"/>
+            <path class="grass-blade" d="M122 326C134 292 146 260 158 226" stroke-width="0.95"/>
+            <path class="grass-blade" d="M132 326C142 296 152 270 164 242" stroke-width="0.85"/>
+            <path class="grass-blade" d="M136 326C144 280 156 246 170 208" stroke-width="1.1"/>
+            <path class="grass-blade" d="M146 326C152 300 160 278 170 252" stroke-width="0.9"/>
+            <path class="grass-blade" d="M156 326C164 294 172 266 180 238" stroke-width="0.8"/>
+          </g>
+          <g class="blooms" stroke-linecap="round" stroke-linejoin="round">
+            <g class="bloom" transform="translate(22 326)">
+              <path class="bloom-stem" d="M0 0C-1-42 4-84 15-122" stroke="#6E8C70" stroke-width="1.9"/>
+              <path class="leaf" d="M9-58C18-55 22-49 21-41C13-43 9-49 9-58Z" fill="#B5C9B2" opacity="0.76"/>
+              <g class="flower-head" transform="translate(15 -122)">
+                <circle r="2.8" fill="#FFF8F0" stroke="#D8B65F" stroke-width="0.8"/>
+                <circle cx="0" cy="-6" r="2.4" fill="#F2D57E"/>
+                <circle cx="5.4" cy="-2.2" r="2.2" fill="#F5E6A0"/>
+                <circle cx="3.5" cy="4.2" r="2.2" fill="#F2D57E"/>
+                <circle cx="-3.5" cy="4.2" r="2.2" fill="#F5E6A0"/>
+                <circle cx="-5.4" cy="-2.2" r="2.2" fill="#F2D57E"/>
+              </g>
+            </g>
+            <g class="bloom" transform="translate(34 326)">
+              <path class="bloom-stem" d="M0 0C0-52 5-103 16-148" stroke="#6E8C70" stroke-width="1.9"/>
+              <path class="leaf" d="M7-74C16-70 20-63 19-54C11-56 7-63 7-74Z" fill="#AFC7AF" opacity="0.72"/>
+              <g class="flower-head" transform="translate(16 -148)">
+                <ellipse cx="0" cy="-9" rx="2.4" ry="7.2" fill="#B78CC5"/>
+                <ellipse cx="0" cy="-5" rx="4" ry="6.5" fill="#A478B8"/>
+                <path d="M-5 -13L-8 -5L-2 -7Z" fill="#8D6BA7"/>
+                <path d="M5 -13L8 -5L2 -7Z" fill="#8D6BA7"/>
+                <path d="M-6 -6L-9 1L-3 -1Z" fill="#9C79B2"/>
+                <path d="M6 -6L9 1L3 -1Z" fill="#9C79B2"/>
+                <path d="M0-16L2-10L-2-10Z" fill="#8D6BA7"/>
+              </g>
+            </g>
+            <g class="bloom" transform="translate(44 326)">
+              <path class="bloom-stem" d="M0 0C2-58 10-116 28-170" stroke="#6E8C70" stroke-width="2.2"/>
+              <path class="leaf" d="M14-82C26-78 32-68 30-58C20-60 13-69 14-82Z" fill="#A8C0A8" opacity="0.8"/>
+              <path class="leaf" d="M10-112C-2-108-8-98-6-88C4-90 10-99 10-112Z" fill="#A8C0A8" opacity="0.75"/>
+              <g class="flower-head" transform="translate(28 -170)">
+                <circle r="4.2" fill="#F8F2F7" stroke="#C9AED8" stroke-width="1"/>
+                <path d="M0-14C5-10 6-4 0-1C-5-4-4-10 0-14Z" fill="#C5A3D1"/>
+                <path d="M13-3C8 2 3 4 0-1C3-6 9-7 13-3Z" fill="#D7B8E2"/>
+                <path d="M8 11C2 7 0 2 4-2C10 1 11 7 8 11Z" fill="#C5A3D1"/>
+                <path d="M-8 11C-11 7 -10 1 -4-2C0 2 -2 7 -8 11Z" fill="#D7B8E2"/>
+                <path d="M-13-3C-9-7 -3-6 0-1C-3 4 -8 2 -13-3Z" fill="#C5A3D1"/>
+              </g>
+            </g>
+            <g class="bloom" transform="translate(66 326)">
+              <path class="bloom-stem" d="M0 0C4-48 14-96 28-138" stroke="#6E8C70" stroke-width="2.1"/>
+              <path class="leaf" d="M11-64C22-60 28-52 26-42C16-44 10-53 11-64Z" fill="#A8C0A8" opacity="0.78"/>
+              <path class="leaf" d="M16-98C8-95 4-88 5-80C14-82 17-89 16-98Z" fill="#B8CDB4" opacity="0.72"/>
+              <g class="flower-head" transform="translate(28 -138)">
+                <circle r="3" fill="#FFF9FC" stroke="#D8BCD9" stroke-width="0.9"/>
+                <ellipse cx="0" cy="-8" rx="2.4" ry="5.2" fill="#E9D8F3"/>
+                <ellipse cx="6.4" cy="-2" rx="2.2" ry="4.8" transform="rotate(58 6.4 -2)" fill="#D3B2E5"/>
+                <ellipse cx="4.5" cy="5.6" rx="2.1" ry="4.5" transform="rotate(120 4.5 5.6)" fill="#E9D8F3"/>
+                <ellipse cx="-4.5" cy="5.6" rx="2.1" ry="4.5" transform="rotate(-120 -4.5 5.6)" fill="#D3B2E5"/>
+                <ellipse cx="-6.4" cy="-2" rx="2.2" ry="4.8" transform="rotate(-58 -6.4 -2)" fill="#E9D8F3"/>
+              </g>
+            </g>
+            <g class="bloom" transform="translate(74 326)">
+              <path class="bloom-stem" d="M0 0C3-40 10-82 18-118" stroke="#6E8C70" stroke-width="1.8"/>
+              <path class="leaf" d="M8-52C16-49 21-43 20-36C12-38 8-44 8-52Z" fill="#B8CDB4" opacity="0.74"/>
+              <g class="flower-head" transform="translate(18 -118)">
+                <circle r="2.1" fill="#FFF7FC" stroke="#CBA8D9" stroke-width="0.6"/>
+                <circle cx="0" cy="-5.5" r="1.8" fill="#E6D2EE"/>
+                <circle cx="4.8" cy="-1.5" r="1.6" fill="#D6B7E2"/>
+                <circle cx="3.1" cy="4.1" r="1.6" fill="#E6D2EE"/>
+                <circle cx="-3.1" cy="4.1" r="1.6" fill="#D6B7E2"/>
+                <circle cx="-4.8" cy="-1.5" r="1.6" fill="#E6D2EE"/>
+              </g>
+            </g>
+            <g class="bloom" transform="translate(86 326)">
+              <path class="bloom-stem" d="M0 0C6-74 20-142 46-212" stroke="#6E8C70" stroke-width="2.8"/>
+              <path class="leaf" d="M19-104C34-100 42-88 39-76C26-80 18-91 19-104Z" fill="#A8C0A8" opacity="0.82"/>
+              <path class="leaf" d="M26-150C12-146 6-132 8-120C21-124 27-136 26-150Z" fill="#A8C0A8" opacity="0.76"/>
+              <path class="leaf" d="M31-182C44-177 49-165 45-153C33-157 29-169 31-182Z" fill="#B8CDB4" opacity="0.7"/>
+              <g class="flower-head" transform="translate(46 -212)">
+                <circle r="5.4" fill="#F8F2F7" stroke="#C9AED8" stroke-width="1"/>
+                <path d="M0-18C6-12 8-5 0-1C-6-5-5-12 0-18Z" fill="#C5A3D1"/>
+                <path d="M16-5C11 2 4 4 0-1C5-8 12-9 16-5Z" fill="#DFC3EA"/>
+                <path d="M12 13C4 10 1 4 5-1C13 1 15 8 12 13Z" fill="#C5A3D1"/>
+                <path d="M0 19C5 12 5 5 0 1C-5 5-5 12 0 19Z" fill="#E8D2F0"/>
+                <path d="M-12 13C-15 8 -13 1 -5-1C-1 4 -4 10 -12 13Z" fill="#C5A3D1"/>
+                <path d="M-16-5C-12-9 -5-8 0-1C-4 4 -11 2 -16-5Z" fill="#DFC3EA"/>
+              </g>
+            </g>
+            <g class="bloom" transform="translate(96 326)">
+              <path class="bloom-stem" d="M0 0C2-62 7-122 12-176" stroke="#6E8C70" stroke-width="1.8"/>
+              <path class="leaf" d="M5-82C15-78 21-70 20-61C11-63 6-71 5-82Z" fill="#AFC7AF" opacity="0.7"/>
+              <g class="flower-head" transform="translate(12 -176)">
+                <path d="M0 -3C7 -15 17 -14 19 -5C15 1 9 5 5 7C0 6 -4 1 -7 -5C-5 -12 3 -13 0 -3Z" fill="#C9828C"/>
+                <path d="M0 -3C4 -17 -5 -20 -12 -10C-12 -1 -7 4 -2 8C2 7 5 2 6 -1Z" fill="#D99CA5"/>
+                <path d="M2 1C9 -5 17 1 14 10C7 14 0 14 -5 10C-3 5 -1 3 2 1Z" fill="#C46F7E"/>
+                <path d="M-1 2C-8 -4 -16 0 -14 9C-8 14 -1 14 4 10C3 6 2 4 -1 2Z" fill="#D6A5AE"/>
+                <circle cx="0" cy="0" r="2.2" fill="#4C3C37"/>
+              </g>
+            </g>
+            <g class="bloom" transform="translate(108 326)">
+              <path class="bloom-stem" d="M0 0C2-54 10-102 24-148" stroke="#6E8C70" stroke-width="2"/>
+              <path class="leaf" d="M10-70C19-66 25-59 24-50C15-52 10-59 10-70Z" fill="#AFC7AF" opacity="0.78"/>
+              <g class="flower-head" transform="translate(24 -148)">
+                <circle r="2.4" fill="#FFF7FB" stroke="#CBA8D9" stroke-width="0.7"/>
+                <ellipse cx="0" cy="-7" rx="1.8" ry="5.1" fill="#DDB7E6"/>
+                <ellipse cx="5.2" cy="-3.5" rx="1.8" ry="4.6" transform="rotate(38 5.2 -3.5)" fill="#EAD2F0"/>
+                <ellipse cx="6.1" cy="2.3" rx="1.8" ry="4.3" transform="rotate(78 6.1 2.3)" fill="#DDB7E6"/>
+                <ellipse cx="2.7" cy="7" rx="1.7" ry="4" transform="rotate(138 2.7 7)" fill="#EAD2F0"/>
+                <ellipse cx="-2.7" cy="7" rx="1.7" ry="4" transform="rotate(-138 -2.7 7)" fill="#DDB7E6"/>
+                <ellipse cx="-6.1" cy="2.3" rx="1.8" ry="4.3" transform="rotate(-78 -6.1 2.3)" fill="#EAD2F0"/>
+                <ellipse cx="-5.2" cy="-3.5" rx="1.8" ry="4.6" transform="rotate(-38 -5.2 -3.5)" fill="#DDB7E6"/>
+              </g>
+            </g>
+            <g class="bloom" transform="translate(120 326)">
+              <path class="bloom-stem" d="M0 0C4-44 14-88 30-132" stroke="#6E8C70" stroke-width="1.95"/>
+              <path class="leaf" d="M14-60C23-58 30-51 29-42C20-43 14-50 14-60Z" fill="#B7CCB4" opacity="0.74"/>
+              <g class="flower-head" transform="translate(30 -132)">
+                <path d="M0-12L3-6L9-8L6-2L12 1L6 3L8 9L2 6L-1 12L-4 6L-10 8L-7 2L-13-1L-7-3L-9-9L-3-6Z" fill="#8E69A8"/>
+                <circle r="3.1" fill="#B793C8"/>
+                <circle r="1.5" fill="#EEE3F1"/>
+              </g>
+            </g>
+            <g class="bloom" transform="translate(132 326)">
+              <path class="bloom-stem" d="M0 0C4-58 16-108 34-152" stroke="#6E8C70" stroke-width="2.2"/>
+              <path class="leaf" d="M16-78C28-76 34-67 33-57C22-58 15-67 16-78Z" fill="#A8C0A8" opacity="0.8"/>
+              <path class="leaf" d="M22-116C11-112 6-102 8-92C19-95 23-104 22-116Z" fill="#B9CFB6" opacity="0.72"/>
+              <g class="flower-head" transform="translate(34 -152)">
+                <circle r="3.8" fill="#F8F2F7" stroke="#C9AED8" stroke-width="0.9"/>
+                <path d="M0-11C4-8 4-3 0-1C-4-3-3-8 0-11Z" fill="#D7B8E2"/>
+                <path d="M10 0C6 3 3 3 1 0C3-3 6-3 10 0Z" fill="#C5A3D1"/>
+                <path d="M0 11C4 8 4 3 0 1C-4 3-4 8 0 11Z" fill="#E8D2F0"/>
+                <path d="M-10 0C-6 3 -3 3 -1 0C-3-3 -6-3 -10 0Z" fill="#C5A3D1"/>
+              </g>
+            </g>
+            <g class="bloom" transform="translate(154 326)">
+              <path class="bloom-stem" d="M0 0C3-46 12-88 24-126" stroke="#6E8C70" stroke-width="1.9"/>
+              <path class="leaf" d="M9-60C18-57 23-50 22-42C14-43 9-50 9-60Z" fill="#AFC7AF" opacity="0.76"/>
+              <g class="flower-head" transform="translate(24 -126)">
+                <circle r="2.6" fill="#FFF7F0" stroke="#D9C094" stroke-width="0.8"/>
+                <circle cx="0" cy="-7" r="2.3" fill="#F7E2A4"/>
+                <circle cx="6" cy="-1.5" r="2.1" fill="#F1D07A"/>
+                <circle cx="3.6" cy="5.2" r="2.1" fill="#F7E2A4"/>
+                <circle cx="-3.6" cy="5.2" r="2.1" fill="#F1D07A"/>
+                <circle cx="-6" cy="-1.5" r="2.1" fill="#F7E2A4"/>
+              </g>
+            </g>
+            <g class="bloom" transform="translate(166 326)">
+              <path class="bloom-stem" d="M0 0C2-38 8-74 14-108" stroke="#6E8C70" stroke-width="1.7"/>
+              <path class="leaf" d="M5-48C12-45 16-40 15-33C8-35 5-40 5-48Z" fill="#B8CDB4" opacity="0.7"/>
+              <g class="flower-head" transform="translate(14 -108)">
+                <circle r="1.9" fill="#FFF7FA" stroke="#D7B6D8" stroke-width="0.6"/>
+                <circle cx="0" cy="-4.8" r="1.5" fill="#E8D6EE"/>
+                <circle cx="4.2" cy="-1.2" r="1.4" fill="#D6B9E2"/>
+                <circle cx="2.6" cy="3.6" r="1.4" fill="#E8D6EE"/>
+                <circle cx="-2.6" cy="3.6" r="1.4" fill="#D6B9E2"/>
+                <circle cx="-4.2" cy="-1.2" r="1.4" fill="#E8D6EE"/>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </div>
+    </div>
   `;
 }
 
@@ -708,6 +957,18 @@ function bindUi() {
     mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
   }
 
+  mobileMenu?.querySelectorAll('.mobile-subnav-toggle').forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      const wrapper = toggle.closest('.mobile-subnav');
+      const panel = wrapper?.querySelector('.mobile-subnav-panel');
+      const icon = toggle.querySelector('.material-symbols-outlined');
+      const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!isOpen));
+      panel?.classList.toggle('hidden', isOpen);
+      icon?.classList.toggle('rotate-180', !isOpen);
+    });
+  });
+
   const revealElements = document.querySelectorAll('.reveal-up');
   if ('IntersectionObserver' in window) {
     const revealObserver = new IntersectionObserver((entries) => {
@@ -736,4 +997,141 @@ function bindUi() {
 
   window.addEventListener('scroll', checkReveal, { passive: true });
   checkReveal();
+
+  initTypewriters();
+  initHeroBlooms();
+}
+
+function initTypewriters() {
+  const targets = document.querySelectorAll('.typewriter-target');
+  targets.forEach((el, index) => {
+    const text = el.dataset.text || '';
+    el.textContent = '';
+    let cursor = 0;
+
+    const typeNext = () => {
+      if (cursor <= text.length) {
+        el.textContent = text.slice(0, cursor);
+        cursor += 1;
+        const currentChar = text.charAt(cursor - 1);
+        let delay = 110 + Math.floor(Math.random() * 70);
+        if (cursor === 1) delay = 280;
+        if (currentChar === ' ') delay += 130;
+        if (/[.,!?]/.test(currentChar)) delay += 90;
+        window.setTimeout(typeNext, delay);
+      }
+    };
+
+    window.setTimeout(typeNext, index * 120);
+  });
+}
+
+function initHeroBlooms() {
+  ensureGsap().then((gsapInstance) => {
+    if (!gsapInstance) return;
+
+    document.querySelectorAll('.hero-bloom-svg').forEach((svg, index) => {
+      const tl = gsapInstance.timeline({ delay: 0.35 + index * 0.18 });
+      const grasses = svg.querySelectorAll('.grass-blade');
+      const blooms = svg.querySelectorAll('.bloom');
+      const stems = svg.querySelectorAll('.bloom-stem');
+      const leaves = svg.querySelectorAll('.leaf');
+      const flowerHeads = svg.querySelectorAll('.flower-head');
+
+      grasses.forEach(preparePathGrowth);
+      stems.forEach(preparePathGrowth);
+      gsapInstance.set(leaves, {
+        transformOrigin: 'bottom center',
+        scale: 0.15,
+        opacity: 0
+      });
+      gsapInstance.set(flowerHeads, {
+        transformOrigin: 'center center',
+        scale: 0.15,
+        opacity: 0
+      });
+
+      tl.to(grasses, {
+        strokeDashoffset: 0,
+        opacity: 0.9,
+        duration: 1.55,
+        stagger: 0.06,
+        ease: 'power1.inOut'
+      }).to(stems, {
+        strokeDashoffset: 0,
+        opacity: 1,
+        duration: 1.25,
+        stagger: 0.12,
+        ease: 'power1.inOut'
+      }, '-=0.72').to(leaves, {
+        scale: 1,
+        opacity: 0.82,
+        duration: 0.55,
+        stagger: 0.06,
+        ease: 'power1.out'
+      }, '-=0.92').to(flowerHeads, {
+        scale: 1,
+        opacity: 1,
+        duration: 0.65,
+        stagger: 0.12,
+        ease: 'back.out(1.5)'
+      }, '-=0.18').add(() => {
+        grasses.forEach((blade, bladeIndex) => {
+          gsapInstance.to(blade, {
+            rotation: bladeIndex % 3 === 0 ? 2.2 : bladeIndex % 2 === 0 ? 1.4 : -1.8,
+            duration: 3.2 + bladeIndex * 0.07,
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut',
+            transformOrigin: 'bottom center'
+          });
+        });
+
+        blooms.forEach((bloom, bloomIndex) => {
+          gsapInstance.to(bloom, {
+            rotation: bloomIndex % 2 === 0 ? 1.4 : -1.2,
+            duration: 3.8 + bloomIndex * 0.16,
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut',
+            transformOrigin: 'bottom center'
+          });
+        });
+
+        leaves.forEach((leaf, leafIndex) => {
+          gsapInstance.to(leaf, {
+            rotation: leafIndex % 2 === 0 ? 3.2 : -2.8,
+            duration: 2.9 + leafIndex * 0.08,
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut',
+            transformOrigin: 'bottom center'
+          });
+        });
+      });
+    });
+  });
+}
+
+function preparePathGrowth(path) {
+  if (!path || typeof path.getTotalLength !== 'function') return;
+  const length = path.getTotalLength();
+  path.style.strokeDasharray = `${length}`;
+  path.style.strokeDashoffset = `${length}`;
+  path.style.opacity = '1';
+}
+
+function ensureGsap() {
+  if (window.gsap) return Promise.resolve(window.gsap);
+  if (window.__ninaGsapPromise) return window.__ninaGsapPromise;
+
+  window.__ninaGsapPromise = new Promise((resolve) => {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js';
+    script.onload = () => resolve(window.gsap);
+    script.onerror = () => resolve(null);
+    document.head.appendChild(script);
+  });
+
+  return window.__ninaGsapPromise;
 }

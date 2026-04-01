@@ -1,18 +1,80 @@
 window.NINA_SITE_DATA = {
   menus: {
     nl: [
-      { label: 'Muziek', href: '/nl/muziek/' },
-      { label: 'Live', href: '/nl/live/' },
-      { label: 'Lessen', href: '/nl/lessen/' },
-      { label: 'Over', href: '/nl/over/' },
+      {
+        label: 'Muziek',
+        href: '/nl/muziek/',
+        children: [
+          { label: 'Albums', href: '/nl/muziek/albums/a-taste-of-the-wild/' },
+          { label: 'Live-opnames', href: '/nl/muziek/live-opnames/' },
+          { label: 'Songteksten', href: '/nl/muziek/albums/a-taste-of-the-wild/songteksten/' }
+        ]
+      },
+      {
+        label: 'Live',
+        href: '/nl/live/',
+        children: [
+          { label: 'Agenda', href: '/nl/live/agenda/' },
+          { label: 'Boekingen', href: '/nl/live/boekingen/' },
+          { label: 'Bruiloften', href: '/nl/live/bruiloften/' }
+        ]
+      },
+      {
+        label: 'Lessen',
+        href: '/nl/lessen/',
+        children: [
+          { label: 'Zangles', href: '/nl/lessen/zangles/' },
+          { label: 'Songwriting', href: '/nl/lessen/songwriting/' }
+        ]
+      },
+      {
+        label: 'Over',
+        href: '/nl/over/',
+        children: [
+          { label: 'Bio', href: '/nl/over/bio/' },
+          { label: 'Band', href: '/nl/over/band/' },
+          { label: 'Pers', href: '/nl/over/pers/' }
+        ]
+      },
       { label: 'Shop', href: '/nl/shop/' },
       { label: 'Contact', href: '/nl/contact/' }
     ],
     en: [
-      { label: 'Music', href: '/en/music/' },
-      { label: 'Live', href: '/en/live/' },
-      { label: 'Lessons', href: '/en/lessons/' },
-      { label: 'About', href: '/en/about/' },
+      {
+        label: 'Music',
+        href: '/en/music/',
+        children: [
+          { label: 'Albums', href: '/en/music/albums/a-taste-of-the-wild/' },
+          { label: 'Live sessions', href: '/en/music/live-sessions/' },
+          { label: 'Lyrics', href: '/en/music/albums/a-taste-of-the-wild/lyrics/' }
+        ]
+      },
+      {
+        label: 'Live',
+        href: '/en/live/',
+        children: [
+          { label: 'Gigs', href: '/en/live/gigs/' },
+          { label: 'Bookings', href: '/en/live/bookings/' },
+          { label: 'Weddings', href: '/en/live/weddings/' }
+        ]
+      },
+      {
+        label: 'Lessons',
+        href: '/en/lessons/',
+        children: [
+          { label: 'Vocal coaching', href: '/en/lessons/vocal-coaching/' },
+          { label: 'Songwriting', href: '/en/lessons/songwriting/' }
+        ]
+      },
+      {
+        label: 'About',
+        href: '/en/about/',
+        children: [
+          { label: 'Bio', href: '/en/about/bio/' },
+          { label: 'Band', href: '/en/about/band/' },
+          { label: 'Press', href: '/en/about/press/' }
+        ]
+      },
       { label: 'Shop', href: '/en/shop/' },
       { label: 'Contact', href: '/en/contact/' }
     ]
