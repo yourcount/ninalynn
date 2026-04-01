@@ -586,7 +586,9 @@ function renderHero(page) {
     <section class="relative min-h-screen flex items-center justify-center pt-20 px-6">
       <div class="absolute inset-0 z-0 flex items-center justify-center">
         <div class="w-[82%] max-w-[1150px] h-[72vh] min-h-[30rem] max-h-[820px] arch-frame overflow-hidden opacity-60">
-          <img class="w-full h-full object-cover" alt="Hero" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJT_cDqe7_w_msSikUjE1pbfPucN15Et2DzA6MdRQ0pNpu4LZt9sVM8BsYzR42PPQvjejfIAmmqVOvp8NDngagUiyONhQXM-tEYmQ_UlPZ-fpg4c17JCWm-vHTaFaqDPOSRh-a_S3H7egihvivfn4NYFiuVQ2T8jf2TzlTMm4ZPNP0Cgmn2geIuWsZ7UlCZkQsCkFT6TASf_ml9lkx5oVMfU9f5hLBg4F6ovJp4VBV_rwJM992EJE3eRLDejQ6qmizlhuja2Caiw"/>
+          <video class="w-full h-full object-cover" autoplay muted loop playsinline preload="auto">
+            <source src="https://ninalynn.nl/wp-content/uploads/2021/01/Slider_short.mp4" type="video/mp4"/>
+          </video>
         </div>
       </div>
       <div class="relative z-10 text-center max-w-2xl -mt-8">
