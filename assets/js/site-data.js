@@ -1,4 +1,21 @@
 window.NINA_SITE_DATA = {
+  socialLinks: [
+    {
+      label: 'Instagram',
+      href: 'https://www.instagram.com/musicbyninalynn/',
+      icon: 'photo_camera'
+    },
+    {
+      label: 'Facebook',
+      href: 'https://www.facebook.com/musicbyninalynn',
+      icon: 'thumb_up'
+    },
+    {
+      label: 'Spotify',
+      href: 'https://open.spotify.com/artist/7wnvfXHe1D6Hw2wBNJeiSO?si=_t79oTI9SvK9hVtjMYtJSA',
+      icon: 'album'
+    }
+  ],
   menus: {
     nl: [
       {
@@ -81,20 +98,16 @@ window.NINA_SITE_DATA = {
   },
   footers: {
     nl: [
-      { label: 'Muziek', href: '/nl/muziek/' },
-      { label: 'Live', href: '/nl/live/' },
-      { label: 'Bruiloften', href: '/nl/live/bruiloften/' },
-      { label: 'Lessen', href: '/nl/lessen/' },
-      { label: 'Shop', href: '/nl/shop/' },
-      { label: 'Contact', href: '/nl/contact/' }
+      { label: 'Nieuwsbrief', href: '#newsletter-signup' },
+      { label: 'Contact', href: '/nl/contact/' },
+      { label: 'Privacy', href: '/nl/privacy/' },
+      { label: 'Voorwaarden', href: '/nl/voorwaarden/' }
     ],
     en: [
-      { label: 'Music', href: '/en/music/' },
-      { label: 'Live', href: '/en/live/' },
-      { label: 'Weddings', href: '/en/live/weddings/' },
-      { label: 'Lessons', href: '/en/lessons/' },
-      { label: 'Shop', href: '/en/shop/' },
-      { label: 'Contact', href: '/en/contact/' }
+      { label: 'Newsletter', href: '#newsletter-signup' },
+      { label: 'Contact', href: '/en/contact/' },
+      { label: 'Privacy', href: '/en/privacy/' },
+      { label: 'Terms', href: '/en/terms/' }
     ]
   },
   pages: {
@@ -133,9 +146,33 @@ window.NINA_SITE_DATA = {
         heading: 'De Curio Shop',
         kicker: 'Verzamelstukken uit de botanische tuin.',
         items: [
-          { title: 'Vinyl', subtitle: '€35.00' },
-          { title: 'CD', subtitle: '€15.00' },
-          { title: 'Linnen Tas', subtitle: '€20.00' }
+          {
+            title: 'A Taste of the Wild',
+            subtitle: 'LP • €30.00',
+            text: 'Het album op vinyl, om de songs warm en tastbaar mee naar huis te nemen.',
+            href: '/nl/shop/',
+            cta: 'Bekijk in shop',
+            image: '/assets/img/shop/a-taste-of-the-wild.jpg',
+            alt: 'A Taste of the Wild albumcover'
+          },
+          {
+            title: 'Hummingbird',
+            subtitle: 'LP • €30.00',
+            text: 'Een lichte, bloemrijke hoes met dezelfde zachte spanning als de plaat zelf.',
+            href: '/nl/shop/',
+            cta: 'Bekijk in shop',
+            image: '/assets/img/shop/hummingbird.jpg',
+            alt: 'Hummingbird albumcover'
+          },
+          {
+            title: 'Linnen Tas',
+            subtitle: 'Merch • €20.00',
+            text: 'De tote met kolibrie-illustratie als klein draagbaar stukje NinaLynn-archief.',
+            href: '/nl/shop/',
+            cta: 'Bekijk in shop',
+            image: '/assets/img/shop/linen-tote.jpg',
+            alt: 'NinaLynn linnen tas met hummingbird illustratie'
+          }
         ]
       }
     },
@@ -174,9 +211,33 @@ window.NINA_SITE_DATA = {
         heading: 'The Curio Shop',
         kicker: 'Collected pieces from the botanical archive.',
         items: [
-          { title: 'Vinyl', subtitle: '€35.00' },
-          { title: 'CD', subtitle: '€15.00' },
-          { title: 'Linen Tote', subtitle: '€20.00' }
+          {
+            title: 'A Taste of the Wild',
+            subtitle: 'LP • €30.00',
+            text: 'The vinyl edition for taking the songs home in their warmest physical form.',
+            href: '/en/shop/',
+            cta: 'View in shop',
+            image: '/assets/img/shop/a-taste-of-the-wild.jpg',
+            alt: 'A Taste of the Wild album cover'
+          },
+          {
+            title: 'Hummingbird',
+            subtitle: 'LP • €30.00',
+            text: 'A floral sleeve that carries the same soft tension and glow as the record itself.',
+            href: '/en/shop/',
+            cta: 'View in shop',
+            image: '/assets/img/shop/hummingbird.jpg',
+            alt: 'Hummingbird album cover'
+          },
+          {
+            title: 'Linen Tote',
+            subtitle: 'Merch • €20.00',
+            text: 'A hummingbird tote: a small portable fragment of the NinaLynn archive.',
+            href: '/en/shop/',
+            cta: 'View in shop',
+            image: '/assets/img/shop/linen-tote.jpg',
+            alt: 'NinaLynn linen tote with hummingbird illustration'
+          }
         ]
       }
     },
@@ -459,6 +520,15 @@ window.NINA_SITE_DATA = {
             { title: 'Bruiloften', text: 'Voor ceremonie, diner of borrel waarbij sfeer, timing en repertoire zorgvuldig mogen landen.', href: '/nl/live/bruiloften/', cta: 'Bekijk bruiloften' },
             { title: 'Lessen', text: 'Voor proeflessen, trajecten en vragen over zangles of songwriting.', href: '/nl/lessen/', cta: 'Bekijk lessen' }
           ]
+        },
+        {
+          kicker: 'Volg mee',
+          heading: 'Luister en kijk verder',
+          cards: [
+            { title: 'Instagram', text: 'Voor studiofragmenten, live beelden en kleine momenten uit het archief.', href: 'https://www.instagram.com/musicbyninalynn/', cta: 'Open Instagram' },
+            { title: 'Facebook', text: 'Voor updates, events en nieuws dat wat langer mag blijven hangen.', href: 'https://www.facebook.com/musicbyninalynn', cta: 'Open Facebook' },
+            { title: 'Spotify', text: 'Voor de platen zelf, direct tussen je andere luisterroutes.', href: 'https://open.spotify.com/artist/7wnvfXHe1D6Hw2wBNJeiSO?si=_t79oTI9SvK9hVtjMYtJSA', cta: 'Luister op Spotify' }
+          ]
         }
       ]
     },
@@ -482,6 +552,15 @@ window.NINA_SITE_DATA = {
             { title: 'Performances', text: 'For venues, programmers and events wanting to book a set or check availability.', href: '/en/live/bookings/', cta: 'Go to bookings' },
             { title: 'Weddings', text: 'For ceremonies, dinners or receptions where atmosphere, timing and repertoire matter.', href: '/en/live/weddings/', cta: 'View weddings' },
             { title: 'Lessons', text: 'For trial lessons, coaching and questions about vocal work or songwriting.', href: '/en/lessons/', cta: 'View lessons' }
+          ]
+        },
+        {
+          kicker: 'Keep listening',
+          heading: 'Follow along elsewhere',
+          cards: [
+            { title: 'Instagram', text: 'For studio fragments, live moments and small pieces from the archive.', href: 'https://www.instagram.com/musicbyninalynn/', cta: 'Open Instagram' },
+            { title: 'Facebook', text: 'For updates, events and longer-form news.', href: 'https://www.facebook.com/musicbyninalynn', cta: 'Open Facebook' },
+            { title: 'Spotify', text: 'For the records themselves, right inside your listening flow.', href: 'https://open.spotify.com/artist/7wnvfXHe1D6Hw2wBNJeiSO?si=_t79oTI9SvK9hVtjMYtJSA', cta: 'Listen on Spotify' }
           ]
         }
       ]

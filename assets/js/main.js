@@ -9,11 +9,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const page = data.pages[path] || buildFallbackPage(path, lang);
   const menu = data.menus[lang] || [];
   const footerLinks = data.footers[lang] || [];
+  const socialLinks = data.socialLinks || [];
 
   document.documentElement.lang = page.lang || lang;
   document.title = `${stripHtml(page.title || 'NinaLynn')} | NinaLynn`;
 
-  renderPage({ page, menu, footerLinks, path, lang });
+  renderPage({ page, menu, footerLinks, socialLinks, path, lang });
   bindUi();
 });
 
@@ -23,6 +24,41 @@ function normalizePath(pathname) {
 
 function stripHtml(text) {
   return text.replace(/<[^>]*>/g, '');
+}
+
+function socialIconSvg(label) {
+  const iconClass = 'social-icon-svg';
+  switch ((label || '').toLowerCase()) {
+    case 'instagram':
+      return `
+        <svg class="${iconClass}" viewBox="0 0 24 24" aria-hidden="true" fill="none">
+          <rect x="3.25" y="3.25" width="17.5" height="17.5" rx="5.25" stroke="currentColor" stroke-width="1.9"></rect>
+          <circle cx="12" cy="12" r="4.1" stroke="currentColor" stroke-width="1.9"></circle>
+          <circle cx="17.25" cy="6.85" r="1.15" fill="currentColor"></circle>
+        </svg>
+      `;
+    case 'facebook':
+      return `
+        <svg class="${iconClass}" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+          <path d="M13.42 20.75v-7.17h2.43l.36-2.8h-2.79V9c0-.81.23-1.36 1.38-1.36h1.47V5.13c-.25-.03-1.13-.11-2.15-.11-2.12 0-3.58 1.29-3.58 3.67v2.09H8.1v2.8h2.44v7.17h2.88Z"></path>
+        </svg>
+      `;
+    case 'spotify':
+      return `
+        <svg class="${iconClass}" viewBox="0 0 24 24" aria-hidden="true" fill="none">
+          <circle cx="12" cy="12" r="8.8" stroke="currentColor" stroke-width="1.8"></circle>
+          <path d="M8 10.1c2.85-1 5.9-.89 8.69.39" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path>
+          <path d="M8.82 13c2.19-.69 4.59-.58 6.62.35" stroke="currentColor" stroke-width="1.55" stroke-linecap="round"></path>
+          <path d="M9.52 15.62c1.58-.45 3.27-.38 4.73.2" stroke="currentColor" stroke-width="1.45" stroke-linecap="round"></path>
+        </svg>
+      `;
+    default:
+      return `
+        <svg class="${iconClass}" viewBox="0 0 24 24" aria-hidden="true" fill="none">
+          <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"></circle>
+        </svg>
+      `;
+  }
 }
 
 function buildFallbackPage(path, lang) {
@@ -388,7 +424,7 @@ function buildFallbackPage(path, lang) {
   };
 }
 
-function renderPage({ page, menu, footerLinks, path, lang }) {
+function renderPage({ page, menu, footerLinks, socialLinks, path, lang }) {
   const app = document.getElementById('app');
   app.innerHTML = `
     <svg class="absolute" height="0" width="0" aria-hidden="true">
@@ -400,23 +436,23 @@ function renderPage({ page, menu, footerLinks, path, lang }) {
     </svg>
 
     <header class="fixed top-0 w-full z-50 sticky-nav" id="main-header">
-      <nav class="max-w-[1600px] mx-auto px-4 md:px-16 py-4 md:py-6 flex items-center justify-between">
+      <nav class="site-header-nav max-w-[1600px] mx-auto px-4 md:px-16 py-[1.125rem] md:py-5 flex items-center justify-between">
         <div class="hidden md:flex gap-10 items-center flex-1">
           ${menu.slice(0, 3).map(item => navLink(item, path)).join('')}
         </div>
         <div class="flex-none flex justify-center items-center gap-2 md:gap-4">
-          <a href="/${lang}/" class="font-headline text-xl md:text-2xl tracking-[0.18em] uppercase text-on-surface hover:text-lavender transition-colors">NinaLynn</a>
+          <a href="/${lang}/" class="font-headline leading-none text-xl md:text-2xl tracking-[0.18em] uppercase text-on-surface hover:text-lavender transition-colors">NinaLynn</a>
           <div class="hidden md:flex gap-2 items-center text-[11px] uppercase tracking-[0.25em] text-on-surface-variant">
-            <a class="text-on-surface" href="${path}">${lang.toUpperCase()}</a>
+            <a class="leading-none text-on-surface" href="${path}">${lang.toUpperCase()}</a>
             <span>/</span>
-            <a class="hover:text-lavender transition-colors" href="${page.switchHref}">${page.switchLabel}</a>
+            <a class="leading-none hover:text-lavender transition-colors" href="${page.switchHref}">${page.switchLabel}</a>
           </div>
         </div>
         <div class="hidden md:flex gap-10 items-center flex-1 justify-end">
           ${menu.slice(3).map(item => navLink(item, path)).join('')}
-          <div class="flex gap-4 ml-4">
-            <span class="material-symbols-outlined text-lavender text-xl">filter_vintage</span>
-            <span class="material-symbols-outlined text-sage text-xl">eco</span>
+          <div class="flex gap-2 ml-4">
+            <a class="header-social-link" href="https://www.instagram.com/musicbyninalynn/" target="_blank" rel="noreferrer" aria-label="Instagram" title="Instagram">${socialIconSvg('Instagram')}</a>
+            <a class="header-social-link header-social-link-spotify" href="https://open.spotify.com/artist/7wnvfXHe1D6Hw2wBNJeiSO?si=_t79oTI9SvK9hVtjMYtJSA" target="_blank" rel="noreferrer" aria-label="Spotify" title="Spotify">${socialIconSvg('Spotify')}</a>
           </div>
         </div>
         <div class="md:hidden flex items-center gap-3">
@@ -445,9 +481,9 @@ function renderPage({ page, menu, footerLinks, path, lang }) {
         <div class="pt-2 border-t border-sage/10">
           <a class="font-body text-sm uppercase tracking-[0.2em] text-on-surface-variant hover:text-lavender transition-colors" href="${page.switchHref}">${lang.toUpperCase()} / ${page.switchLabel}</a>
         </div>
-        <div class="flex gap-6 mt-auto">
-          <span class="material-symbols-outlined text-lavender">filter_vintage</span>
-          <span class="material-symbols-outlined text-sage">eco</span>
+        <div class="flex gap-3 mt-auto pt-2">
+          <a class="header-social-link" href="https://www.instagram.com/musicbyninalynn/" target="_blank" rel="noreferrer" aria-label="Instagram" title="Instagram">${socialIconSvg('Instagram')}</a>
+          <a class="header-social-link header-social-link-spotify" href="https://open.spotify.com/artist/7wnvfXHe1D6Hw2wBNJeiSO?si=_t79oTI9SvK9hVtjMYtJSA" target="_blank" rel="noreferrer" aria-label="Spotify" title="Spotify">${socialIconSvg('Spotify')}</a>
         </div>
       </div>
     </div>
@@ -460,24 +496,50 @@ function renderPage({ page, menu, footerLinks, path, lang }) {
       <div class="absolute bottom-0 right-0 p-8 opacity-15 pointer-events-none">
         <span class="material-symbols-outlined text-6xl text-lavender">spa</span>
       </div>
-      <div class="max-w-4xl mx-auto flex flex-col items-center gap-12 md:gap-16 reveal-up">
-        <div class="text-center">
-          <p class="font-handwriting text-2xl md:text-3xl italic">${lang === 'nl' ? 'Word lid van de bloementuin' : 'Join the garden archive'}</p>
+      <div class="max-w-4xl mx-auto flex flex-col items-center gap-12 md:gap-16 reveal-up reveal-paper-soft">
+        <div class="text-center" id="newsletter-signup">
+          <p class="font-handwriting text-3xl md:text-[3rem] leading-none italic">${lang === 'nl' ? 'Word lid van de bloementuin' : 'Become part of the flower garden'}</p>
         </div>
-        <div class="w-full max-w-xl text-center space-y-8 p-10 md:p-12 hand-drawn-border bg-white/30 backdrop-blur-sm">
-          <p class="font-body text-sm md:text-base leading-relaxed text-on-surface-variant">
+        <div class="w-full max-w-3xl text-center space-y-6 md:space-y-7">
+          <form class="newsletter-shell" id="newsletter-form" novalidate>
+            <label class="sr-only" for="newsletter-email">${lang === 'nl' ? 'E-mailadres' : 'Email address'}</label>
+            <input
+              class="newsletter-input"
+              id="newsletter-email"
+              name="email"
+              type="email"
+              inputmode="email"
+              autocomplete="email"
+              placeholder="${lang === 'nl' ? 'E-mail adres' : 'E-mail address'}"
+              required
+            />
+            <button class="newsletter-submit font-body" type="submit">${lang === 'nl' ? 'Aanmelden' : 'Sign up'}</button>
+          </form>
+          <p class="newsletter-feedback font-body text-xs md:text-sm text-on-surface-variant min-h-[1.25rem]" id="newsletter-feedback" aria-live="polite">
             ${lang === 'nl'
-              ? 'Nieuws, nieuwe muziek, optredens en kleine notities uit het archief verschijnen hier als eerste.'
-              : 'News, new music, performances and small notes from the archive tend to appear here first.'}
+              ? 'Nieuws, nieuwe muziek en optredens landen hier als eerste.'
+              : 'News, new music and performances arrive here first.'}
           </p>
-          <div class="flex flex-wrap justify-center gap-4 md:gap-6">
-            ${footerLinks.map(item => `<a class="btn-ghost font-body" href="${item.href}">${item.label}</a>`).join('')}
+          <div class="flex flex-wrap justify-center gap-x-8 gap-y-4 md:gap-x-12">
+            ${footerLinks.map(item => `<a class="footer-meta-link font-body" href="${item.href}">${item.label}</a>`).join('')}
           </div>
         </div>
-        <div class="flex gap-10 text-sage/60">
-          <span class="material-symbols-outlined">share</span>
-          <span class="material-symbols-outlined">music_note</span>
-          <span class="material-symbols-outlined">mail</span>
+        <div class="flex gap-8 md:gap-10 text-sage/70 items-center">
+          ${socialLinks.map(item => `
+            <a
+              class="footer-social-link ${item.label === 'Spotify' ? 'footer-social-link-spotify' : ''}"
+              href="${item.href}"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="${item.label}"
+              title="${item.label}"
+            >
+              ${socialIconSvg(item.label)}
+            </a>
+          `).join('')}
+          <a class="footer-social-link" href="mailto:info@ninalynn.nl" aria-label="Email" title="Email">
+            <span class="material-symbols-outlined">mail</span>
+          </a>
         </div>
         <div class="text-[10px] font-body uppercase tracking-[0.2em] opacity-40 text-center">
           &copy; NinaLynn. Hand-annotated in the Botanical Archive.
@@ -490,8 +552,8 @@ function renderPage({ page, menu, footerLinks, path, lang }) {
 function renderHome(page, lang) {
   return `
     ${renderHero(page)}
-    <div class="w-48 mx-auto divider-motif my-0"></div>
-    <section class="py-20 md:py-32 px-4 md:px-6 max-w-5xl mx-auto relative editorial-divider">
+    <div class="w-48 mx-auto divider-motif draw-divider my-0"></div>
+    <section class="py-20 md:py-32 px-4 md:px-6 max-w-5xl mx-auto relative editorial-divider reveal-section reveal-paper-lift">
       <div class="absolute -left-10 top-0 opacity-15 hidden lg:block botanical-float pointer-events-none">
         <span class="material-symbols-outlined text-8xl text-sage">local_florist</span>
       </div>
@@ -501,33 +563,33 @@ function renderHome(page, lang) {
           <h2 class="font-headline text-3xl md:text-4xl text-on-surface">${page.tour.heading}</h2>
         </div>
         <div class="tour-ledger grid grid-cols-1 md:grid-cols-12 gap-0">
-          <div class="hidden md:contents font-handwriting text-sage text-xs">
+          <div class="hidden md:contents font-body uppercase tracking-[0.18em] text-sage text-[11px]">
             <div class="md:col-span-3 py-4 border-r border-sage/15 px-6">${lang === 'nl' ? 'Datum' : 'Date'}</div>
             <div class="md:col-span-5 py-4 border-r border-sage/15 px-6">${lang === 'nl' ? 'Locatie' : 'Venue'}</div>
             <div class="md:col-span-4 py-4 px-6 text-right">${lang === 'nl' ? 'Toegang' : 'Access'}</div>
           </div>
           ${page.tour.rows.map(row => `
-            <div class="tour-row md:col-span-12 group hover:bg-sage/5 transition-colors grid grid-cols-1 md:grid-cols-12 items-center">
+            <div class="tour-row tour-row-stagger md:col-span-12 group hover:bg-sage/5 transition-colors grid grid-cols-1 md:grid-cols-12 items-center">
               <div class="md:col-span-3 pt-8 md:py-8 px-6 md:border-r border-sage/15">
-                <span class="md:hidden font-handwriting text-sage text-xs block mb-2">${lang === 'nl' ? 'Datum' : 'Date'}</span>
+                <span class="md:hidden font-body uppercase tracking-[0.18em] text-sage text-[11px] block mb-2">${lang === 'nl' ? 'Datum' : 'Date'}</span>
                 <span class="font-body text-xs text-sage block tracking-widest">${row.date}</span>
               </div>
               <div class="md:col-span-5 px-6 py-2 md:py-8 md:border-r border-sage/15">
-                <span class="md:hidden font-handwriting text-sage text-xs block mb-2">${lang === 'nl' ? 'Locatie' : 'Venue'}</span>
+                <span class="md:hidden font-body uppercase tracking-[0.18em] text-sage text-[11px] block mb-2">${lang === 'nl' ? 'Locatie' : 'Venue'}</span>
                 <h3 class="font-headline text-2xl">${row.venue}</h3>
-                <p class="font-handwriting text-sm text-on-surface-variant">${row.location}</p>
+                <p class="font-body text-sm text-on-surface-variant">${row.location}</p>
               </div>
               <div class="md:col-span-4 pb-8 md:py-8 px-6 flex md:justify-end">
-                <span class="md:hidden font-handwriting text-sage text-xs block mb-2 w-full">${lang === 'nl' ? 'Toegang' : 'Access'}</span>
+                <span class="md:hidden font-body uppercase tracking-[0.18em] text-sage text-[11px] block mb-2 w-full">${lang === 'nl' ? 'Toegang' : 'Access'}</span>
                 <a class="btn-ghost font-body" href="${row.href}">${row.cta}</a>
               </div>
             </div>
           `).join('')}
         </div>
       </div>
-      <div class="w-48 mx-auto divider-motif mt-24"></div>
+      <div class="w-48 mx-auto divider-motif draw-divider mt-24"></div>
     </section>
-    <section class="py-24 md:py-40 relative overflow-hidden editorial-divider flower-press-corners">
+    <section class="py-24 md:py-40 relative overflow-hidden editorial-divider flower-press-corners reveal-section reveal-paper-lift">
       <div class="absolute top-10 right-10 opacity-10 pointer-events-none botanical-float">
         <span class="material-symbols-outlined text-[200px] text-lavender">wb_iridescent</span>
       </div>
@@ -546,10 +608,10 @@ function renderHome(page, lang) {
             <span class="font-handwriting text-sage text-lg md:text-xl block">${page.albumFeature.kicker}</span>
             <h2 class="font-headline text-4xl md:text-5xl lg:text-6xl text-on-surface leading-tight">${page.albumFeature.heading}</h2>
           </div>
-          <p class="font-body text-base md:text-lg leading-relaxed text-on-surface-variant italic border-l-4 border-lavender/20 pl-8">${page.albumFeature.text}</p>
+          <p class="soft-highlight-block font-body text-base md:text-lg leading-relaxed text-on-surface-variant italic border-l-4 border-lavender/20 pl-8 py-2">${page.albumFeature.text}</p>
           <div class="space-y-5 font-body">
             ${page.albumFeature.tracks.map(track => `
-              <div class="flex justify-between items-center group/track cursor-pointer border-b border-sage/10 pb-4">
+              <div class="soft-highlight-row flex justify-between items-center group/track cursor-pointer border-b border-sage/10 pb-4">
                 <span class="group-hover/track:translate-x-2 group-hover/track:text-lavender transition-all">${track.title}</span>
                 <span class="text-sm text-sage">${track.time}</span>
               </div>
@@ -559,25 +621,33 @@ function renderHome(page, lang) {
         </div>
       </div>
     </section>
-    <div class="divider-gradient max-w-4xl mx-auto"></div>
-    <section class="py-24 md:py-32 px-6 bg-surface-container-low/50 editorial-divider">
+    <div class="divider-gradient draw-divider max-w-4xl mx-auto"></div>
+    <section class="py-24 md:py-32 px-6 bg-surface-container-low/50 editorial-divider reveal-section reveal-paper-lift">
       <div class="max-w-7xl mx-auto">
         <div class="mb-16 md:mb-24 text-center reveal-up">
           <h2 class="font-headline text-4xl md:text-5xl mb-4">${page.shopFeature.heading}</h2>
           <p class="font-handwriting text-lg md:text-xl text-sage">${page.shopFeature.kicker}</p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-24">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-14">
           ${page.shopFeature.items.map((item, index) => `
-            <div class="flex flex-col gap-8 ${index === 0 ? 'md:mt-16' : index === 2 ? 'md:-mt-8' : ''} group reveal-up" style="transition-delay:${index * 0.1}s">
-              <div class="relative overflow-hidden aspect-[4/5] watercolor-edge bg-white/35 flex items-center justify-center">
-                <span class="material-symbols-outlined text-[110px] text-lavender/50">${index === 0 ? 'album' : index === 1 ? 'radio' : 'shopping_bag'}</span>
-              </div>
-              <div class="text-center">
+            <article class="shop-card shop-card-stagger flex flex-col gap-6 ${index === 0 ? 'md:mt-12' : index === 2 ? 'md:-mt-6' : ''} group reveal-up" style="transition-delay:${index * 0.1}s">
+              <a class="shop-card-media relative overflow-hidden bg-white/50 aspect-[4/5] block" href="${item.href}">
+                <img class="shop-card-image w-full h-full object-cover" src="${item.image}" alt="${item.alt || item.title}" loading="lazy"/>
+                <div class="shop-card-overlay">
+                  <span class="shop-card-chip font-body">${item.subtitle}</span>
+                  <span class="btn-ghost font-body">${item.cta}</span>
+                </div>
+              </a>
+              <div class="text-center px-2">
                 <h4 class="font-headline text-2xl mb-1">${item.title}</h4>
-                <p class="font-handwriting text-lavender">${item.subtitle}</p>
+                <p class="font-body uppercase tracking-[0.14em] text-sm text-lavender mb-3">${item.subtitle}</p>
+                <p class="font-body text-sm leading-relaxed text-on-surface-variant max-w-[18rem] mx-auto">${item.text || ''}</p>
               </div>
-            </div>
+            </article>
           `).join('')}
+        </div>
+        <div class="mt-14 md:mt-16 text-center reveal-up" style="transition-delay:0.35s">
+          <a class="btn-pill font-body tracking-wider" href="${lang === 'nl' ? '/nl/shop/' : '/en/shop/'}">${lang === 'nl' ? 'Bekijk de volledige shop' : 'Browse the full shop'}</a>
         </div>
       </div>
     </section>
@@ -593,7 +663,7 @@ function navLink(item, path) {
   const active = isItemActive(item, path);
   const hasChildren = Array.isArray(item.children) && item.children.length;
   if (!hasChildren) {
-    return `<a class="font-body text-sm ${active ? 'text-lavender' : 'text-on-surface'} hover:text-lavender transition-colors" href="${item.href}">${item.label}</a>`;
+    return `<a class="font-body leading-none text-sm ${active ? 'text-lavender' : 'text-on-surface'} hover:text-lavender transition-colors" href="${item.href}">${item.label}</a>`;
   }
 
   const menuPositionClass = item.label === 'Muziek' || item.label === 'Music'
@@ -602,7 +672,7 @@ function navLink(item, path) {
 
   return `
     <div class="relative group">
-      <a class="font-body text-sm inline-flex items-center gap-2 ${active ? 'text-lavender' : 'text-on-surface'} hover:text-lavender transition-colors" href="${item.href}">
+      <a class="font-body leading-none text-sm inline-flex items-center gap-2 ${active ? 'text-lavender' : 'text-on-surface'} hover:text-lavender transition-colors" href="${item.href}">
         <span>${item.label}</span>
         <span class="material-symbols-outlined text-base leading-none submenu-caret">expand_more</span>
       </a>
@@ -656,21 +726,22 @@ function escapeHtml(text) {
 
 function renderHero(page) {
   return `
-    <section class="relative min-h-[80vh] sm:min-h-[40rem] md:min-h-screen px-4 md:px-6 pt-24 md:pt-28">
-      <div class="absolute inset-x-0 top-24 md:top-28 bottom-0 z-0 flex items-start justify-center">
-        <div class="w-[90%] sm:w-[88%] md:w-[82%] max-w-[1150px] h-[80vh] sm:h-[28rem] md:h-full arch-frame overflow-hidden opacity-60">
-          <video class="block w-full h-full object-cover" autoplay muted loop playsinline preload="auto">
+    <section class="hero-home-scene relative min-h-[80vh] sm:min-h-[40rem] md:min-h-screen px-4 md:px-6 pt-16 md:pt-20">
+      <div class="absolute inset-x-0 top-16 md:top-20 bottom-0 z-0 flex items-start justify-center">
+        <div class="hero-frame-backdrop hero-parallax-frame w-[90%] sm:w-[88%] md:w-[82%] max-w-[1150px] h-[80vh] sm:h-[28rem] md:h-full arch-frame overflow-hidden">
+          <div class="hero-frame-tint hero-parallax-tint absolute inset-0"></div>
+          <video class="hero-parallax-video block w-full h-full object-cover" autoplay muted loop playsinline preload="auto">
             <source src="https://ninalynn.nl/wp-content/uploads/2021/01/Slider_short.mp4" type="video/mp4"/>
           </video>
         </div>
       </div>
-      <div class="absolute inset-x-0 top-24 md:top-28 bottom-0 z-10 pointer-events-none flex justify-center">
+      <div class="hero-parallax-blooms absolute inset-x-0 top-16 md:top-20 bottom-0 z-10 pointer-events-none flex justify-center">
         <div class="w-[90%] sm:w-[88%] md:w-[82%] max-w-[1150px] h-[80vh] sm:h-[28rem] md:h-full relative">
           ${renderHeroBloom('left')}
           ${renderHeroBloom('right')}
         </div>
       </div>
-      <div class="relative z-10 text-center max-w-2xl mx-auto pt-24 sm:pt-28 md:pt-[18vh] px-4">
+      <div class="hero-parallax-content relative z-10 text-center max-w-2xl mx-auto pt-20 sm:pt-24 md:pt-[16vh] px-4">
         ${page.eyebrow ? `<span class="font-handwriting text-lg md:text-2xl text-sage/80 block mb-4 md:mb-5">${page.eyebrow}</span>` : ''}
         <h1 class="font-headline text-4xl sm:text-5xl md:text-7xl mb-4 md:mb-5"><span class="typewriter-anim typewriter-target" data-text="${escapeHtml(page.title || '')}"></span></h1>
         <p class="font-body italic text-on-surface-variant mb-6 md:mb-8 text-[11px] md:text-sm bg-parchment/75 backdrop-blur-sm px-4 md:px-5 py-3 rounded-sm inline-block max-w-[36rem]">
@@ -694,10 +765,10 @@ function renderHeroBloom(side) {
       <div class="relative w-[170px] md:w-[220px] h-[300px] md:h-[390px] overflow-visible">
         <svg class="hero-soil-svg absolute inset-x-0 -bottom-[6px] z-[14] w-full h-[5.1rem] md:h-[5.7rem] overflow-visible" viewBox="0 0 185 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <g class="soil-bed">
-            <path class="soil-fill" d="M2 50C18 47 31 45 46 43C63 41 80 42 97 39C118 35 138 28 183 18V56H2V50Z" fill="#83705D" fill-opacity="0.96"/>
-            <path class="soil-fill-secondary" d="M3 54C22 50 37 48 55 47C72 46 88 48 105 45C128 41 148 34 181 26V56H3V54Z" fill="#685647" fill-opacity="0.84"/>
-            <path class="soil-ridge" d="M2 50C18 47 31 45 46 43C63 41 80 42 97 39C118 35 138 28 183 18" stroke="#655345" stroke-opacity="0.9" stroke-width="1.9" stroke-linecap="round"/>
-            <path class="soil-ridge" d="M13 47C29 45 42 43 56 43C72 43 87 45 102 43C123 39 143 34 171 25" stroke="#A7917A" stroke-opacity="0.34" stroke-width="0.95" stroke-linecap="round"/>
+            <path class="soil-fill" d="M2 50C18 47 31 45 46 43C63 41 80 42 97 39C118 35 136 29 176 20V56H2V50Z" fill="#83705D" fill-opacity="0.96"/>
+            <path class="soil-fill-secondary" d="M3 54C22 50 37 48 55 47C72 46 88 48 105 45C126 41 145 35 174 28V56H3V54Z" fill="#685647" fill-opacity="0.84"/>
+            <path class="soil-ridge" d="M2 50C18 47 31 45 46 43C63 41 80 42 97 39C118 35 136 29 176 20" stroke="#655345" stroke-opacity="0.9" stroke-width="1.9" stroke-linecap="round"/>
+            <path class="soil-ridge" d="M13 47C29 45 42 43 56 43C72 43 87 45 102 43C123 39 141 35 166 27" stroke="#A7917A" stroke-opacity="0.34" stroke-width="0.95" stroke-linecap="round"/>
             <circle class="soil-speck" cx="24" cy="48" r="1.4" fill="#5D4A3C" fill-opacity="0.55"/>
             <circle class="soil-speck" cx="58" cy="46" r="1.2" fill="#5D4A3C" fill-opacity="0.46"/>
             <circle class="soil-speck" cx="86" cy="45" r="1.3" fill="#5D4A3C" fill-opacity="0.5"/>
@@ -887,7 +958,7 @@ function renderPrimarySection(page, lang) {
   if (!first) return '';
   return `
     <div class="w-48 mx-auto divider-motif my-0"></div>
-    <section class="py-24 md:py-32 px-6 max-w-6xl mx-auto relative">
+    <section class="py-24 md:py-32 px-6 max-w-6xl mx-auto relative reveal-section reveal-paper-lift">
       <div class="absolute -left-10 top-0 opacity-15 hidden lg:block botanical-float pointer-events-none">
         <span class="material-symbols-outlined text-8xl text-sage">local_florist</span>
       </div>
@@ -917,7 +988,7 @@ function renderSecondarySection(page, lang) {
   const second = (page.sections || [])[1];
   if (!second) return '';
   return `
-    <section class="py-24 md:py-32 px-6 bg-surface-container-low/50 relative overflow-hidden">
+    <section class="py-24 md:py-32 px-6 bg-surface-container-low/50 relative overflow-hidden reveal-section reveal-paper-lift">
       <div class="absolute top-10 right-10 opacity-10 pointer-events-none botanical-float">
         <span class="material-symbols-outlined text-[200px] text-lavender">wb_iridescent</span>
       </div>
@@ -1001,7 +1072,7 @@ function bindUi() {
     });
   });
 
-  const revealElements = document.querySelectorAll('.reveal-up');
+  const revealElements = document.querySelectorAll('.reveal-up, .reveal-section');
   if ('IntersectionObserver' in window) {
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -1030,8 +1101,54 @@ function bindUi() {
   window.addEventListener('scroll', checkReveal, { passive: true });
   checkReveal();
 
+  bindNewsletterForm();
   initTypewriters();
   initHeroBlooms();
+  initHomepageMotion();
+}
+
+function bindNewsletterForm() {
+  const form = document.getElementById('newsletter-form');
+  const input = document.getElementById('newsletter-email');
+  const feedback = document.getElementById('newsletter-feedback');
+  if (!form || !input || !feedback) return;
+
+  const isNl = document.documentElement.lang !== 'en';
+  const defaultMessage = isNl
+    ? 'Nieuws, nieuwe muziek en optredens landen hier als eerste.'
+    : 'News, new music and performances arrive here first.';
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const email = input.value.trim();
+
+    if (!email || !input.checkValidity()) {
+      feedback.textContent = isNl
+        ? 'Vul eerst een geldig e-mailadres in.'
+        : 'Please enter a valid email address first.';
+      feedback.classList.add('newsletter-feedback-error');
+      return;
+    }
+
+    feedback.classList.remove('newsletter-feedback-error');
+    feedback.textContent = isNl
+      ? 'Je mailapp wordt geopend om je inschrijving af te ronden.'
+      : 'Your mail app will open to complete the subscription.';
+
+    const subject = encodeURIComponent(isNl ? 'Inschrijving nieuwsbrief NinaLynn' : 'NinaLynn newsletter signup');
+    const body = encodeURIComponent(
+      isNl
+        ? `Hoi NinaLynn,\n\nIk wil me graag inschrijven voor de nieuwsbrief.\n\nE-mailadres: ${email}\n`
+        : `Hi NinaLynn,\n\nI would love to subscribe to the newsletter.\n\nEmail address: ${email}\n`
+    );
+
+    window.location.href = `mailto:info@ninalynn.nl?subject=${subject}&body=${body}`;
+  });
+
+  input.addEventListener('input', () => {
+    feedback.classList.remove('newsletter-feedback-error');
+    feedback.textContent = defaultMessage;
+  });
 }
 
 function initTypewriters() {
@@ -1039,22 +1156,78 @@ function initTypewriters() {
   targets.forEach((el, index) => {
     const text = el.dataset.text || '';
     el.textContent = '';
-    let cursor = 0;
+    el.classList.remove('typewriter-settled');
 
-    const typeNext = () => {
-      if (cursor <= text.length) {
-        el.textContent = text.slice(0, cursor);
-        cursor += 1;
-        const currentChar = text.charAt(cursor - 1);
-        let delay = 110 + Math.floor(Math.random() * 70);
-        if (cursor === 1) delay = 280;
-        if (currentChar === ' ') delay += 130;
-        if (/[.,!?]/.test(currentChar)) delay += 90;
-        window.setTimeout(typeNext, delay);
-      }
+    const nextDelay = (char, position, mode = 'type') => {
+      let delay = mode === 'delete'
+        ? 52 + Math.floor(Math.random() * 28)
+        : 110 + Math.floor(Math.random() * 70);
+      if (position === 1 && mode === 'type') delay = 280;
+      if (char === ' ' && mode === 'type') delay += 180;
+      if (/[.,!?]/.test(char) && mode === 'type') delay += 90;
+      return delay;
     };
 
-    window.setTimeout(typeNext, index * 120);
+    const typeText = (value, done) => {
+      let cursor = (el.textContent || '').length;
+      const typeNext = () => {
+        if (cursor > value.length) {
+          done?.();
+          return;
+        }
+
+        el.textContent = value.slice(0, cursor);
+        cursor += 1;
+        const currentChar = value.charAt(cursor - 1);
+        window.setTimeout(typeNext, nextDelay(currentChar, cursor, 'type'));
+      };
+      typeNext();
+    };
+
+    const deleteToLength = (targetLength, done) => {
+      const deleteNext = () => {
+        const current = el.textContent || '';
+        if (current.length <= targetLength) {
+          done?.();
+          return;
+        }
+
+        const nextValue = current.slice(0, -1);
+        el.textContent = nextValue;
+        const currentChar = current.charAt(current.length - 1);
+        window.setTimeout(deleteNext, nextDelay(currentChar, nextValue.length, 'delete'));
+      };
+      deleteNext();
+    };
+
+    if (text === 'To Flower') {
+      window.setTimeout(() => {
+        typeText('To Play', () => {
+          window.setTimeout(() => {
+            deleteToLength(3, () => {
+              window.setTimeout(() => {
+                typeText('To Shine', () => {
+                  window.setTimeout(() => {
+                    deleteToLength(3, () => {
+                      window.setTimeout(() => {
+                        typeText('To Flower', () => {
+                          el.classList.add('typewriter-settled');
+                        });
+                      }, 220);
+                    });
+                  }, 760);
+                });
+              }, 220);
+            });
+          }, 760);
+        });
+      }, index * 120);
+      return;
+    }
+
+    window.setTimeout(() => {
+      typeText(text);
+    }, index * 120);
   });
 }
 
@@ -1064,65 +1237,101 @@ function initHeroBlooms() {
 
     const soilLayers = document.querySelectorAll('.hero-soil-svg');
     if (soilLayers.length) {
-      gsapInstance.set(soilLayers, {
-        y: 18,
-        opacity: 0
-      });
-      gsapInstance.to(soilLayers, {
-        y: 0,
-        opacity: 1,
-        duration: 1.15,
-        stagger: 0.08,
-        ease: 'power2.out'
+      soilLayers.forEach((soilSvg, index) => {
+        const ridges = soilSvg.querySelectorAll('.soil-ridge');
+        const fills = soilSvg.querySelectorAll('.soil-fill, .soil-fill-secondary');
+        const specks = soilSvg.querySelectorAll('.soil-speck');
+
+        ridges.forEach(preparePathGrowth);
+        gsapInstance.set(ridges, { opacity: 0.92 });
+        gsapInstance.set(fills, {
+          opacity: 0,
+          y: 2.5,
+          scaleY: 0.75,
+          transformOrigin: 'bottom center'
+        });
+        gsapInstance.set(specks, {
+          opacity: 0
+        });
+
+        const soilTl = gsapInstance.timeline({ delay: 0.08 + index * 0.1 });
+        soilTl
+          .to(fills, {
+            opacity: (_, el) => Number(el.getAttribute('fill-opacity') || 1),
+            y: 0,
+            scaleY: 1,
+            duration: 0.46,
+            stagger: 0.08,
+            ease: 'power1.out'
+          })
+          .to(ridges, {
+            strokeDashoffset: 0,
+            duration: 0.9,
+            stagger: 0.08,
+            ease: 'power1.inOut'
+          }, '-=0.18')
+          .to(specks, {
+            opacity: 1,
+            duration: 0.18,
+            stagger: 0.04,
+            ease: 'none'
+          }, '-=0.12');
       });
     }
 
     document.querySelectorAll('.hero-bloom-svg').forEach((svg, index) => {
-      const tl = gsapInstance.timeline({ delay: 0.75 + index * 0.18 });
+      const tl = gsapInstance.timeline({ delay: 0.72 + index * 0.18 });
       const grasses = svg.querySelectorAll('.grass-blade');
       const blooms = svg.querySelectorAll('.bloom');
       const stems = svg.querySelectorAll('.bloom-stem');
       const leaves = svg.querySelectorAll('.leaf');
       const flowerHeads = svg.querySelectorAll('.flower-head');
+      const flowerParts = svg.querySelectorAll('.flower-head > *');
 
       grasses.forEach(preparePathGrowth);
       stems.forEach(preparePathGrowth);
-      gsapInstance.set(leaves, {
-        transformOrigin: 'bottom center',
-        scale: 0.15,
-        opacity: 0
-      });
+      leaves.forEach(prepareSketchShape);
+      flowerParts.forEach(prepareSketchShape);
+
+      gsapInstance.set(grasses, { opacity: 0.9 });
+      gsapInstance.set(stems, { opacity: 1 });
       gsapInstance.set(flowerHeads, {
-        transformOrigin: 'center center',
-        scale: 0.15,
-        opacity: 0
+        opacity: 1
       });
 
       tl.to(grasses, {
         strokeDashoffset: 0,
-        opacity: 0.9,
-        duration: 1.55,
-        stagger: 0.06,
+        duration: 1.4,
+        stagger: 0.05,
         ease: 'power1.inOut'
       }).to(stems, {
         strokeDashoffset: 0,
-        opacity: 1,
-        duration: 1.25,
-        stagger: 0.12,
+        duration: 1.12,
+        stagger: 0.1,
         ease: 'power1.inOut'
-      }, '-=0.72').to(leaves, {
-        scale: 1,
-        opacity: 0.82,
-        duration: 0.55,
-        stagger: 0.06,
-        ease: 'power1.out'
-      }, '-=0.92').to(flowerHeads, {
-        scale: 1,
+      }, '-=0.82').to(leaves, {
         opacity: 1,
-        duration: 0.65,
-        stagger: 0.12,
-        ease: 'back.out(1.5)'
-      }, '-=0.18').add(() => {
+        strokeDashoffset: 0,
+        duration: 0.52,
+        stagger: 0.05,
+        ease: 'power1.out'
+      }, '-=0.72').to(leaves, {
+        fillOpacity: (_, el) => Number(el.dataset.sketchFillOpacity || 1),
+        duration: 0.28,
+        stagger: 0.05,
+        ease: 'none'
+      }, '-=0.36').to(flowerParts, {
+        opacity: 1,
+        strokeDashoffset: 0,
+        duration: 0.46,
+        stagger: 0.035,
+        ease: 'power1.out'
+      }, '-=0.18').to(flowerParts, {
+        fillOpacity: (_, el) => Number(el.dataset.sketchFillOpacity || 1),
+        duration: 0.24,
+        stagger: 0.03,
+        ease: 'none'
+      }, '-=0.16').add(() => {
         grasses.forEach((blade, bladeIndex) => {
           gsapInstance.to(blade, {
             rotation: bladeIndex % 3 === 0 ? 2.2 : bladeIndex % 2 === 0 ? 1.4 : -1.8,
@@ -1160,12 +1369,141 @@ function initHeroBlooms() {
   });
 }
 
+function initHomepageMotion() {
+  ensureGsap().then((gsapInstance) => {
+    if (!gsapInstance) return;
+
+    const hero = document.querySelector('.hero-home-scene');
+    const frame = hero?.querySelector('.hero-parallax-frame');
+    const video = hero?.querySelector('.hero-parallax-video');
+    const tint = hero?.querySelector('.hero-parallax-tint');
+    const blooms = hero?.querySelector('.hero-parallax-blooms');
+    const content = hero?.querySelector('.hero-parallax-content');
+
+    if (hero && frame && video && tint && blooms && content) {
+      let ticking = false;
+
+      const updateHeroParallax = () => {
+        ticking = false;
+        const rect = hero.getBoundingClientRect();
+        const viewport = window.innerHeight || 1;
+        const progress = Math.min(1, Math.max(0, (-rect.top) / Math.max(rect.height - viewport * 0.2, 1)));
+
+        gsapInstance.set(video, { y: progress * 34, scale: 1 + progress * 0.035 });
+        gsapInstance.set(tint, { y: progress * 10, opacity: 1 - progress * 0.14 });
+        gsapInstance.set(blooms, { y: progress * -16 });
+        gsapInstance.set(content, { y: progress * -24, opacity: 1 - progress * 0.12 });
+        gsapInstance.set(frame, { y: progress * -8 });
+      };
+
+      const requestParallax = () => {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(updateHeroParallax);
+      };
+
+      window.addEventListener('scroll', requestParallax, { passive: true });
+      window.addEventListener('resize', requestParallax);
+      requestParallax();
+    }
+
+    const dividerObserver = 'IntersectionObserver' in window
+      ? new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          gsapInstance.to(entry.target, {
+            opacity: 1,
+            scaleX: 1,
+            duration: 1.1,
+            ease: 'power2.out'
+          });
+          dividerObserver.unobserve(entry.target);
+        });
+      }, { threshold: 0.2, rootMargin: '0px 0px -60px 0px' })
+      : null;
+
+    document.querySelectorAll('.draw-divider').forEach((divider) => {
+      gsapInstance.set(divider, { opacity: 0.22, scaleX: 0.82 });
+      if (dividerObserver) {
+        dividerObserver.observe(divider);
+      } else {
+        gsapInstance.set(divider, { opacity: 1, scaleX: 1 });
+      }
+    });
+
+    const staggerGroups = [
+      { selector: '.tour-row-stagger', y: 18, stagger: 0.08, duration: 0.62 },
+      { selector: '.shop-card-stagger', y: 26, stagger: 0.12, duration: 0.8 }
+    ];
+
+    staggerGroups.forEach((group) => {
+      const items = Array.from(document.querySelectorAll(group.selector));
+      if (!items.length) return;
+
+      const animateItems = () => {
+        gsapInstance.fromTo(items, {
+          opacity: 0,
+          y: group.y,
+          rotate: 0.001
+        }, {
+          opacity: 1,
+          y: 0,
+          rotate: 0,
+          duration: group.duration,
+          stagger: group.stagger,
+          ease: 'power2.out',
+          clearProps: 'opacity,transform'
+        });
+      };
+
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            animateItems();
+            observer.disconnect();
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -90px 0px' });
+        observer.observe(items[0].parentElement || items[0]);
+      } else {
+        animateItems();
+      }
+    });
+  });
+}
+
 function preparePathGrowth(path) {
   if (!path || typeof path.getTotalLength !== 'function') return;
   const length = path.getTotalLength();
   path.style.strokeDasharray = `${length}`;
   path.style.strokeDashoffset = `${length}`;
   path.style.opacity = '1';
+}
+
+function prepareSketchShape(shape) {
+  if (!shape) return;
+
+  const originalFillOpacity = shape.getAttribute('fill-opacity')
+    ?? shape.getAttribute('opacity')
+    ?? 1;
+  shape.dataset.sketchFillOpacity = `${originalFillOpacity}`;
+
+  const fill = shape.getAttribute('fill');
+  const stroke = shape.getAttribute('stroke');
+  if (fill && fill !== 'none') {
+    shape.style.fillOpacity = '0';
+  }
+
+  if (!stroke && fill && fill !== 'none') {
+    shape.setAttribute('stroke', fill);
+    shape.setAttribute('stroke-opacity', '0.95');
+    if (!shape.getAttribute('stroke-width')) {
+      const strokeWidth = shape.tagName === 'circle' || shape.tagName === 'ellipse' ? '0.7' : '0.8';
+      shape.setAttribute('stroke-width', strokeWidth);
+    }
+  }
+
+  preparePathGrowth(shape);
 }
 
 function ensureGsap() {
