@@ -573,12 +573,12 @@ function renderHome(page, lang) {
 
 function navLink(item, path) {
   const active = path === item.href;
-  return `<a class="font-handwriting text-sm ${active ? 'text-lavender' : 'text-on-surface'} hover:text-lavender transition-colors" href="${item.href}">${item.label}</a>`;
+  return `<a class="font-body text-sm ${active ? 'text-lavender' : 'text-on-surface'} hover:text-lavender transition-colors" href="${item.href}">${item.label}</a>`;
 }
 
 function mobileNavLink(item, path) {
   const active = path === item.href;
-  return `<a class="font-handwriting text-xl ${active ? 'text-lavender' : ''} hover:text-lavender transition-colors" href="${item.href}">${item.label}</a>`;
+  return `<a class="font-body text-xl ${active ? 'text-lavender' : ''} hover:text-lavender transition-colors" href="${item.href}">${item.label}</a>`;
 }
 
 function renderHero(page) {
