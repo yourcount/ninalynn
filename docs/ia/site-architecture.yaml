@@ -1,0 +1,364 @@
+site:
+  name: ninalynn.nl
+  strategy:
+    primary_goal: artist_branding
+    secondary_goal: conversion
+    languages:
+      default: nl
+      supported:
+        - nl
+        - en
+      url_strategy: language_prefix
+      prefixes:
+        nl: /nl
+        en: /en
+
+menus:
+  nl:
+    primary:
+      - label: Muziek
+        href: /nl/muziek/
+      - label: Live
+        href: /nl/live/
+      - label: Lessen
+        href: /nl/lessen/
+      - label: Over
+        href: /nl/over/
+      - label: Shop
+        href: /nl/shop/
+      - label: Contact
+        href: /nl/contact/
+    footer:
+      - label: Muziek
+        href: /nl/muziek/
+      - label: Live
+        href: /nl/live/
+      - label: Bruiloften
+        href: /nl/live/bruiloften/
+      - label: Lessen
+        href: /nl/lessen/
+      - label: Shop
+        href: /nl/shop/
+      - label: Contact
+        href: /nl/contact/
+  en:
+    primary:
+      - label: Music
+        href: /en/music/
+      - label: Live
+        href: /en/live/
+      - label: Lessons
+        href: /en/lessons/
+      - label: About
+        href: /en/about/
+      - label: Shop
+        href: /en/shop/
+      - label: Contact
+        href: /en/contact/
+    footer:
+      - label: Music
+        href: /en/music/
+      - label: Live
+        href: /en/live/
+      - label: Weddings
+        href: /en/live/weddings/
+      - label: Lessons
+        href: /en/lessons/
+      - label: Shop
+        href: /en/shop/
+      - label: Contact
+        href: /en/contact/
+
+pages:
+  nl:
+    - path: /nl/
+      template: home
+      goal: brand_entry
+      primary_ctas:
+        - Luister muziek
+        - Bekijk live
+        - Boek NinaLynn
+      secondary_ctas:
+        - Bekijk bruiloften
+        - Ontdek lessen
+        - Bezoek shop
+    - path: /nl/muziek/
+      template: music_hub
+      goal: discovery
+      primary_ctas:
+        - Luister nu
+        - Bekijk shows
+        - Koop album
+    - path: /nl/muziek/albums/
+      template: album_index
+      goal: album_browse
+    - path: /nl/muziek/albums/a-taste-of-the-wild/
+      template: album_detail
+      goal: album_story
+      primary_ctas:
+        - Luister nu
+        - Bekijk shows
+        - Koop album
+      children:
+        - /nl/muziek/albums/a-taste-of-the-wild/songteksten/
+        - /nl/muziek/albums/a-taste-of-the-wild/reviews/
+    - path: /nl/muziek/albums/a-taste-of-the-wild/songteksten/
+      template: lyrics_hub
+      goal: deepen_engagement
+      primary_ctas:
+        - Beluister album
+        - Bekijk reviews
+        - Bekijk shows
+    - path: /nl/muziek/albums/a-taste-of-the-wild/reviews/
+      template: press_reviews
+      goal: credibility
+      primary_ctas:
+        - Beluister album
+        - Bekijk shows
+        - Koop album
+    - path: /nl/muziek/albums/hummingbird/
+      template: album_detail
+      goal: album_story
+      children:
+        - /nl/muziek/albums/hummingbird/songteksten/
+        - /nl/muziek/albums/hummingbird/reviews/
+    - path: /nl/muziek/albums/hummingbird/songteksten/
+      template: lyrics_hub
+      goal: deepen_engagement
+    - path: /nl/muziek/albums/hummingbird/reviews/
+      template: press_reviews
+      goal: credibility
+    - path: /nl/muziek/albums/imaginations/
+      template: album_detail
+      goal: archive_album
+      children:
+        - /nl/muziek/albums/imaginations/songteksten/
+    - path: /nl/muziek/albums/imaginations/songteksten/
+      template: lyrics_hub
+      goal: deepen_engagement
+    - path: /nl/muziek/live-opnames/
+      template: live_sessions
+      goal: proof_of_quality
+      primary_ctas:
+        - Bekijk live
+        - Boek NinaLynn
+        - Luister muziek
+    - path: /nl/live/
+      template: live_hub
+      goal: booking_and_shows
+      primary_ctas:
+        - Bekijk agenda
+        - Boek NinaLynn
+        - Beluister muziek
+    - path: /nl/live/agenda/
+      template: gigs
+      goal: event_discovery
+      primary_ctas:
+        - Beluister muziek
+        - Bekijk over NinaLynn
+        - Vraag boeking aan
+    - path: /nl/live/boekingen/
+      template: bookings
+      goal: commercial_booking
+      primary_ctas:
+        - Vraag beschikbaarheid aan
+        - Bekijk live-opnames
+        - Neem contact op
+    - path: /nl/live/bruiloften/
+      template: weddings
+      goal: wedding_conversion
+      primary_ctas:
+        - Bekijk mogelijkheden
+        - Lees ervaringen
+        - Plan kennismaking
+    - path: /nl/lessen/
+      template: lessons_hub
+      goal: education_entry
+      primary_ctas:
+        - Bekijk zangles
+        - Bekijk songwriting
+        - Neem contact op
+    - path: /nl/lessen/zangles/
+      template: vocal_lessons
+      goal: lesson_conversion
+      primary_ctas:
+        - Plan gratis proefles
+        - Bekijk tarieven
+        - Stel een vraag
+    - path: /nl/lessen/songwriting/
+      template: songwriting_lessons
+      goal: workshop_conversion
+      primary_ctas:
+        - Bekijk workshop
+        - Meld je aan
+        - Vraag begeleiding aan
+    - path: /nl/over/
+      template: about_hub
+      goal: brand_story
+      primary_ctas:
+        - Luister muziek
+        - Bekijk live
+        - Neem contact op
+    - path: /nl/over/bio/
+      template: biography
+      goal: artist_story
+    - path: /nl/over/band/
+      template: band
+      goal: supporting_cast
+    - path: /nl/over/pers/
+      template: press
+      goal: authority
+    - path: /nl/shop/
+      template: shop
+      goal: commerce
+      primary_ctas:
+        - Bestel muziek
+        - Bekijk albums
+        - Neem contact op
+    - path: /nl/contact/
+      template: contact
+      goal: direct_contact
+  en:
+    - path: /en/
+      template: home
+      goal: brand_entry
+      primary_ctas:
+        - Listen now
+        - Explore live
+        - Book NinaLynn
+    - path: /en/music/
+      template: music_hub
+      goal: discovery
+    - path: /en/music/albums/
+      template: album_index
+      goal: album_browse
+    - path: /en/music/albums/a-taste-of-the-wild/
+      template: album_detail
+      goal: album_story
+      children:
+        - /en/music/albums/a-taste-of-the-wild/lyrics/
+        - /en/music/albums/a-taste-of-the-wild/reviews/
+    - path: /en/music/albums/a-taste-of-the-wild/lyrics/
+      template: lyrics_hub
+      goal: deepen_engagement
+    - path: /en/music/albums/a-taste-of-the-wild/reviews/
+      template: press_reviews
+      goal: credibility
+    - path: /en/music/albums/hummingbird/
+      template: album_detail
+      goal: album_story
+      children:
+        - /en/music/albums/hummingbird/lyrics/
+        - /en/music/albums/hummingbird/reviews/
+    - path: /en/music/albums/hummingbird/lyrics/
+      template: lyrics_hub
+      goal: deepen_engagement
+    - path: /en/music/albums/hummingbird/reviews/
+      template: press_reviews
+      goal: credibility
+    - path: /en/music/albums/imaginations/
+      template: album_detail
+      goal: archive_album
+      children:
+        - /en/music/albums/imaginations/lyrics/
+    - path: /en/music/albums/imaginations/lyrics/
+      template: lyrics_hub
+      goal: deepen_engagement
+    - path: /en/music/live-sessions/
+      template: live_sessions
+      goal: proof_of_quality
+    - path: /en/live/
+      template: live_hub
+      goal: booking_and_shows
+    - path: /en/live/gigs/
+      template: gigs
+      goal: event_discovery
+    - path: /en/live/bookings/
+      template: bookings
+      goal: commercial_booking
+    - path: /en/live/weddings/
+      template: weddings
+      goal: wedding_conversion
+    - path: /en/lessons/
+      template: lessons_hub
+      goal: education_entry
+    - path: /en/lessons/vocal-coaching/
+      template: vocal_lessons
+      goal: lesson_conversion
+    - path: /en/lessons/songwriting/
+      template: songwriting_lessons
+      goal: workshop_conversion
+    - path: /en/about/
+      template: about_hub
+      goal: brand_story
+      children:
+        - /en/about/bio/
+        - /en/about/band/
+        - /en/about/press/
+    - path: /en/about/bio/
+      template: biography
+      goal: artist_story
+    - path: /en/about/band/
+      template: band
+      goal: supporting_cast
+    - path: /en/about/press/
+      template: press
+      goal: authority
+    - path: /en/shop/
+      template: shop
+      goal: commerce
+    - path: /en/contact/
+      template: contact
+      goal: direct_contact
+
+language_switch_pairs:
+  - nl: /nl/
+    en: /en/
+  - nl: /nl/muziek/
+    en: /en/music/
+  - nl: /nl/muziek/albums/
+    en: /en/music/albums/
+  - nl: /nl/muziek/albums/a-taste-of-the-wild/
+    en: /en/music/albums/a-taste-of-the-wild/
+  - nl: /nl/muziek/albums/a-taste-of-the-wild/songteksten/
+    en: /en/music/albums/a-taste-of-the-wild/lyrics/
+  - nl: /nl/muziek/albums/a-taste-of-the-wild/reviews/
+    en: /en/music/albums/a-taste-of-the-wild/reviews/
+  - nl: /nl/muziek/albums/hummingbird/
+    en: /en/music/albums/hummingbird/
+  - nl: /nl/muziek/albums/hummingbird/songteksten/
+    en: /en/music/albums/hummingbird/lyrics/
+  - nl: /nl/muziek/albums/hummingbird/reviews/
+    en: /en/music/albums/hummingbird/reviews/
+  - nl: /nl/muziek/albums/imaginations/
+    en: /en/music/albums/imaginations/
+  - nl: /nl/muziek/albums/imaginations/songteksten/
+    en: /en/music/albums/imaginations/lyrics/
+  - nl: /nl/muziek/live-opnames/
+    en: /en/music/live-sessions/
+  - nl: /nl/live/
+    en: /en/live/
+  - nl: /nl/live/agenda/
+    en: /en/live/gigs/
+  - nl: /nl/live/boekingen/
+    en: /en/live/bookings/
+  - nl: /nl/live/bruiloften/
+    en: /en/live/weddings/
+  - nl: /nl/lessen/
+    en: /en/lessons/
+  - nl: /nl/lessen/zangles/
+    en: /en/lessons/vocal-coaching/
+  - nl: /nl/lessen/songwriting/
+    en: /en/lessons/songwriting/
+  - nl: /nl/over/
+    en: /en/about/
+  - nl: /nl/over/bio/
+    en: /en/about/bio/
+  - nl: /nl/over/band/
+    en: /en/about/band/
+  - nl: /nl/over/pers/
+    en: /en/about/press/
+  - nl: /nl/shop/
+    en: /en/shop/
+  - nl: /nl/contact/
+    en: /en/contact/
