@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Nina Lynn — To Flower</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Special+Elite&family=Homemade+Apple&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "parchment": "#FBF9F6",
+                    "lavender": "#C5A3D1",
+                    "sage": "#8BA88E",
+                    "background": "#FBF9F6",
+                    "on-surface": "#1b1c1a",
+                    "on-surface-variant": "#4b444c",
+                    "surface-container": "#efeeeb",
+                    "surface-container-low": "#f5f3f0",
+                    "outline-variant": "#cec3cd",
+                },
+                fontFamily: {
+                    "headline": ["Special Elite", "serif"],
+                    "body": ["Courier Prime", "monospace"],
+                    "handwriting": ["Homemade Apple", "cursive"]
+                },
+            },
+        },
+    }
+</script>
+<style>
+    html { scroll-behavior: smooth; }
+    body {
+        background-color: #FBF9F6;
+        color: #1b1c1a;
+        font-family: 'Courier Prime', monospace;
+        overflow-x: hidden;
+    }
+
+    /* === Organic Shape Masks (from v11) === */
+    .organic-window { clip-path: url(#organic-shape); }
+    .watercolor-edge {
+        mask-image: radial-gradient(circle, black 50%, transparent 100%);
+        -webkit-mask-image: radial-gradient(circle, black 50%, transparent 100%);
+    }
+
+    /* === Hand-Drawn Border (from v3) === */
+    .hand-drawn-border {
+        border: 1px solid rgba(139, 168, 142, 0.3);
+        border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    }
+
+    /* === Button System === */
+    .btn-pill {
+        border-radius: 9999px;
+        padding: 0.75rem 2.5rem;
+        transition: all 0.5s;
+        background-color: #C5A3D1;
+        color: white;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .btn-pill:hover {
+        background-color: #8BA88E;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+    }
+    .btn-ghost {
+        border-radius: 9999px;
+        padding: 0.5rem 2rem;
+        border: 1px solid rgba(197, 163, 209, 0.4);
+        color: #1b1c1a;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        transition: all 0.3s;
+    }
+    .btn-ghost:hover {
+        background-color: #C5A3D1;
+        color: white;
+    }
+
+    /* === Divider Motif (from v11) === */
+    .divider-motif {
+        background-image: radial-gradient(circle, #C5A3D1 1px, transparent 1px);
+        background-size: 24px 24px;
+        height: 1px; width: 100%; opacity: 0.3;
+    }
+    /* Gradient divider (from v6) */
+    .divider-gradient {
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba(139, 168, 142, 0.3), transparent);
+    }
+
+    /* === Typewriter Animation === */
+    .typewriter-anim {
+        overflow: hidden;
+        border-right: .15em solid #C5A3D1;
+        white-space: nowrap;
+        margin: 0 auto;
+        animation: typing 3.5s steps(30, end), blink-caret .75s step-end infinite;
+    }
+    @keyframes typing { from { width: 0 } to { width: 100% } }
+    @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: #C5A3D1; } }
+
+    /* === Sticky Nav (from v11, enhanced) === */
+    .sticky-nav { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+    .sticky-nav.scrolled {
+        background-color: rgba(251, 249, 246, 0.92);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid rgba(139, 168, 142, 0.12);
+    }
+
+    /* === Botanical Float (from v11) === */
+    .botanical-float { animation: float 12s ease-in-out infinite; }
+    .botanical-float-delayed { animation: float 10s ease-in-out infinite; animation-delay: -4s; }
+    @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(3deg); }
+    }
+
+    /* === Scroll Reveal (from v3) === */
+    .reveal-up {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal-up.revealed {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* === Mobile Menu === */
+    .mobile-menu {
+        transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .mobile-menu.open { transform: translateX(0); }
+</style>
+</head>
+<body class="selection:bg-lavender/30">
+
+<!-- SVG Defs for organic clip-path -->
+<svg class="absolute" height="0" width="0">
+<defs>
+    <clipPath clipPathUnits="objectBoundingBox" id="organic-shape">
+        <path d="M0.1,0.15 C0.2,0.05,0.4,0,0.6,0.05 C0.8,0.1,0.95,0.3,0.98,0.5 C1,0.7,0.9,0.9,0.7,0.95 C0.5,1,0.2,0.95,0.05,0.8 C0,0.65,0,0.3,0.1,0.15"></path>
+    </clipPath>
+</defs>
+</svg>
+
+<!-- ============================================ -->
+<!-- HEADER — v11 base + mobile hamburger         -->
+<!-- ============================================ -->
+<header class="fixed top-0 w-full z-50 sticky-nav" id="main-header">
+<nav class="max-w-[1600px] mx-auto px-6 md:px-16 py-6 flex items-center justify-between">
+    <!-- Left nav -->
+    <div class="hidden md:flex gap-10 items-center flex-1">
+        <a class="font-handwriting text-sm text-on-surface hover:text-lavender transition-colors" href="#home">Home</a>
+        <a class="font-handwriting text-sm text-on-surface hover:text-lavender transition-colors" href="#tour">Tour</a>
+        <a class="font-handwriting text-sm text-on-surface hover:text-lavender transition-colors" href="#muziek">Muziek</a>
+    </div>
+    <!-- Logo -->
+    <div class="flex-none flex justify-center">
+        <a href="#home">
+            <img alt="Nina Lynn Logo" class="h-12 md:h-16 grayscale opacity-80 hover:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida/ADBb0ujwksWYsaGWXX-nythcUk-iAaJX74K6TElad9ZNsULuzyAv-oxJwaM__7K7-PaJYCOlgoZrVpQ1haG6UpVxlHd8k5eKM2iq7l-3d9Et7LTac8CL61E0bs_mG3u_4onFu4Tljle5DM7fsfI3q5BfvTRIosCP3eRE65VgfpMNeBsK-ijb6oVJ7ExKLli85pY6oqu1VYArZNwtHtRmc2J3RFsjHwJkm05l15bIS74qTmIPTzK2GJJE4fSDjDs0IzaQxlZe8iAxT1g"/>
+        </a>
+    </div>
+    <!-- Right nav -->
+    <div class="hidden md:flex gap-10 items-center flex-1 justify-end">
+        <a class="font-handwriting text-sm text-on-surface hover:text-lavender transition-colors" href="#shop">Shop</a>
+        <a class="font-handwriting text-sm text-on-surface hover:text-lavender transition-colors" href="#over">Over Nina</a>
+        <div class="flex gap-4 ml-4">
+            <span class="material-symbols-outlined text-lavender text-xl">filter_vintage</span>
+            <span class="material-symbols-outlined text-sage text-xl">eco</span>
+        </div>
+    </div>
+    <!-- Mobile hamburger -->
+    <button class="md:hidden flex flex-col gap-1.5 p-2" id="menu-toggle" aria-label="Menu openen">
+        <span class="block w-6 h-px bg-on-surface transition-all" id="bar1"></span>
+        <span class="block w-6 h-px bg-on-surface transition-all" id="bar2"></span>
+        <span class="block w-4 h-px bg-on-surface transition-all" id="bar3"></span>
+    </button>
+</nav>
+</header>
+
+<!-- Mobile slide-out menu -->
+<div class="fixed inset-0 z-[60] pointer-events-none" id="mobile-overlay">
+    <div class="absolute inset-0 bg-on-surface/20 opacity-0 transition-opacity duration-300 pointer-events-none" id="overlay-bg"></div>
+    <div class="mobile-menu absolute right-0 top-0 h-full w-72 bg-parchment/95 backdrop-blur-xl p-12 flex flex-col gap-8 pointer-events-auto shadow-2xl" id="mobile-menu">
+        <button class="self-end mb-8" id="menu-close" aria-label="Menu sluiten">
+            <span class="material-symbols-outlined text-2xl">close</span>
+        </button>
+        <a class="font-handwriting text-xl hover:text-lavender transition-colors" href="#home">Home</a>
+        <a class="font-handwriting text-xl hover:text-lavender transition-colors" href="#tour">Tour</a>
+        <a class="font-handwriting text-xl hover:text-lavender transition-colors" href="#muziek">Muziek</a>
+        <a class="font-handwriting text-xl hover:text-lavender transition-colors" href="#shop">Shop</a>
+        <a class="font-handwriting text-xl hover:text-lavender transition-colors" href="#over">Over Nina</a>
+        <div class="flex gap-6 mt-auto">
+            <span class="material-symbols-outlined text-lavender">filter_vintage</span>
+            <span class="material-symbols-outlined text-sage">eco</span>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- HERO — v11 organic glass + v1 full-bleed bg  -->
+<!-- ============================================ -->
+<section id="home" class="relative min-h-screen flex items-center justify-center pt-20">
+    <!-- Full-bleed background (from v1) -->
+    <div class="absolute inset-0 z-0 overflow-hidden">
+        <img class="w-full h-full object-cover opacity-40 scale-105" alt="Dreamy flower field" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJT_cDqe7_w_msSikUjE1pbfPucN15Et2DzA6MdRQ0pNpu4LZt9sVM8BsYzR42PPQvjejfIAmmqVOvp8NDngagUiyONhQXM-tEYmQ_UlPZ-fpg4c17JCWm-vHTaFaqDPOSRh-a_S3H7egihvivfn4NYFiuVQ2T8jf2TzlTMm4ZPNP0Cgmn2geIuWsZ7UlCZkQsCkFT6TASf_ml9lkx5oVMfU9f5hLBg4F6ovJp4VBV_rwJM992EJE3eRLDejQ6qmizlhuja2Caiw"/>
+        <div class="absolute inset-0 bg-gradient-to-b from-parchment/20 via-transparent to-parchment"></div>
+    </div>
+    <!-- Organic glass card (from v11) -->
+    <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
+        <div class="relative inline-block py-16 px-10 md:py-20 md:px-24">
+            <div class="absolute inset-0 bg-white/40 backdrop-blur-md organic-window border border-white/30 -z-10 shadow-2xl"></div>
+            <div class="inline-block mb-4">
+                <h1 class="font-headline text-5xl md:text-8xl text-on-surface typewriter-anim">To Flower</h1>
+            </div>
+            <p class="font-body text-base md:text-lg italic text-on-surface-variant max-w-md mx-auto mb-10 leading-relaxed">
+                /t&#601; &#712;flou-&#601;r/ (verb) 1. Opbloeien; je ontpoppen tot je beste zelf.
+            </p>
+            <button class="btn-pill font-body tracking-wider text-sm" onclick="document.getElementById('muziek').scrollIntoView({behavior:'smooth'})">
+                Luister het Album
+            </button>
+        </div>
+    </div>
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 opacity-40 animate-bounce">
+        <span class="material-symbols-outlined text-sage text-lg">expand_more</span>
+    </div>
+</section>
+
+<!-- Divider -->
+<div class="w-48 mx-auto divider-motif my-0"></div>
+
+<!-- ============================================ -->
+<!-- TOUR AGENDA — v11 clean grid + v7 handwriting labels -->
+<!-- ============================================ -->
+<section id="tour" class="py-24 md:py-32 px-6 max-w-5xl mx-auto relative">
+    <!-- Floating botanical (from v11) -->
+    <div class="absolute -left-10 top-0 opacity-15 hidden lg:block botanical-float pointer-events-none">
+        <span class="material-symbols-outlined text-8xl text-sage">local_florist</span>
+    </div>
+
+    <div class="reveal-up">
+        <div class="mb-16 md:mb-20 text-center relative">
+            <span class="font-handwriting text-lavender block text-lg md:text-xl mb-2">De Agenda</span>
+            <h2 class="font-headline text-3xl md:text-4xl text-on-surface">Live Optredens</h2>
+        </div>
+
+        <!-- Tour rows — clean grid (from v11) with ghost button (from v1) -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-0 border-y border-sage/20">
+            <!-- Column headers (desktop) -->
+            <div class="hidden md:contents font-handwriting text-sage text-xs">
+                <div class="md:col-span-3 py-4 border-r border-sage/15 px-6">Datum</div>
+                <div class="md:col-span-5 py-4 border-r border-sage/15 px-6">Locatie</div>
+                <div class="md:col-span-4 py-4 px-6 text-right">Toegang</div>
+            </div>
+
+            <!-- Row 1 -->
+            <div class="md:col-span-12 group hover:bg-sage/5 transition-colors grid grid-cols-1 md:grid-cols-12 items-center border-t border-sage/15">
+                <div class="md:col-span-3 pt-8 md:py-8 px-6 md:border-r border-sage/15">
+                    <span class="font-body text-xs text-sage block tracking-widest">12 MEI 2024</span>
+                </div>
+                <div class="md:col-span-5 px-6 py-2 md:py-8 md:border-r border-sage/15">
+                    <h3 class="font-headline text-2xl">Paradiso</h3>
+                    <p class="font-handwriting text-sm text-on-surface-variant">Amsterdam, NL</p>
+                </div>
+                <div class="md:col-span-4 pb-8 md:py-8 px-6 flex md:justify-end">
+                    <button class="btn-ghost font-body">Tickets</button>
+                </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="md:col-span-12 group hover:bg-sage/5 transition-colors grid grid-cols-1 md:grid-cols-12 items-center border-t border-sage/15">
+                <div class="md:col-span-3 pt-8 md:py-8 px-6 md:border-r border-sage/15">
+                    <span class="font-body text-xs text-sage block tracking-widest">15 MEI 2024</span>
+                </div>
+                <div class="md:col-span-5 px-6 py-2 md:py-8 md:border-r border-sage/15">
+                    <h3 class="font-headline text-2xl">TivoliVredenburg</h3>
+                    <p class="font-handwriting text-sm text-on-surface-variant">Utrecht, NL</p>
+                </div>
+                <div class="md:col-span-4 pb-8 md:py-8 px-6 flex md:justify-end">
+                    <button class="btn-ghost font-body">Tickets</button>
+                </div>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="md:col-span-12 group hover:bg-sage/5 transition-colors grid grid-cols-1 md:grid-cols-12 items-center border-t border-sage/15">
+                <div class="md:col-span-3 pt-8 md:py-8 px-6 md:border-r border-sage/15">
+                    <span class="font-body text-xs text-sage block tracking-widest">18 MEI 2024</span>
+                </div>
+                <div class="md:col-span-5 px-6 py-2 md:py-8 md:border-r border-sage/15">
+                    <h3 class="font-headline text-2xl">Doornroosje</h3>
+                    <p class="font-handwriting text-sm text-on-surface-variant">Nijmegen, NL</p>
+                </div>
+                <div class="md:col-span-4 pb-8 md:py-8 px-6 flex md:justify-end">
+                    <button class="btn-ghost font-body">Tickets</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-48 mx-auto divider-motif mt-24"></div>
+</section>
+
+<!-- ============================================ -->
+<!-- ALBUM — v11 watercolor + v3 organic hover    -->
+<!-- ============================================ -->
+<section id="muziek" class="py-24 md:py-40 relative overflow-hidden">
+    <!-- Botanical decorations -->
+    <div class="absolute top-10 right-10 opacity-10 pointer-events-none botanical-float">
+        <span class="material-symbols-outlined text-[200px] text-lavender">wb_iridescent</span>
+    </div>
+    <div class="absolute bottom-10 left-10 opacity-10 pointer-events-none botanical-float-delayed">
+        <span class="material-symbols-outlined text-[180px] text-sage">nest_eco_leaf</span>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <!-- Album Cover — watercolor mask (v11) + slow zoom hover (v3) -->
+        <div class="relative group reveal-up order-2 lg:order-1">
+            <div class="relative z-10 watercolor-edge overflow-hidden">
+                <img class="w-full object-cover scale-110 group-hover:scale-100 transition-transform duration-[2s]"
+                     alt="To Flower — Album Cover"
+                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcNpWphsMnMZw0bvYiZu75HDPa5CWM8yHS-YzaW4G_BOKCVqMQHVKOCDjRSvWYYtmCn5UKdvVROWSXdABsqMq22taPLc3utn4poYnocLEo6k4BmiC3rD89JeJpL3esFXtezolo4nKuBQINHeK0fJy1vPrCK7NXApNQ0swpoWRxuHfxS3MAFx7kX_QD1KOTvoeTcC6gFW1_uIBnv_MADpeWbwG_x6ck1z1n4z313fGBRG1dHvTo_tEL_WvjrHfVxaBRI2SAOV7wGA"/>
+            </div>
+            <!-- Rotating decorative ring (from v6) -->
+            <div class="absolute -inset-10 border border-lavender/10 rounded-[40%] -z-10 group-hover:rotate-12 transition-transform duration-[3s]"></div>
+        </div>
+
+        <!-- Album Info -->
+        <div class="space-y-10 md:space-y-12 relative order-1 lg:order-2 reveal-up" style="transition-delay: 0.15s">
+            <div class="space-y-4">
+                <span class="font-handwriting text-sage text-lg md:text-xl block">Nieuw Album</span>
+                <h2 class="font-headline text-4xl md:text-5xl lg:text-6xl text-on-surface leading-tight">Uitgelicht: To Flower</h2>
+            </div>
+            <p class="font-body text-base md:text-lg leading-relaxed text-on-surface-variant italic border-l-4 border-lavender/20 pl-8">
+                Dit album vertelt het verhaal van een stille knop die de moed vindt om zich te openen voor het zonlicht. Elke track is een hand-geannoteerde herinnering aan de seizoenen van het leven, gevangen in akoestische klanken en zachte po&#235;zie.
+            </p>
+            <!-- Tracklist with slide hover (from v11) -->
+            <div class="space-y-5 font-body">
+                <div class="flex justify-between items-center group/track cursor-pointer border-b border-sage/10 pb-4">
+                    <span class="group-hover/track:translate-x-2 group-hover/track:text-lavender transition-all">1. Ontwaken</span>
+                    <span class="text-sm text-sage">04:12</span>
+                </div>
+                <div class="flex justify-between items-center group/track cursor-pointer border-b border-sage/10 pb-4">
+                    <span class="group-hover/track:translate-x-2 group-hover/track:text-lavender transition-all">2. Wilde Hyacint</span>
+                    <span class="text-sm text-sage">03:45</span>
+                </div>
+                <div class="flex justify-between items-center group/track cursor-pointer border-b border-sage/10 pb-4">
+                    <span class="group-hover/track:translate-x-2 group-hover/track:text-lavender transition-all">3. Gouden Uur</span>
+                    <span class="text-sm text-sage">05:02</span>
+                </div>
+            </div>
+            <button class="btn-pill font-body tracking-wider">
+                Bestel op Vinyl
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Divider -->
+<div class="divider-gradient max-w-4xl mx-auto"></div>
+
+<!-- ============================================ -->
+<!-- SHOP — v11 watercolor + grayscale-to-color   -->
+<!-- ============================================ -->
+<section id="shop" class="py-24 md:py-32 px-6 bg-surface-container-low/50">
+<div class="max-w-7xl mx-auto">
+    <div class="mb-16 md:mb-24 text-center reveal-up">
+        <h2 class="font-headline text-4xl md:text-5xl mb-4">De Curio Shop</h2>
+        <p class="font-handwriting text-lg md:text-xl text-sage">Verzamelstukken uit de botanische tuin.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-24">
+        <!-- Product 1: Vinyl -->
+        <div class="flex flex-col gap-8 md:mt-16 group reveal-up">
+            <div class="relative overflow-hidden aspect-[4/5] watercolor-edge">
+                <img class="w-full h-full object-contain grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
+                     alt="To Flower — Vinyl"
+                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuQfvID6PGuCe_n-fk30X0pgms2l1qNRjwdQ4OxFxFJTYSLDupKiW-Auu9Sc7T5-SYJ5Ml3kkBs80-zixYPGC2LHD3lgGQDisWiofBpoOIq0nKm08OFXSS3b2r9Q94LzBxuzQA8xAkF6CgLpT1o13pcd0WxeulcJ2CqEIB2f2Pid5ymX_5X_rP7s56KH4WhNGElw1AiJ8yhEXLH_cCmHIZOfFwOv5QfinPgCtlmWf5AJ6z-S0uIM1coIUoBCnTlSXQ0pZ4gVjveQ"/>
+            </div>
+            <div class="text-center">
+                <h4 class="font-headline text-2xl mb-1">Vinyl</h4>
+                <p class="font-handwriting text-lavender">&#8364;35.00</p>
+            </div>
+        </div>
+
+        <!-- Product 2: CD (offset up for asymmetry) -->
+        <div class="flex flex-col gap-8 group reveal-up" style="transition-delay: 0.1s">
+            <div class="relative overflow-hidden aspect-[4/5] watercolor-edge">
+                <img class="w-full h-full object-contain grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
+                     alt="To Flower — CD"
+                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJYESG5wVSie60usEscalcy53uh0stQTVXFqjeJxUA2cHBVyRiXxdSMVB1N0NyGzY9ICPWfgDEoVXRVyj5-1AGkrimDlnEIaDD0KWOdVguFrhmaXVJIdkL6n_-k2SY0p0QsnttwSB4MsnvKvARwDGY9ElbFJSFctypiC1qTksWKy_5iQlATUFPrjKLE0BILl_iPG31hQn72yKgIGC1V-j62tzsntEika1o9PgP_U2nG5lddjgM4n1aHZEpnau9phU1-qGOFMfsXA"/>
+            </div>
+            <div class="text-center">
+                <h4 class="font-headline text-2xl mb-1">CD</h4>
+                <p class="font-handwriting text-lavender">&#8364;15.00</p>
+            </div>
+        </div>
+
+        <!-- Product 3: Tote Bag (offset down for asymmetry) -->
+        <div class="flex flex-col gap-8 md:-mt-8 group reveal-up" style="transition-delay: 0.2s">
+            <div class="relative overflow-hidden aspect-[4/5] watercolor-edge">
+                <img class="w-full h-full object-contain grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
+                     alt="Linnen Tas"
+                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7sAdo9F2OPcOIHlZebq_xgicuqKmbm-l-DkC6ie97xIOHD8IpyTsDvNtXipVPK2yyW7nkYRoChDWgFVUyM_1wMeQkVVwK9T31JOHBVOemxkIpgLtumwGBGLefBSD4crlYTC7iLnFWVv0R4jioYBF2Ov9XpCZgsXRJmskRJFFziBR462YXPnyRyr8HOxrmb2Sj467FG72hu3kg0zkJbR9RS9vDERk0I4vDb--Kww_WsXFzCMFbOH2jHlP5XZpE9XWY3L8lGMIbLA"/>
+            </div>
+            <div class="text-center">
+                <h4 class="font-headline text-2xl mb-1">Linnen Tas</h4>
+                <p class="font-handwriting text-lavender">&#8364;20.00</p>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+<!-- ============================================ -->
+<!-- FOOTER — v11 organic + v3 hand-drawn border  -->
+<!-- ============================================ -->
+<footer id="over" class="py-20 md:py-24 px-6 md:px-8 border-t border-sage/10 bg-parchment relative">
+    <!-- Botanical decoration -->
+    <div class="absolute bottom-0 right-0 p-8 opacity-15 pointer-events-none">
+        <span class="material-symbols-outlined text-6xl text-lavender">spa</span>
+    </div>
+
+    <div class="max-w-4xl mx-auto flex flex-col items-center gap-12 md:gap-16 reveal-up">
+        <!-- Logo -->
+        <img alt="Nina Lynn Logo" class="h-10 grayscale opacity-40 hover:opacity-100 transition-opacity"
+             src="https://lh3.googleusercontent.com/aida/ADBb0ujwksWYsaGWXX-nythcUk-iAaJX74K6TElad9ZNsULuzyAv-oxJwaM__7K7-PaJYCOlgoZrVpQ1haG6UpVxlHd8k5eKM2iq7l-3d9Et7LTac8CL61E0bs_mG3u_4onFu4Tljle5DM7fsfI3q5BfvTRIosCP3eRE65VgfpMNeBsK-ijb6oVJ7ExKLli85pY6oqu1VYArZNwtHtRmc2J3RFsjHwJkm05l15bIS74qTmIPTzK2GJJE4fSDjDs0IzaQxlZe8iAxT1g"/>
+
+        <!-- Newsletter — hand-drawn border (from v3) + organic bg (from v11) -->
+        <div class="w-full max-w-xl text-center space-y-8 p-10 md:p-12 hand-drawn-border bg-white/30 backdrop-blur-sm">
+            <h3 class="font-handwriting text-2xl md:text-3xl italic">Word lid van de bloementuin</h3>
+            <form class="flex flex-col sm:flex-row gap-4 md:gap-6 max-w-lg mx-auto" onsubmit="event.preventDefault()">
+                <input class="flex-1 bg-transparent border-b-2 border-sage/30 font-body p-2 focus:outline-none focus:border-lavender transition-all placeholder:text-sage/40"
+                       placeholder="E-mail adres" type="email" required/>
+                <button class="btn-pill uppercase text-xs tracking-widest font-body !px-8 !py-2.5" type="submit">Aanmelden</button>
+            </form>
+        </div>
+
+        <!-- Navigation links -->
+        <div class="flex flex-wrap justify-center gap-8 md:gap-10 font-handwriting text-sm text-on-surface-variant">
+            <a class="hover:text-lavender transition-colors" href="#">Nieuwsbrief</a>
+            <a class="hover:text-lavender transition-colors" href="#">Contact</a>
+            <a class="hover:text-lavender transition-colors" href="#">Privacy</a>
+            <a class="hover:text-lavender transition-colors" href="#">Voorwaarden</a>
+        </div>
+
+        <!-- Social icons -->
+        <div class="flex gap-10 text-sage/60">
+            <a class="hover:text-lavender transition-colors" href="#" aria-label="Delen"><span class="material-symbols-outlined">share</span></a>
+            <a class="hover:text-lavender transition-colors" href="#" aria-label="Muziek"><span class="material-symbols-outlined">music_note</span></a>
+            <a class="hover:text-lavender transition-colors" href="#" aria-label="E-mail"><span class="material-symbols-outlined">mail</span></a>
+        </div>
+
+        <!-- Copyright -->
+        <div class="text-[10px] font-body uppercase tracking-[0.2em] opacity-40 text-center">
+            &copy; Nina Lynn. Hand-annotated in the Botanical Archive.
+        </div>
+    </div>
+</footer>
+
+<!-- ============================================ -->
+<!-- SCRIPTS                                       -->
+<!-- ============================================ -->
+<script>
+// --- Sticky header scroll effect (from v11) ---
+const header = document.getElementById('main-header');
+window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 80);
+}, { passive: true });
+
+// --- Mobile menu ---
+const menuToggle = document.getElementById('menu-toggle');
+const menuClose = document.getElementById('menu-close');
+const mobileMenu = document.getElementById('mobile-menu');
+const overlayBg = document.getElementById('overlay-bg');
+const mobileOverlay = document.getElementById('mobile-overlay');
+
+function openMenu() {
+    mobileMenu.classList.add('open');
+    overlayBg.style.opacity = '1';
+    overlayBg.classList.remove('pointer-events-none');
+    mobileOverlay.classList.remove('pointer-events-none');
+}
+function closeMenu() {
+    mobileMenu.classList.remove('open');
+    overlayBg.style.opacity = '0';
+    overlayBg.classList.add('pointer-events-none');
+    mobileOverlay.classList.add('pointer-events-none');
+}
+menuToggle.addEventListener('click', openMenu);
+menuClose.addEventListener('click', closeMenu);
+overlayBg.addEventListener('click', closeMenu);
+// Close on nav link click
+mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+
+// --- Scroll reveal (inspired by v3 IntersectionObserver) ---
+const revealElements = document.querySelectorAll('.reveal-up');
+
+if ('IntersectionObserver' in window) {
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('revealed');
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
+    revealElements.forEach(el => revealObserver.observe(el));
+}
+
+// Fallback: reveal everything after 2s in case observer doesn't fire
+setTimeout(() => {
+    revealElements.forEach(el => el.classList.add('revealed'));
+}, 2000);
+
+// Also reveal on scroll as a secondary fallback
+function checkReveal() {
+    revealElements.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 50) {
+            el.classList.add('revealed');
+        }
+    });
+}
+window.addEventListener('scroll', checkReveal, { passive: true });
+checkReveal();
+</script>
+</body>
+</html>
