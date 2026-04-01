@@ -593,7 +593,7 @@ function renderHero(page) {
       </div>
       <div class="relative z-10 text-center max-w-2xl mx-auto pt-[12vh]">
         ${page.eyebrow ? `<span class="font-handwriting text-xl md:text-2xl text-sage/80 block mb-5">${page.eyebrow}</span>` : ''}
-        <h1 class="font-headline text-5xl md:text-7xl mb-5 typewriter-cursor">${page.title || ''}</h1>
+        <h1 class="font-headline text-5xl md:text-7xl mb-5"><span class="typewriter-anim">${page.title || ''}</span></h1>
         <p class="font-body italic text-on-surface-variant mb-8 text-xs md:text-sm bg-parchment/75 backdrop-blur-sm px-5 py-3 rounded-sm inline-block max-w-[36rem]">
           ${page.intro || ''}
         </p>

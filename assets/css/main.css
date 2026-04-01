@@ -67,7 +67,9 @@ body {
     border-right: .15em solid #C5A3D1;
     white-space: nowrap;
     margin: 0 auto;
-    animation: typing 3.5s steps(30, end), blink-caret .75s step-end infinite;
+    display: inline-block;
+    width: 0;
+    animation: typing 2.8s steps(18, end) forwards, blink-caret .75s step-end infinite;
 }
 @keyframes typing { from { width: 0 } to { width: 100% } }
 @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: #C5A3D1; } }
@@ -107,11 +109,4 @@ body {
 
 .arch-frame {
     border-radius: 12rem 12rem 2rem 2rem;
-}
-
-.typewriter-cursor::after {
-    content: "|";
-    animation: blink-caret .75s step-end infinite;
-    color: #C5A3D1;
-    margin-left: 0.12em;
 }
