@@ -4,6 +4,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   const data = window.NINA_SITE_DATA || {};
+  window.NINA_RUNTIME_DATA = data;
   const path = normalizePath(window.location.pathname);
   const lang = path.startsWith('/en/') || path === '/en/' ? 'en' : 'nl';
   const page = data.pages[path] || buildFallbackPage(path, lang);
@@ -24,6 +25,63 @@ function normalizePath(pathname) {
 
 function stripHtml(text) {
   return text.replace(/<[^>]*>/g, '');
+}
+
+function formatTourDate(datetime, lang) {
+  const date = new Date(datetime);
+  if (Number.isNaN(date.getTime())) return '';
+  const locale = lang === 'nl' ? 'nl-NL' : 'en-GB';
+  return new Intl.DateTimeFormat(locale, {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric'
+  }).format(date).replace('.', '').toUpperCase();
+}
+
+function formatEventLocation(event) {
+  const venue = event?.venue || {};
+  const parts = [venue.city, venue.region || venue.country].filter(Boolean);
+  return parts.join(', ');
+}
+
+function mapBandsintownEvent(event, lang, fallbackHref) {
+  const offers = Array.isArray(event?.offers) ? event.offers : [];
+  const primaryOffer = offers.find((offer) => offer?.url) || null;
+  const cta = primaryOffer
+    ? (lang === 'nl' ? 'Tickets' : 'Tickets')
+    : (lang === 'nl' ? 'Details' : 'Details');
+
+  return {
+    date: formatTourDate(event?.datetime, lang),
+    venue: event?.venue?.name || event?.title || (lang === 'nl' ? 'Aankomend optreden' : 'Upcoming performance'),
+    location: formatEventLocation(event),
+    cta,
+    href: primaryOffer?.url || event?.url || fallbackHref,
+    infoHref: event?.url || fallbackHref
+  };
+}
+
+function renderTourRows(rows, lang) {
+  return rows.map(row => `
+    <div class="tour-row tour-row-stagger md:col-span-12 group hover:bg-sage/5 transition-colors grid grid-cols-1 md:grid-cols-12 items-center">
+      <div class="md:col-span-3 pt-8 md:py-8 px-6 md:border-r border-sage/15">
+        <span class="md:hidden font-body uppercase tracking-[0.18em] text-sage text-[11px] block mb-2">${lang === 'nl' ? 'Datum' : 'Date'}</span>
+        <span class="font-body text-xs text-sage block tracking-widest">${row.date}</span>
+      </div>
+      <div class="md:col-span-5 px-6 py-2 md:py-8 md:border-r border-sage/15">
+        <span class="md:hidden font-body uppercase tracking-[0.18em] text-sage text-[11px] block mb-2">${lang === 'nl' ? 'Locatie' : 'Venue'}</span>
+        <h3 class="font-headline text-2xl">${row.venue}</h3>
+        <p class="font-body text-sm text-on-surface-variant">${row.location}</p>
+      </div>
+      <div class="md:col-span-4 pb-8 md:py-8 px-6 flex md:justify-end">
+        <span class="md:hidden font-body uppercase tracking-[0.18em] text-sage text-[11px] block mb-2 w-full">${lang === 'nl' ? 'Toegang' : 'Access'}</span>
+        <div class="tour-row-actions flex flex-wrap items-center gap-5 md:justify-end w-full md:w-auto">
+          <a class="btn-ghost font-body" href="${row.href}">${row.cta}</a>
+          <a class="btn-ghost font-body" href="${row.infoHref || row.href}">${lang === 'nl' ? 'Meer info' : 'More info'}</a>
+        </div>
+      </div>
+    </div>
+  `).join('');
 }
 
 function socialIconSvg(label) {
@@ -181,17 +239,12 @@ function buildFallbackPage(path, lang) {
         { label: isNl ? 'Beluister muziek' : 'Listen to music', href: musicHref },
         { label: isNl ? 'Contact' : 'Contact', href: contactHref }
       ],
-      sections: [
-        {
-          kicker: isNl ? 'Komende avonden' : 'Upcoming evenings',
-          heading: isNl ? 'Dichtbij, open en aandachtig' : 'Close, open and attentive',
-          cards: [
-            { title: isNl ? 'Paradiso' : 'Paradiso', text: isNl ? 'Amsterdam, een intieme set tussen nieuw werk en vertrouwde songs.' : 'Amsterdam, an intimate set moving between new work and familiar songs.' },
-            { title: isNl ? 'TivoliVredenburg' : 'TivoliVredenburg', text: isNl ? 'Utrecht, met meer ruimte voor banddynamiek en lange lijnen.' : 'Utrecht, with more room for band dynamics and long arcs.' },
-            { title: isNl ? 'Doornroosje' : 'Doornroosje', text: isNl ? 'Nijmegen, ergens tussen fluistering en open veld.' : 'Nijmegen, somewhere between whisper and open field.' }
-          ]
-        }
-      ]
+      liveFeed: {
+        kicker: isNl ? 'Komende avonden' : 'Upcoming evenings',
+        heading: isNl ? 'Dichtbij, open en aandachtig' : 'Close, open and attentive',
+        loadingText: isNl ? 'Aankomende optredens worden geladen…' : 'Loading upcoming performances…',
+        emptyText: isNl ? 'Er staan momenteel nog geen aankomende optredens online.' : 'There are no upcoming performances online right now.'
+      }
     };
   }
 
@@ -489,7 +542,9 @@ function renderPage({ page, menu, footerLinks, socialLinks, path, lang }) {
     </div>
 
     <main class="selection:bg-lavender/30">
-      ${page.homeLayout ? renderHome(page, lang) : `${renderHero(page)}${renderPrimarySection(page, lang)}${renderSecondarySection(page, lang)}`}
+      ${page.homeLayout
+        ? renderHome(page, lang)
+        : `${renderHero(page)}${page.liveFeed ? renderLiveFeedSection(page, lang, path) : renderPrimarySection(page, lang)}${renderSecondarySection(page, lang)}`}
     </main>
 
     <footer class="py-20 md:py-24 px-6 md:px-8 border-t border-sage/10 bg-parchment relative">
@@ -550,6 +605,7 @@ function renderPage({ page, menu, footerLinks, socialLinks, path, lang }) {
 }
 
 function renderHome(page, lang) {
+  const fallbackHref = lang === 'nl' ? '/nl/live/agenda/' : '/en/live/gigs/';
   return `
     ${renderHero(page)}
     <div class="w-48 mx-auto divider-motif draw-divider my-0"></div>
@@ -562,34 +618,19 @@ function renderHome(page, lang) {
           <span class="font-handwriting text-lavender block text-lg md:text-xl mb-2">${page.tour.kicker}</span>
           <h2 class="font-headline text-3xl md:text-4xl text-on-surface">${page.tour.heading}</h2>
         </div>
-        <div class="tour-ledger grid grid-cols-1 md:grid-cols-12 gap-0">
+        <div class="tour-ledger grid grid-cols-1 md:grid-cols-12 gap-0" data-live-feed data-lang="${lang}" data-limit="3" data-fallback-href="${fallbackHref}" data-loading-text="${lang === 'nl' ? 'Aankomende optredens worden geladen…' : 'Loading upcoming performances…'}" data-empty-text="${lang === 'nl' ? 'Er staan momenteel nog geen aankomende optredens online.' : 'There are no upcoming performances online right now.'}">
           <div class="hidden md:contents font-body uppercase tracking-[0.18em] text-sage text-[11px]">
             <div class="md:col-span-3 py-4 border-r border-sage/15 px-6">${lang === 'nl' ? 'Datum' : 'Date'}</div>
             <div class="md:col-span-5 py-4 border-r border-sage/15 px-6">${lang === 'nl' ? 'Locatie' : 'Venue'}</div>
             <div class="md:col-span-4 py-4 px-6 text-right">${lang === 'nl' ? 'Toegang' : 'Access'}</div>
           </div>
-          ${page.tour.rows.map(row => `
-            <div class="tour-row tour-row-stagger md:col-span-12 group hover:bg-sage/5 transition-colors grid grid-cols-1 md:grid-cols-12 items-center">
-              <div class="md:col-span-3 pt-8 md:py-8 px-6 md:border-r border-sage/15">
-                <span class="md:hidden font-body uppercase tracking-[0.18em] text-sage text-[11px] block mb-2">${lang === 'nl' ? 'Datum' : 'Date'}</span>
-                <span class="font-body text-xs text-sage block tracking-widest">${row.date}</span>
-              </div>
-              <div class="md:col-span-5 px-6 py-2 md:py-8 md:border-r border-sage/15">
-                <span class="md:hidden font-body uppercase tracking-[0.18em] text-sage text-[11px] block mb-2">${lang === 'nl' ? 'Locatie' : 'Venue'}</span>
-                <h3 class="font-headline text-2xl">${row.venue}</h3>
-                <p class="font-body text-sm text-on-surface-variant">${row.location}</p>
-              </div>
-              <div class="md:col-span-4 pb-8 md:py-8 px-6 flex md:justify-end">
-                <span class="md:hidden font-body uppercase tracking-[0.18em] text-sage text-[11px] block mb-2 w-full">${lang === 'nl' ? 'Toegang' : 'Access'}</span>
-                <a class="btn-ghost font-body" href="${row.href}">${row.cta}</a>
-              </div>
-            </div>
-          `).join('')}
+          <div class="live-feed-status md:col-span-12 font-body text-sm text-on-surface-variant px-6 py-5 hidden"></div>
+          <div class="md:contents live-feed-rows">${renderTourRows(page.tour.rows, lang)}</div>
         </div>
       </div>
-      <div class="w-48 mx-auto divider-motif draw-divider mt-24"></div>
+      <div class="w-48 mx-auto divider-motif draw-divider mt-14 md:mt-16"></div>
     </section>
-    <section class="py-24 md:py-40 relative overflow-hidden editorial-divider flower-press-corners reveal-section reveal-paper-lift">
+    <section class="pt-14 md:pt-16 pb-24 md:pb-40 relative overflow-hidden editorial-divider flower-press-corners reveal-section reveal-paper-lift">
       <div class="absolute top-10 right-10 opacity-10 pointer-events-none botanical-float">
         <span class="material-symbols-outlined text-[200px] text-lavender">wb_iridescent</span>
       </div>
@@ -650,6 +691,35 @@ function renderHome(page, lang) {
           <a class="btn-pill font-body tracking-wider" href="${lang === 'nl' ? '/nl/shop/' : '/en/shop/'}">${lang === 'nl' ? 'Bekijk de volledige shop' : 'Browse the full shop'}</a>
         </div>
       </div>
+    </section>
+  `;
+}
+
+function renderLiveFeedSection(page, lang, path) {
+  const fallbackHref = path;
+  const liveFeed = page.liveFeed || {};
+  return `
+    <div class="w-48 mx-auto divider-motif draw-divider my-0"></div>
+    <section class="py-20 md:py-32 px-4 md:px-6 max-w-5xl mx-auto relative editorial-divider reveal-section reveal-paper-lift">
+      <div class="absolute -left-10 top-0 opacity-15 hidden lg:block botanical-float pointer-events-none">
+        <span class="material-symbols-outlined text-8xl text-sage">local_florist</span>
+      </div>
+      <div class="reveal-up">
+        <div class="mb-12 md:mb-20 text-center relative">
+          <span class="font-handwriting text-lavender block text-lg md:text-xl mb-2">${liveFeed.kicker || (lang === 'nl' ? 'Komende avonden' : 'Upcoming evenings')}</span>
+          <h2 class="font-headline text-3xl md:text-4xl text-on-surface">${liveFeed.heading || (lang === 'nl' ? 'Aankomende optredens' : 'Upcoming performances')}</h2>
+        </div>
+        <div class="tour-ledger grid grid-cols-1 md:grid-cols-12 gap-0" data-live-feed data-lang="${lang}" data-fallback-href="${fallbackHref}" data-loading-text="${liveFeed.loadingText || ''}" data-empty-text="${liveFeed.emptyText || ''}">
+          <div class="hidden md:contents font-body uppercase tracking-[0.18em] text-sage text-[11px]">
+            <div class="md:col-span-3 py-4 border-r border-sage/15 px-6">${lang === 'nl' ? 'Datum' : 'Date'}</div>
+            <div class="md:col-span-5 py-4 border-r border-sage/15 px-6">${lang === 'nl' ? 'Locatie' : 'Venue'}</div>
+            <div class="md:col-span-4 py-4 px-6 text-right">${lang === 'nl' ? 'Toegang' : 'Access'}</div>
+          </div>
+          <div class="live-feed-status md:col-span-12 font-body text-sm text-on-surface-variant px-6 py-5">${liveFeed.loadingText || ''}</div>
+          <div class="md:contents live-feed-rows"></div>
+        </div>
+      </div>
+      <div class="w-48 mx-auto divider-motif draw-divider mt-24"></div>
     </section>
   `;
 }
@@ -741,17 +811,80 @@ function renderHero(page) {
           ${renderHeroBloom('right')}
         </div>
       </div>
-      <div class="hero-parallax-content relative z-10 text-center max-w-2xl mx-auto pt-20 sm:pt-24 md:pt-[16vh] px-4">
-        ${page.eyebrow ? `<span class="font-handwriting text-lg md:text-2xl text-sage/80 block mb-4 md:mb-5">${page.eyebrow}</span>` : ''}
-        <h1 class="font-headline text-4xl sm:text-5xl md:text-7xl mb-4 md:mb-5"><span class="typewriter-anim typewriter-target" data-text="${escapeHtml(page.title || '')}"></span></h1>
-        <p class="font-body italic text-on-surface-variant mb-6 md:mb-8 text-[11px] md:text-sm bg-parchment/75 backdrop-blur-sm px-4 md:px-5 py-3 rounded-sm inline-block max-w-[36rem]">
-          ${page.intro || ''}
-        </p>
-        <div class="flex flex-wrap items-center justify-center gap-3 md:gap-4">
-          ${(page.primaryCtas || []).map(cta => `<a class="btn-pill btn-pill-hero font-body text-[10px] uppercase tracking-[0.25em] px-7 py-3" href="${cta.href}">${cta.label}</a>`).join('')}
+      <div class="hero-parallax-content absolute inset-x-0 top-16 md:top-20 bottom-0 z-10 flex items-center justify-center px-4">
+        <div class="text-center max-w-2xl mx-auto">
+          ${page.eyebrow ? `<span class="font-handwriting text-lg md:text-2xl text-sage/80 block mb-4 md:mb-5">${page.eyebrow}</span>` : ''}
+          <h1 class="font-headline text-4xl sm:text-5xl md:text-7xl mb-4 md:mb-5"><span class="typewriter-anim typewriter-target" data-text="${escapeHtml(page.title || '')}"></span></h1>
+          <p class="font-body italic text-on-surface-variant mb-6 md:mb-8 text-[11px] md:text-sm bg-parchment/75 backdrop-blur-sm px-4 md:px-5 py-3 rounded-sm inline-block max-w-[36rem]">
+            ${page.intro || ''}
+          </p>
+          <div class="flex flex-wrap items-center justify-center gap-3 md:gap-4">
+            ${(page.primaryCtas || []).map(cta => `<a class="btn-pill btn-pill-hero font-body text-[10px] uppercase tracking-[0.25em] px-7 py-3" href="${cta.href}">${cta.label}</a>`).join('')}
+          </div>
         </div>
       </div>
     </section>
+  `;
+}
+
+function renderHeroWillowBorder() {
+  return `
+    <svg class="hero-willow-svg absolute inset-0 z-[2] w-full h-full pointer-events-none overflow-visible" viewBox="0 0 1200 760" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g class="willow-border-main" stroke-linecap="round" stroke-linejoin="round">
+        <path class="willow-branch" d="M30 760L30 228C30 102 118 20 212 20L600 20" stroke="#6E5945" stroke-width="4"/>
+        <path class="willow-branch" d="M1170 760L1170 228C1170 102 1082 20 988 20L600 20" stroke="#6E5945" stroke-width="4"/>
+        <path class="willow-branch" d="M30 760L30 228C30 102 118 20 212 20L600 20" stroke="#8B755A" stroke-width="1.2" stroke-opacity="0.4"/>
+        <path class="willow-branch" d="M1170 760L1170 228C1170 102 1082 20 988 20L600 20" stroke="#8B755A" stroke-width="1.2" stroke-opacity="0.4"/>
+      </g>
+      <g class="ivy-vines" stroke="#6F8A71" stroke-linecap="round" stroke-linejoin="round" fill="none">
+        <path class="ivy-vine" d="M58 722C54 632 56 556 66 482C76 404 98 326 134 248" stroke-width="2"/>
+        <path class="ivy-vine" d="M86 700C84 624 88 558 100 500C114 430 138 360 170 292" stroke-width="1.7"/>
+        <path class="ivy-vine" d="M1142 722C1146 632 1144 556 1134 482C1124 404 1102 326 1066 248" stroke-width="2"/>
+        <path class="ivy-vine" d="M1114 700C1116 624 1112 558 1100 500C1086 430 1062 360 1030 292" stroke-width="1.7"/>
+      </g>
+      <g class="ivy-leaves" fill="#A8C0A8" fill-opacity="0.82" stroke="#7A977B" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round">
+        <path class="ivy-leaf" d="M144 604C152 594 167 594 172 606C178 620 170 634 158 636C145 639 133 629 134 616C135 610 138 607 144 604Z"/>
+        <path class="ivy-leaf" d="M168 542C176 534 190 534 196 545C203 558 196 572 184 575C172 578 160 569 160 556C160 550 163 546 168 542Z"/>
+        <path class="ivy-leaf" d="M194 478C202 470 216 470 222 481C229 494 222 508 210 511C198 514 186 505 186 492C186 486 189 482 194 478Z"/>
+        <path class="ivy-leaf" d="M1028 604C1020 594 1005 594 1000 606C994 620 1002 634 1014 636C1027 639 1039 629 1038 616C1037 610 1034 607 1028 604Z"/>
+        <path class="ivy-leaf" d="M1004 542C996 534 982 534 976 545C969 558 976 572 988 575C1000 578 1012 569 1012 556C1012 550 1009 546 1004 542Z"/>
+        <path class="ivy-leaf" d="M978 478C970 470 956 470 950 481C943 494 950 508 962 511C974 514 986 505 986 492C986 486 983 482 978 478Z"/>
+      </g>
+      <g class="ivy-flowers" fill="#DDB7E6" fill-opacity="0.92" stroke="#B48CC5" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round">
+        <g class="ivy-flower" transform="translate(180 500)">
+          <circle r="2.1" fill="#F8F2F7" stroke="#D9C3E1" stroke-width="0.6"/>
+          <ellipse cx="0" cy="-6.4" rx="2.2" ry="4.8"/>
+          <ellipse cx="5.6" cy="-1.8" rx="2" ry="4.4" transform="rotate(58 5.6 -1.8)"/>
+          <ellipse cx="3.8" cy="4.8" rx="2" ry="4.2" transform="rotate(124 3.8 4.8)"/>
+          <ellipse cx="-3.8" cy="4.8" rx="2" ry="4.2" transform="rotate(-124 -3.8 4.8)"/>
+          <ellipse cx="-5.6" cy="-1.8" rx="2" ry="4.4" transform="rotate(-58 -5.6 -1.8)"/>
+        </g>
+        <g class="ivy-flower" transform="translate(220 420)">
+          <circle r="1.9" fill="#FFF8FB" stroke="#D9C3E1" stroke-width="0.55"/>
+          <ellipse cx="0" cy="-5.6" rx="1.9" ry="4.2"/>
+          <ellipse cx="4.9" cy="-1.5" rx="1.8" ry="4" transform="rotate(58 4.9 -1.5)"/>
+          <ellipse cx="3.2" cy="4.1" rx="1.8" ry="3.8" transform="rotate(124 3.2 4.1)"/>
+          <ellipse cx="-3.2" cy="4.1" rx="1.8" ry="3.8" transform="rotate(-124 -3.2 4.1)"/>
+          <ellipse cx="-4.9" cy="-1.5" rx="1.8" ry="4" transform="rotate(-58 -4.9 -1.5)"/>
+        </g>
+        <g class="ivy-flower" transform="translate(1020 500)">
+          <circle r="2.1" fill="#F8F2F7" stroke="#D9C3E1" stroke-width="0.6"/>
+          <ellipse cx="0" cy="-6.4" rx="2.2" ry="4.8"/>
+          <ellipse cx="5.6" cy="-1.8" rx="2" ry="4.4" transform="rotate(58 5.6 -1.8)"/>
+          <ellipse cx="3.8" cy="4.8" rx="2" ry="4.2" transform="rotate(124 3.8 4.8)"/>
+          <ellipse cx="-3.8" cy="4.8" rx="2" ry="4.2" transform="rotate(-124 -3.8 4.8)"/>
+          <ellipse cx="-5.6" cy="-1.8" rx="2" ry="4.4" transform="rotate(-58 -5.6 -1.8)"/>
+        </g>
+        <g class="ivy-flower" transform="translate(980 420)">
+          <circle r="1.9" fill="#FFF8FB" stroke="#D9C3E1" stroke-width="0.55"/>
+          <ellipse cx="0" cy="-5.6" rx="1.9" ry="4.2"/>
+          <ellipse cx="4.9" cy="-1.5" rx="1.8" ry="4" transform="rotate(58 4.9 -1.5)"/>
+          <ellipse cx="3.2" cy="4.1" rx="1.8" ry="3.8" transform="rotate(124 3.2 4.1)"/>
+          <ellipse cx="-3.2" cy="4.1" rx="1.8" ry="3.8" transform="rotate(-124 -3.2 4.1)"/>
+          <ellipse cx="-4.9" cy="-1.5" rx="1.8" ry="4" transform="rotate(-58 -4.9 -1.5)"/>
+        </g>
+      </g>
+    </svg>
   `;
 }
 
@@ -1105,6 +1238,7 @@ function bindUi() {
   initTypewriters();
   initHeroBlooms();
   initHomepageMotion();
+  hydrateLiveFeeds();
 }
 
 function bindNewsletterForm() {
@@ -1212,6 +1346,7 @@ function initTypewriters() {
                       window.setTimeout(() => {
                         typeText('To Flower', () => {
                           el.classList.add('typewriter-settled');
+                          window.dispatchEvent(new CustomEvent('ninalynn:hero-flower-settled'));
                         });
                       }, 220);
                     });
@@ -1260,22 +1395,22 @@ function initHeroBlooms() {
             opacity: (_, el) => Number(el.getAttribute('fill-opacity') || 1),
             y: 0,
             scaleY: 1,
-            duration: 0.46,
+            duration: 0.24,
             stagger: 0.08,
             ease: 'power1.out'
           })
           .to(ridges, {
             strokeDashoffset: 0,
-            duration: 0.9,
+            duration: 0.44,
             stagger: 0.08,
             ease: 'power1.inOut'
-          }, '-=0.18')
+          }, '-=0.08')
           .to(specks, {
             opacity: 1,
-            duration: 0.18,
+            duration: 0.12,
             stagger: 0.04,
             ease: 'none'
-          }, '-=0.12');
+          }, '-=0.06');
       });
     }
 
@@ -1301,26 +1436,26 @@ function initHeroBlooms() {
 
       tl.to(grasses, {
         strokeDashoffset: 0,
-        duration: 1.4,
+        duration: 0.72,
         stagger: 0.05,
         ease: 'power1.inOut'
       }).to(stems, {
         strokeDashoffset: 0,
-        duration: 1.12,
+        duration: 0.58,
         stagger: 0.1,
         ease: 'power1.inOut'
-      }, '-=0.82').to(leaves, {
+      }, '-=0.38').to(leaves, {
         opacity: 1,
         strokeDashoffset: 0,
-        duration: 0.52,
-        stagger: 0.05,
-        ease: 'power1.out'
-      }, '-=0.72').to(leaves, {
-        fillOpacity: (_, el) => Number(el.dataset.sketchFillOpacity || 1),
         duration: 0.28,
         stagger: 0.05,
+        ease: 'power1.out'
+      }, '-=0.18').to(leaves, {
+        fillOpacity: (_, el) => Number(el.dataset.sketchFillOpacity || 1),
+        duration: 0.16,
+        stagger: 0.05,
         ease: 'none'
-      }, '-=0.36').to(flowerParts, {
+      }, '-=0.08').to(flowerParts, {
         opacity: 1,
         strokeDashoffset: 0,
         duration: 0.46,
@@ -1366,6 +1501,106 @@ function initHeroBlooms() {
         });
       });
     });
+  });
+}
+
+function initHeroWillowBorder() {
+  ensureGsap().then((gsapInstance) => {
+    if (!gsapInstance) return;
+
+    const willowSvg = document.querySelector('.hero-willow-svg');
+    if (!willowSvg) return;
+
+    const branches = willowSvg.querySelectorAll('.willow-branch');
+    const ivyVines = willowSvg.querySelectorAll('.ivy-vine');
+    const ivyLeaves = willowSvg.querySelectorAll('.ivy-leaf');
+    const ivyFlowers = willowSvg.querySelectorAll('.ivy-flower');
+
+    branches.forEach(preparePathGrowth);
+    ivyVines.forEach(preparePathGrowth);
+    ivyLeaves.forEach(prepareSketchShape);
+    gsapInstance.set(branches, { opacity: 1 });
+    gsapInstance.set(ivyVines, { opacity: 0 });
+    gsapInstance.set(ivyLeaves, { opacity: 0 });
+    gsapInstance.set(ivyFlowers, { opacity: 0, scale: 0.72, transformOrigin: '50% 50%' });
+
+    const tl = gsapInstance.timeline({ delay: 0.22 });
+    tl.to(branches, {
+      strokeDashoffset: 0,
+      duration: 1.5,
+      stagger: 0.08,
+      ease: 'power1.inOut'
+    }).to(ivyVines, {
+      opacity: 1,
+      strokeDashoffset: 0,
+      duration: 0.72,
+      stagger: 0.06,
+      ease: 'power1.out'
+    }, '-=0.18').to(ivyLeaves, {
+      opacity: 1,
+      strokeDashoffset: 0,
+      duration: 0.42,
+      stagger: 0.04,
+      ease: 'power1.out'
+    }, '-=0.24').to(ivyLeaves, {
+      fillOpacity: (_, el) => Number(el.dataset.sketchFillOpacity || 1),
+      duration: 0.22,
+      stagger: 0.03,
+      ease: 'none'
+    }).add(() => {
+      branches.forEach((branch, index) => {
+        gsapInstance.to(branch, {
+          rotation: index === 0 ? 0.28 : -0.18,
+          duration: 5.2 + index * 0.2,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          transformOrigin: '50% 50%'
+        });
+      });
+
+      ivyVines.forEach((vine, index) => {
+        gsapInstance.to(vine, {
+          rotation: index % 2 === 0 ? 0.9 : -0.9,
+          duration: 4.4 + index * 0.2,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          transformOrigin: index < 2 ? '0% 100%' : '100% 100%'
+        });
+      });
+
+      ivyLeaves.forEach((leaf, index) => {
+        gsapInstance.to(leaf, {
+          rotation: index % 2 === 0 ? 2.4 : -2.2,
+          duration: 3.1 + index * 0.08,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          transformOrigin: '50% 50%'
+        });
+      });
+    });
+
+    let flowersShown = false;
+    const revealFlowers = () => {
+      if (flowersShown) return;
+      flowersShown = true;
+      gsapInstance.set(ivyFlowers, { opacity: 0, scale: 0.78 });
+      gsapInstance.to(ivyFlowers, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.58,
+        stagger: 0.08,
+        ease: 'back.out(1.3)',
+        clearProps: 'transform,opacity'
+      });
+    };
+
+    window.addEventListener('ninalynn:hero-flower-settled', revealFlowers, { once: true });
+    if (document.querySelector('.typewriter-target.typewriter-settled')) {
+      revealFlowers();
+    }
   });
 }
 
@@ -1519,4 +1754,80 @@ function ensureGsap() {
   });
 
   return window.__ninaGsapPromise;
+}
+
+async function hydrateLiveFeeds() {
+  const feedNodes = Array.from(document.querySelectorAll('[data-live-feed]'));
+  if (!feedNodes.length) return;
+
+  const runtimeData = window.NINA_RUNTIME_DATA || {};
+  const bandsintown = runtimeData.bandsintown || {};
+  if (!bandsintown.artist || !bandsintown.appId) return;
+
+  try {
+    const response = await fetch(`https://rest.bandsintown.com/artists/${encodeURIComponent(bandsintown.artist)}/events/?app_id=${encodeURIComponent(bandsintown.appId)}`);
+    if (!response.ok) throw new Error(`Bandsintown request failed: ${response.status}`);
+
+    const payload = await response.json();
+    const events = Array.isArray(payload) ? payload : [];
+    const upcoming = events
+      .filter((event) => {
+        const value = new Date(event?.datetime || '');
+        return !Number.isNaN(value.getTime()) && value.getTime() >= Date.now() - 60 * 60 * 1000;
+      })
+      .sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
+
+    feedNodes.forEach((feedNode) => {
+      const lang = feedNode.dataset.lang || document.documentElement.lang || 'nl';
+      const fallbackHref = feedNode.dataset.fallbackHref || '/';
+      const limit = Number(feedNode.dataset.limit || 0);
+      const loadingText = feedNode.dataset.loadingText || '';
+      const emptyText = feedNode.dataset.emptyText || '';
+      const statusNode = feedNode.querySelector('.live-feed-status');
+      const rowsNode = feedNode.querySelector('.live-feed-rows');
+
+      if (!rowsNode) return;
+
+      const selectedEvents = limit > 0 ? upcoming.slice(0, limit) : upcoming;
+      const rows = selectedEvents.map((event) => mapBandsintownEvent(event, lang, fallbackHref));
+
+      if (!rows.length) {
+        rowsNode.innerHTML = '';
+        if (statusNode) {
+          statusNode.textContent = emptyText || loadingText;
+          statusNode.classList.remove('hidden');
+        }
+        return;
+      }
+
+      rowsNode.innerHTML = renderTourRows(rows, lang);
+      if (statusNode) {
+        statusNode.textContent = '';
+        statusNode.classList.add('hidden');
+      }
+
+      if (window.gsap) {
+        window.gsap.fromTo(rowsNode.querySelectorAll('.tour-row'), {
+          opacity: 0,
+          y: 14
+        }, {
+          opacity: 1,
+          y: 0,
+          duration: 0.56,
+          stagger: 0.07,
+          ease: 'power2.out',
+          clearProps: 'opacity,transform'
+        });
+      }
+    });
+  } catch (error) {
+    console.error('Unable to load Bandsintown events', error);
+    feedNodes.forEach((feedNode) => {
+      const statusNode = feedNode.querySelector('.live-feed-status');
+      if (statusNode && !feedNode.querySelector('.live-feed-rows')?.children.length) {
+        statusNode.textContent = feedNode.dataset.emptyText || statusNode.textContent;
+        statusNode.classList.remove('hidden');
+      }
+    });
+  }
 }

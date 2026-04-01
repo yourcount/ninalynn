@@ -719,12 +719,31 @@ main {
 
 .hero-frame-tint {
     background:
-        linear-gradient(180deg, rgba(205, 221, 202, 0.24), rgba(168, 193, 167, 0.14)),
-        radial-gradient(circle at 50% 120%, rgba(139, 168, 142, 0.22), transparent 58%);
+        radial-gradient(circle at 18% 22%, rgba(255, 250, 244, 0.22), transparent 26%),
+        radial-gradient(circle at 78% 18%, rgba(255, 249, 240, 0.18), transparent 24%),
+        radial-gradient(circle at 50% 120%, rgba(139, 168, 142, 0.22), transparent 58%),
+        linear-gradient(180deg, rgba(205, 221, 202, 0.22), rgba(168, 193, 167, 0.14)),
+        radial-gradient(circle at 12px 18px, rgba(118, 105, 89, 0.055) 0 0.8px, transparent 0.95px),
+        radial-gradient(circle at 42px 36px, rgba(139, 168, 142, 0.05) 0 0.9px, transparent 1.05px),
+        radial-gradient(circle at 68px 24px, rgba(197, 163, 209, 0.042) 0 0.7px, transparent 0.9px),
+        radial-gradient(ellipse at 28px 52px, rgba(105, 91, 74, 0.038) 0 1.6px, transparent 1.8px),
+        radial-gradient(ellipse at 88px 62px, rgba(113, 98, 81, 0.034) 0 1.3px, transparent 1.5px);
+    background-size:
+        auto,
+        auto,
+        auto,
+        auto,
+        92px 76px,
+        110px 84px,
+        126px 94px,
+        144px 110px,
+        154px 118px;
+    background-blend-mode: screen, screen, multiply, normal, multiply, multiply, multiply, multiply, multiply;
     mix-blend-mode: multiply;
     pointer-events: none;
     z-index: 1;
     will-change: transform, opacity;
+    filter: saturate(0.92) contrast(1.02);
 }
 
 .hero-frame-backdrop video {
@@ -732,6 +751,15 @@ main {
     z-index: 0;
     opacity: 0.58;
     will-change: transform;
+}
+
+.hero-willow-svg {
+    overflow: visible;
+}
+
+.hero-willow-svg .ivy-leaf,
+.hero-willow-svg .ivy-flower {
+    opacity: 0;
 }
 
 .hero-parallax-blooms,

@@ -1,4 +1,8 @@
 window.NINA_SITE_DATA = {
+  bandsintown: {
+    artist: 'NinaLynn',
+    appId: '0771e1a17bf250a1117c0f015a3150c8'
+  },
   socialLinks: [
     {
       label: 'Instagram',
