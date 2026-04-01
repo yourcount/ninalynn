@@ -583,15 +583,15 @@ function mobileNavLink(item, path) {
 
 function renderHero(page) {
   return `
-    <section class="relative pt-28 pb-6 px-6">
-      <div class="absolute inset-0 z-0 flex items-start justify-center pt-28">
-        <div class="w-[82%] max-w-[1150px] h-[72vh] min-h-[30rem] max-h-[820px] arch-frame overflow-hidden opacity-60">
+    <section class="relative min-h-screen px-6 pt-28">
+      <div class="absolute inset-x-0 top-28 bottom-0 z-0 flex items-start justify-center">
+        <div class="w-[82%] max-w-[1150px] h-full arch-frame overflow-hidden opacity-60">
           <video class="block w-full h-full object-cover" autoplay muted loop playsinline preload="auto">
             <source src="https://ninalynn.nl/wp-content/uploads/2021/01/Slider_short.mp4" type="video/mp4"/>
           </video>
         </div>
       </div>
-      <div class="relative z-10 text-center max-w-2xl mx-auto pt-[12vh]">
+      <div class="relative z-10 text-center max-w-2xl mx-auto pt-[18vh]">
         ${page.eyebrow ? `<span class="font-handwriting text-xl md:text-2xl text-sage/80 block mb-5">${page.eyebrow}</span>` : ''}
         <h1 class="font-headline text-5xl md:text-7xl mb-5"><span class="typewriter-anim">${page.title || ''}</span></h1>
         <p class="font-body italic text-on-surface-variant mb-8 text-xs md:text-sm bg-parchment/75 backdrop-blur-sm px-5 py-3 rounded-sm inline-block max-w-[36rem]">
