@@ -586,7 +586,7 @@ function renderHero(page) {
     <section class="relative min-h-screen flex items-center justify-center pt-20 px-6">
       <div class="absolute inset-0 z-0 flex items-center justify-center">
         <div class="w-[82%] max-w-[1150px] h-[72vh] min-h-[30rem] max-h-[820px] arch-frame overflow-hidden opacity-60">
-          <video class="w-full h-full object-cover" autoplay muted loop playsinline preload="auto">
+          <video class="block w-full h-full object-cover" autoplay muted loop playsinline preload="auto">
             <source src="https://ninalynn.nl/wp-content/uploads/2021/01/Slider_short.mp4" type="video/mp4"/>
           </video>
         </div>
