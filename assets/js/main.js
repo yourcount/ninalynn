@@ -63,21 +63,21 @@ function mapBandsintownEvent(event, lang, fallbackHref) {
 
 function renderTourRows(rows, lang) {
   return rows.map(row => `
-    <div class="tour-row tour-row-stagger md:col-span-12 group hover:bg-sage/5 transition-colors grid grid-cols-1 md:grid-cols-12 items-center">
-      <div class="md:col-span-3 pt-8 md:py-8 px-6 md:border-r border-sage/15">
+    <div class="tour-row tour-row-stagger track-wash tilt-card paper-row md:col-span-12 group hover:bg-sage/5 transition-colors grid grid-cols-1 md:grid-cols-12 items-center">
+      <div class="md:col-span-3 pt-8 md:py-9 px-7 md:px-7 md:border-r border-sage/15">
         <span class="md:hidden font-body uppercase tracking-[0.18em] text-sage text-[11px] block mb-2">${lang === 'nl' ? 'Datum' : 'Date'}</span>
         <span class="font-body text-xs text-sage block tracking-widest">${row.date}</span>
       </div>
-      <div class="md:col-span-5 px-6 py-2 md:py-8 md:border-r border-sage/15">
+      <div class="md:col-span-5 px-7 md:px-7 py-3 md:py-9 md:border-r border-sage/15">
         <span class="md:hidden font-body uppercase tracking-[0.18em] text-sage text-[11px] block mb-2">${lang === 'nl' ? 'Locatie' : 'Venue'}</span>
         <h3 class="font-headline text-2xl">${row.venue}</h3>
         <p class="font-body text-sm text-on-surface-variant">${row.location}</p>
       </div>
-      <div class="md:col-span-4 pb-8 md:py-8 px-6 flex md:justify-end">
+      <div class="md:col-span-4 pb-8 md:py-9 px-7 md:px-7 flex md:justify-end">
         <span class="md:hidden font-body uppercase tracking-[0.18em] text-sage text-[11px] block mb-2 w-full">${lang === 'nl' ? 'Toegang' : 'Access'}</span>
         <div class="tour-row-actions flex flex-wrap items-center gap-5 md:justify-end w-full md:w-auto">
-          <a class="btn-ghost font-body" href="${row.href}">${row.cta}</a>
-          <a class="btn-ghost font-body" href="${row.infoHref || row.href}">${lang === 'nl' ? 'Meer info' : 'More info'}</a>
+          <a class="btn-ghost stamp-button ink-link font-body" href="${row.href}">${row.cta}</a>
+          <a class="btn-ghost stamp-button ink-link font-body" href="${row.infoHref || row.href}">${lang === 'nl' ? 'Meer info' : 'More info'}</a>
         </div>
       </div>
     </div>
@@ -490,27 +490,27 @@ function renderPage({ page, menu, footerLinks, socialLinks, path, lang }) {
 
     <header class="fixed top-0 w-full z-50 sticky-nav" id="main-header">
       <nav class="site-header-nav max-w-[1600px] mx-auto px-4 md:px-16 py-[1.125rem] md:py-5 flex items-center justify-between">
-        <div class="hidden md:flex gap-10 items-center flex-1">
+        <div class="hidden md:flex gap-10 items-center flex-1 site-header-nav-group site-header-nav-group--left">
           ${menu.slice(0, 3).map(item => navLink(item, path)).join('')}
         </div>
-        <div class="flex-none flex justify-center items-center gap-2 md:gap-4">
-          <a href="/${lang}/" class="font-headline leading-none text-xl md:text-2xl tracking-[0.18em] uppercase text-on-surface hover:text-lavender transition-colors">NinaLynn</a>
+        <div class="flex-none flex justify-center items-center gap-2 md:gap-4 site-header-nav-brand">
+          <a href="/${lang}/" class="font-headline leading-none text-xl md:text-2xl tracking-[0.18em] uppercase text-on-surface hover:text-lavender transition-colors ink-link site-header-brand-link">NinaLynn</a>
           <div class="hidden md:flex gap-2 items-center text-[11px] uppercase tracking-[0.25em] text-on-surface-variant">
             <a class="leading-none text-on-surface" href="${path}">${lang.toUpperCase()}</a>
             <span>/</span>
             <a class="leading-none hover:text-lavender transition-colors" href="${page.switchHref}">${page.switchLabel}</a>
           </div>
         </div>
-        <div class="hidden md:flex gap-10 items-center flex-1 justify-end">
+        <div class="hidden md:flex gap-10 items-center flex-1 justify-end site-header-nav-group site-header-nav-group--right">
           ${menu.slice(3).map(item => navLink(item, path)).join('')}
-          <div class="flex gap-2 ml-4">
-            <a class="header-social-link" href="https://www.instagram.com/musicbyninalynn/" target="_blank" rel="noreferrer" aria-label="Instagram" title="Instagram">${socialIconSvg('Instagram')}</a>
-            <a class="header-social-link header-social-link-spotify" href="https://open.spotify.com/artist/7wnvfXHe1D6Hw2wBNJeiSO?si=_t79oTI9SvK9hVtjMYtJSA" target="_blank" rel="noreferrer" aria-label="Spotify" title="Spotify">${socialIconSvg('Spotify')}</a>
+          <div class="flex gap-2 ml-4 site-header-socials">
+            <a class="header-social-link ink-link" href="https://www.instagram.com/musicbyninalynn/" target="_blank" rel="noreferrer" aria-label="Instagram" title="Instagram">${socialIconSvg('Instagram')}</a>
+            <a class="header-social-link header-social-link-spotify ink-link" href="https://open.spotify.com/artist/7wnvfXHe1D6Hw2wBNJeiSO?si=_t79oTI9SvK9hVtjMYtJSA" target="_blank" rel="noreferrer" aria-label="Spotify" title="Spotify">${socialIconSvg('Spotify')}</a>
           </div>
         </div>
-        <div class="md:hidden flex items-center gap-3">
+        <div class="md:hidden flex items-center gap-3 site-header-mobile-controls">
           <a class="font-body text-[11px] uppercase tracking-[0.22em] text-on-surface-variant hover:text-lavender transition-colors" href="${page.switchHref}">${page.switchLabel}</a>
-          <button class="flex flex-col gap-1.5 p-2 -mr-2" id="menu-toggle" aria-label="Menu openen" aria-expanded="false" aria-controls="mobile-menu">
+          <button class="flex flex-col gap-1.5 p-2 -mr-2 mobile-menu-toggle" id="menu-toggle" aria-label="Menu openen" aria-expanded="false" aria-controls="mobile-menu">
             <span class="block w-6 h-px bg-on-surface transition-all"></span>
             <span class="block w-6 h-px bg-on-surface transition-all"></span>
             <span class="block w-4 h-px bg-on-surface transition-all"></span>
@@ -521,10 +521,10 @@ function renderPage({ page, menu, footerLinks, socialLinks, path, lang }) {
 
     <div class="fixed inset-0 z-[60] pointer-events-none" id="mobile-overlay">
       <div class="absolute inset-0 bg-on-surface/20 opacity-0 transition-opacity duration-300 pointer-events-none" id="overlay-bg"></div>
-      <div class="mobile-menu absolute right-0 top-0 h-full w-full max-w-[22rem] bg-parchment/95 backdrop-blur-xl px-6 py-8 flex flex-col gap-8 pointer-events-auto shadow-2xl overflow-y-auto" id="mobile-menu">
+      <div class="mobile-menu note-dropdown mobile-menu-card absolute right-0 top-0 h-full w-full max-w-[22rem] bg-parchment/95 backdrop-blur-xl px-6 py-8 flex flex-col gap-8 pointer-events-auto shadow-2xl overflow-y-auto" id="mobile-menu">
         <div class="flex items-center justify-between mb-2">
-          <a href="/${lang}/" class="font-headline text-lg tracking-[0.18em] uppercase text-on-surface hover:text-lavender transition-colors">NinaLynn</a>
-          <button id="menu-close" aria-label="Menu sluiten">
+          <a href="/${lang}/" class="font-headline text-lg tracking-[0.18em] uppercase text-on-surface hover:text-lavender transition-colors ink-link">NinaLynn</a>
+          <button id="menu-close" class="stamp-button mobile-menu-close" aria-label="Menu sluiten">
             <span class="material-symbols-outlined text-2xl">close</span>
           </button>
         </div>
@@ -535,8 +535,8 @@ function renderPage({ page, menu, footerLinks, socialLinks, path, lang }) {
           <a class="font-body text-sm uppercase tracking-[0.2em] text-on-surface-variant hover:text-lavender transition-colors" href="${page.switchHref}">${lang.toUpperCase()} / ${page.switchLabel}</a>
         </div>
         <div class="flex gap-3 mt-auto pt-2">
-          <a class="header-social-link" href="https://www.instagram.com/musicbyninalynn/" target="_blank" rel="noreferrer" aria-label="Instagram" title="Instagram">${socialIconSvg('Instagram')}</a>
-          <a class="header-social-link header-social-link-spotify" href="https://open.spotify.com/artist/7wnvfXHe1D6Hw2wBNJeiSO?si=_t79oTI9SvK9hVtjMYtJSA" target="_blank" rel="noreferrer" aria-label="Spotify" title="Spotify">${socialIconSvg('Spotify')}</a>
+          <a class="header-social-link ink-link" href="https://www.instagram.com/musicbyninalynn/" target="_blank" rel="noreferrer" aria-label="Instagram" title="Instagram">${socialIconSvg('Instagram')}</a>
+          <a class="header-social-link header-social-link-spotify ink-link" href="https://open.spotify.com/artist/7wnvfXHe1D6Hw2wBNJeiSO?si=_t79oTI9SvK9hVtjMYtJSA" target="_blank" rel="noreferrer" aria-label="Spotify" title="Spotify">${socialIconSvg('Spotify')}</a>
         </div>
       </div>
     </div>
@@ -547,19 +547,19 @@ function renderPage({ page, menu, footerLinks, socialLinks, path, lang }) {
         : `${renderHero(page)}${page.liveFeed ? renderLiveFeedSection(page, lang, path) : renderPrimarySection(page, lang)}${renderSecondarySection(page, lang)}`}
     </main>
 
-    <footer class="py-20 md:py-24 px-6 md:px-8 border-t border-sage/10 bg-parchment relative">
-      <div class="absolute bottom-0 right-0 p-8 opacity-15 pointer-events-none">
+    <footer class="paper-stack-section anchored-section py-20 md:py-24 px-6 md:px-8 border-t border-sage/10 bg-parchment relative">
+      <div class="absolute bottom-0 right-0 p-8 opacity-15 pointer-events-none ornament-layer archival-stamp">
         <span class="material-symbols-outlined text-6xl text-lavender">spa</span>
       </div>
-      <div class="max-w-4xl mx-auto flex flex-col items-center gap-12 md:gap-16 reveal-up reveal-paper-soft">
-        <div class="text-center" id="newsletter-signup">
-          <p class="font-handwriting text-3xl md:text-[3rem] leading-none italic">${lang === 'nl' ? 'Word lid van de bloementuin' : 'Become part of the flower garden'}</p>
+      <div class="max-w-4xl mx-auto flex flex-col items-center gap-12 md:gap-16 motion-paper-lift">
+        <div class="text-center annotated-section" id="newsletter-signup">
+          <p class="font-handwriting text-3xl md:text-[3rem] leading-none italic archival-stamp">${lang === 'nl' ? 'Word lid van de bloementuin' : 'Become part of the flower garden'}</p>
         </div>
         <div class="w-full max-w-3xl text-center space-y-6 md:space-y-7">
-          <form class="newsletter-shell" id="newsletter-form" novalidate>
+          <form class="newsletter-shell activated-field note-dropdown" id="newsletter-form" novalidate>
             <label class="sr-only" for="newsletter-email">${lang === 'nl' ? 'E-mailadres' : 'Email address'}</label>
             <input
-              class="newsletter-input"
+              class="newsletter-input activated-field__input"
               id="newsletter-email"
               name="email"
               type="email"
@@ -568,7 +568,7 @@ function renderPage({ page, menu, footerLinks, socialLinks, path, lang }) {
               placeholder="${lang === 'nl' ? 'E-mail adres' : 'E-mail address'}"
               required
             />
-            <button class="newsletter-submit font-body" type="submit">${lang === 'nl' ? 'Aanmelden' : 'Sign up'}</button>
+            <button class="newsletter-submit stamp-button ink-link font-body" type="submit">${lang === 'nl' ? 'Aanmelden' : 'Sign up'}</button>
           </form>
           <p class="newsletter-feedback font-body text-xs md:text-sm text-on-surface-variant min-h-[1.25rem]" id="newsletter-feedback" aria-live="polite">
             ${lang === 'nl'
@@ -576,13 +576,13 @@ function renderPage({ page, menu, footerLinks, socialLinks, path, lang }) {
               : 'News, new music and performances arrive here first.'}
           </p>
           <div class="flex flex-wrap justify-center gap-x-8 gap-y-4 md:gap-x-12">
-            ${footerLinks.map(item => `<a class="footer-meta-link font-body" href="${item.href}">${item.label}</a>`).join('')}
+            ${footerLinks.map(item => `<a class="footer-meta-link ink-link font-body" href="${item.href}">${item.label}</a>`).join('')}
           </div>
         </div>
         <div class="flex gap-8 md:gap-10 text-sage/70 items-center">
           ${socialLinks.map(item => `
             <a
-              class="footer-social-link ${item.label === 'Spotify' ? 'footer-social-link-spotify' : ''}"
+              class="footer-social-link ink-link ${item.label === 'Spotify' ? 'footer-social-link-spotify' : ''}"
               href="${item.href}"
               target="_blank"
               rel="noreferrer"
@@ -592,7 +592,7 @@ function renderPage({ page, menu, footerLinks, socialLinks, path, lang }) {
               ${socialIconSvg(item.label)}
             </a>
           `).join('')}
-          <a class="footer-social-link" href="mailto:info@ninalynn.nl" aria-label="Email" title="Email">
+          <a class="footer-social-link ink-link" href="mailto:info@ninalynn.nl" aria-label="Email" title="Email">
             <span class="material-symbols-outlined">mail</span>
           </a>
         </div>
@@ -608,17 +608,17 @@ function renderHome(page, lang) {
   const fallbackHref = lang === 'nl' ? '/nl/live/agenda/' : '/en/live/gigs/';
   return `
     ${renderHero(page)}
-    <div class="w-48 mx-auto divider-motif draw-divider my-0"></div>
-    <section class="py-20 md:py-32 px-4 md:px-6 max-w-5xl mx-auto relative editorial-divider reveal-section reveal-paper-lift">
-      <div class="absolute -left-10 top-0 opacity-15 hidden lg:block botanical-float pointer-events-none">
+    <div class="w-48 mx-auto divider-motif draw-divider motion-draw-divider my-0"></div>
+    <section class="paper-stack-section offset-section anchored-section annotated-section py-20 md:py-32 px-4 md:px-6 max-w-5xl mx-auto relative editorial-divider motion-margin-slide">
+      <div class="absolute -left-10 top-0 opacity-15 hidden lg:block botanical-float pointer-events-none ornament-layer">
         <span class="material-symbols-outlined text-8xl text-sage">local_florist</span>
       </div>
-      <div class="reveal-up">
+      <div class="motion-paper-lift">
         <div class="mb-12 md:mb-20 text-center relative">
-          <span class="font-handwriting text-lavender block text-lg md:text-xl mb-2">${page.tour.kicker}</span>
+          <span class="font-handwriting text-lavender block text-lg md:text-xl mb-2 section-ornament archival-stamp motion-annotation-pop">${page.tour.kicker}</span>
           <h2 class="font-headline text-3xl md:text-4xl text-on-surface">${page.tour.heading}</h2>
         </div>
-        <div class="tour-ledger grid grid-cols-1 md:grid-cols-12 gap-0" data-live-feed data-lang="${lang}" data-limit="3" data-fallback-href="${fallbackHref}" data-loading-text="${lang === 'nl' ? 'Aankomende optredens worden geladen…' : 'Loading upcoming performances…'}" data-empty-text="${lang === 'nl' ? 'Er staan momenteel nog geen aankomende optredens online.' : 'There are no upcoming performances online right now.'}">
+        <div class="tour-ledger paper-ledger grid grid-cols-1 md:grid-cols-12 gap-0 motion-paper-lift" data-live-feed data-lang="${lang}" data-limit="3" data-fallback-href="${fallbackHref}" data-loading-text="${lang === 'nl' ? 'Aankomende optredens worden geladen…' : 'Loading upcoming performances…'}" data-empty-text="${lang === 'nl' ? 'Er staan momenteel nog geen aankomende optredens online.' : 'There are no upcoming performances online right now.'}">
           <div class="hidden md:contents font-body uppercase tracking-[0.18em] text-sage text-[11px]">
             <div class="md:col-span-3 py-4 border-r border-sage/15 px-6">${lang === 'nl' ? 'Datum' : 'Date'}</div>
             <div class="md:col-span-5 py-4 border-r border-sage/15 px-6">${lang === 'nl' ? 'Locatie' : 'Venue'}</div>
@@ -628,55 +628,55 @@ function renderHome(page, lang) {
           <div class="md:contents live-feed-rows">${renderTourRows(page.tour.rows, lang)}</div>
         </div>
       </div>
-      <div class="w-48 mx-auto divider-motif draw-divider mt-14 md:mt-16"></div>
+      <div class="w-48 mx-auto divider-motif draw-divider motion-draw-divider mt-14 md:mt-16"></div>
     </section>
-    <section class="pt-14 md:pt-16 pb-24 md:pb-40 relative overflow-hidden editorial-divider flower-press-corners reveal-section reveal-paper-lift">
-      <div class="absolute top-10 right-10 opacity-10 pointer-events-none botanical-float">
+    <section class="overlap-section paper-stack-section anchored-section pt-14 md:pt-16 pb-24 md:pb-40 relative overflow-hidden isolate z-0 editorial-divider flower-press-corners motion-paper-lift">
+      <div class="absolute top-10 right-10 opacity-10 pointer-events-none botanical-float ornament-layer">
         <span class="material-symbols-outlined text-[200px] text-lavender">wb_iridescent</span>
       </div>
-      <div class="absolute bottom-10 left-10 opacity-10 pointer-events-none botanical-float-delayed">
+      <div class="absolute bottom-10 left-10 opacity-10 pointer-events-none botanical-float-delayed ornament-layer">
         <span class="material-symbols-outlined text-[180px] text-sage">nest_eco_leaf</span>
       </div>
       <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-        <div class="relative group reveal-up order-2 lg:order-1">
-          <div class="relative z-10 watercolor-edge overflow-hidden bg-white/35 aspect-[4/5] flex items-center justify-center">
+        <div class="relative group motion-margin-slide order-2 lg:order-1 tilt-card paper-stack-card">
+          <div class="relative z-10 watercolor-edge overflow-hidden bg-white/35 aspect-[4/5] flex items-center justify-center paper-card">
             <span class="font-headline text-4xl md:text-6xl text-on-surface/80">${page.title}</span>
           </div>
           <div class="absolute -inset-10 border border-lavender/10 rounded-[40%] -z-10 group-hover:rotate-12 transition-transform duration-[3s]"></div>
         </div>
-        <div class="space-y-10 md:space-y-12 relative order-1 lg:order-2 reveal-up" style="transition-delay: 0.15s">
+        <div class="space-y-10 md:space-y-12 relative order-1 lg:order-2 motion-paper-lift overlap-section annotated-section paper-stack-card" style="transition-delay: 0.15s">
           <div class="space-y-4">
-            <span class="font-handwriting text-sage text-lg md:text-xl block">${page.albumFeature.kicker}</span>
+            <span class="font-handwriting text-sage text-lg md:text-xl block archival-stamp motion-annotation-pop mb-3 w-fit max-w-full">${page.albumFeature.kicker}</span>
             <h2 class="font-headline text-4xl md:text-5xl lg:text-6xl text-on-surface leading-tight">${page.albumFeature.heading}</h2>
           </div>
           <p class="soft-highlight-block font-body text-base md:text-lg leading-relaxed text-on-surface-variant italic border-l-4 border-lavender/20 pl-8 py-2">${page.albumFeature.text}</p>
           <div class="space-y-5 font-body">
             ${page.albumFeature.tracks.map(track => `
-              <div class="soft-highlight-row flex justify-between items-center group/track cursor-pointer border-b border-sage/10 pb-4">
-                <span class="group-hover/track:translate-x-2 group-hover/track:text-lavender transition-all">${track.title}</span>
+              <div class="soft-highlight-row track-wash flex justify-between items-center group/track cursor-pointer border-b border-sage/10 pb-4">
+                <span class="transition-colors">${track.title}</span>
                 <span class="text-sm text-sage">${track.time}</span>
               </div>
             `).join('')}
           </div>
-          <a class="btn-pill font-body tracking-wider" href="${page.albumFeature.cta.href}">${page.albumFeature.cta.label}</a>
+          <a class="btn-pill stamp-button ink-link font-body tracking-wider" href="${page.albumFeature.cta.href}">${page.albumFeature.cta.label}</a>
         </div>
       </div>
     </section>
-    <div class="divider-gradient draw-divider max-w-4xl mx-auto"></div>
-    <section class="py-24 md:py-32 px-6 bg-surface-container-low/50 editorial-divider reveal-section reveal-paper-lift">
+    <div class="divider-gradient draw-divider motion-draw-divider max-w-4xl mx-auto"></div>
+    <section class="paper-stack-section offset-section anchored-section py-24 md:py-32 px-6 bg-surface-container-low/50 relative isolate z-10 overflow-hidden editorial-divider motion-margin-slide">
       <div class="max-w-7xl mx-auto">
-        <div class="mb-16 md:mb-24 text-center reveal-up">
+        <div class="mb-16 md:mb-24 text-center motion-paper-lift">
           <h2 class="font-headline text-4xl md:text-5xl mb-4">${page.shopFeature.heading}</h2>
-          <p class="font-handwriting text-lg md:text-xl text-sage">${page.shopFeature.kicker}</p>
+          <p class="font-handwriting text-lg md:text-xl text-sage section-ornament archival-stamp motion-annotation-pop">${page.shopFeature.kicker}</p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-14">
           ${page.shopFeature.items.map((item, index) => `
-            <article class="shop-card shop-card-stagger flex flex-col gap-6 ${index === 0 ? 'md:mt-12' : index === 2 ? 'md:-mt-6' : ''} group reveal-up" style="transition-delay:${index * 0.1}s">
-              <a class="shop-card-media relative overflow-hidden bg-white/50 aspect-[4/5] block" href="${item.href}">
+            <article class="shop-card shop-card-stagger motion-stagger-shop tilt-card paper-stack-card flex flex-col gap-6 ${index === 0 ? 'md:mt-12 shop-card--featured' : index === 2 ? 'md:-mt-6' : ''} group motion-paper-lift" style="transition-delay:${index * 0.1}s">
+              <a class="shop-card-media paper-card relative overflow-hidden bg-white/50 aspect-[4/5] block" href="${item.href}">
                 <img class="shop-card-image w-full h-full object-cover" src="${item.image}" alt="${item.alt || item.title}" loading="lazy"/>
                 <div class="shop-card-overlay">
-                  <span class="shop-card-chip font-body">${item.subtitle}</span>
-                  <span class="btn-ghost font-body">${item.cta}</span>
+                  <span class="shop-card-chip font-body section-ornament archival-stamp">${item.subtitle}</span>
+                  <span class="btn-ghost stamp-button ink-link font-body">${item.cta}</span>
                 </div>
               </a>
               <div class="text-center px-2">
@@ -687,8 +687,8 @@ function renderHome(page, lang) {
             </article>
           `).join('')}
         </div>
-        <div class="mt-14 md:mt-16 text-center reveal-up" style="transition-delay:0.35s">
-          <a class="btn-pill font-body tracking-wider" href="${lang === 'nl' ? '/nl/shop/' : '/en/shop/'}">${lang === 'nl' ? 'Bekijk de volledige shop' : 'Browse the full shop'}</a>
+        <div class="mt-14 md:mt-16 text-center motion-paper-lift" style="transition-delay:0.35s">
+          <a class="btn-pill stamp-button ink-link font-body tracking-wider" href="${lang === 'nl' ? '/nl/shop/' : '/en/shop/'}">${lang === 'nl' ? 'Bekijk de volledige shop' : 'Browse the full shop'}</a>
         </div>
       </div>
     </section>
@@ -699,17 +699,17 @@ function renderLiveFeedSection(page, lang, path) {
   const fallbackHref = path;
   const liveFeed = page.liveFeed || {};
   return `
-    <div class="w-48 mx-auto divider-motif draw-divider my-0"></div>
-    <section class="py-20 md:py-32 px-4 md:px-6 max-w-5xl mx-auto relative editorial-divider reveal-section reveal-paper-lift">
-      <div class="absolute -left-10 top-0 opacity-15 hidden lg:block botanical-float pointer-events-none">
+    <div class="w-48 mx-auto divider-motif draw-divider motion-draw-divider my-0"></div>
+    <section class="paper-stack-section offset-section anchored-section py-20 md:py-32 px-4 md:px-6 max-w-5xl mx-auto relative editorial-divider motion-margin-slide">
+      <div class="absolute -left-10 top-0 opacity-15 hidden lg:block botanical-float pointer-events-none ornament-layer">
         <span class="material-symbols-outlined text-8xl text-sage">local_florist</span>
       </div>
-      <div class="reveal-up">
+      <div class="motion-paper-lift">
         <div class="mb-12 md:mb-20 text-center relative">
-          <span class="font-handwriting text-lavender block text-lg md:text-xl mb-2">${liveFeed.kicker || (lang === 'nl' ? 'Komende avonden' : 'Upcoming evenings')}</span>
+          <span class="font-handwriting text-lavender block text-lg md:text-xl mb-2 section-ornament archival-stamp motion-annotation-pop">${liveFeed.kicker || (lang === 'nl' ? 'Komende avonden' : 'Upcoming evenings')}</span>
           <h2 class="font-headline text-3xl md:text-4xl text-on-surface">${liveFeed.heading || (lang === 'nl' ? 'Aankomende optredens' : 'Upcoming performances')}</h2>
         </div>
-        <div class="tour-ledger grid grid-cols-1 md:grid-cols-12 gap-0" data-live-feed data-lang="${lang}" data-fallback-href="${fallbackHref}" data-loading-text="${liveFeed.loadingText || ''}" data-empty-text="${liveFeed.emptyText || ''}">
+        <div class="tour-ledger paper-ledger grid grid-cols-1 md:grid-cols-12 gap-0" data-live-feed data-lang="${lang}" data-fallback-href="${fallbackHref}" data-loading-text="${liveFeed.loadingText || ''}" data-empty-text="${liveFeed.emptyText || ''}">
           <div class="hidden md:contents font-body uppercase tracking-[0.18em] text-sage text-[11px]">
             <div class="md:col-span-3 py-4 border-r border-sage/15 px-6">${lang === 'nl' ? 'Datum' : 'Date'}</div>
             <div class="md:col-span-5 py-4 border-r border-sage/15 px-6">${lang === 'nl' ? 'Locatie' : 'Venue'}</div>
@@ -719,7 +719,7 @@ function renderLiveFeedSection(page, lang, path) {
           <div class="md:contents live-feed-rows"></div>
         </div>
       </div>
-      <div class="w-48 mx-auto divider-motif draw-divider mt-24"></div>
+      <div class="w-48 mx-auto divider-motif draw-divider motion-draw-divider mt-24"></div>
     </section>
   `;
 }
@@ -733,7 +733,7 @@ function navLink(item, path) {
   const active = isItemActive(item, path);
   const hasChildren = Array.isArray(item.children) && item.children.length;
   if (!hasChildren) {
-    return `<a class="font-body leading-none text-sm ${active ? 'text-lavender' : 'text-on-surface'} hover:text-lavender transition-colors" href="${item.href}">${item.label}</a>`;
+    return `<a class="font-body leading-none text-sm ink-link menu-ink-link ${active ? 'text-lavender ink-link--active' : 'text-on-surface'} hover:text-lavender transition-colors" href="${item.href}">${item.label}</a>`;
   }
 
   const menuPositionClass = item.label === 'Muziek' || item.label === 'Music'
@@ -741,17 +741,17 @@ function navLink(item, path) {
     : 'left-1/2 -translate-x-1/2';
 
   return `
-    <div class="relative group">
-      <a class="font-body leading-none text-sm inline-flex items-center gap-2 ${active ? 'text-lavender' : 'text-on-surface'} hover:text-lavender transition-colors" href="${item.href}">
+    <div class="relative group note-dropdown">
+      <a class="note-dropdown__trigger font-body leading-none text-sm inline-flex items-center gap-2 ink-link menu-ink-link ${active ? 'text-lavender ink-link--active' : 'text-on-surface'} hover:text-lavender transition-colors" href="${item.href}">
         <span>${item.label}</span>
         <span class="material-symbols-outlined text-base leading-none submenu-caret">expand_more</span>
       </a>
-      <div class="absolute ${menuPositionClass} top-full pt-4 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto transition-all duration-300">
-        <div class="min-w-[220px] rounded-[28px] border border-sage/15 bg-parchment/95 backdrop-blur-xl shadow-[0_20px_60px_rgba(58,50,45,0.12)] px-5 py-5">
+      <div class="note-dropdown__panel absolute ${menuPositionClass} top-full pt-4 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto transition-all duration-300">
+        <div class="note-dropdown__card min-w-[220px] rounded-[28px] border border-sage/15 bg-parchment/95 backdrop-blur-xl shadow-[0_20px_60px_rgba(58,50,45,0.12)] px-5 py-5">
           <div class="flex flex-col gap-3">
             ${item.children.map(child => {
               const childActive = path === child.href || path.startsWith(child.href);
-              return `<a class="font-body text-[13px] leading-relaxed ${childActive ? 'text-lavender' : 'text-on-surface-variant'} hover:text-lavender transition-colors" href="${child.href}">${child.label}</a>`;
+              return `<a class="note-dropdown__item font-body text-[13px] leading-relaxed ${childActive ? 'text-lavender' : 'text-on-surface-variant'} hover:text-lavender transition-colors" href="${child.href}">${child.label}</a>`;
             }).join('')}
           </div>
         </div>
@@ -764,21 +764,21 @@ function mobileNavLink(item, path) {
   const active = isItemActive(item, path);
   const hasChildren = Array.isArray(item.children) && item.children.length;
   if (!hasChildren) {
-    return `<a class="font-body text-xl ${active ? 'text-lavender' : ''} hover:text-lavender transition-colors" href="${item.href}">${item.label}</a>`;
+    return `<a class="font-body text-xl ink-link ${active ? 'text-lavender ink-link--active' : ''} hover:text-lavender transition-colors" href="${item.href}">${item.label}</a>`;
   }
 
   return `
-    <div class="mobile-subnav border-b border-sage/10 pb-5">
-      <button class="mobile-subnav-toggle w-full flex items-center justify-between gap-4 text-left" type="button" aria-expanded="${active ? 'true' : 'false'}">
-        <span class="font-body text-xl ${active ? 'text-lavender' : ''}">${item.label}</span>
+    <div class="mobile-subnav note-dropdown border-b border-sage/10 pb-5">
+      <button class="mobile-subnav-toggle note-dropdown__trigger stamp-button w-full flex items-center justify-between gap-4 text-left" type="button" aria-expanded="${active ? 'true' : 'false'}">
+        <span class="font-body text-xl ${active ? 'text-lavender ink-link--active' : ''}">${item.label}</span>
         <span class="material-symbols-outlined text-xl text-on-surface-variant transition-transform duration-300 ${active ? 'rotate-180' : ''}">expand_more</span>
       </button>
-      <div class="mobile-subnav-panel ${active ? '' : 'hidden'} pt-4 pl-4">
+      <div class="mobile-subnav-panel note-dropdown__panel ${active ? '' : 'hidden'} pt-4 pl-4">
         <div class="flex flex-col gap-4">
-          <a class="font-body text-sm uppercase tracking-[0.18em] ${path === item.href ? 'text-lavender' : 'text-on-surface-variant'} hover:text-lavender transition-colors" href="${item.href}">${item.label}</a>
+          <a class="font-body text-sm uppercase tracking-[0.18em] ink-link ${path === item.href ? 'text-lavender ink-link--active' : 'text-on-surface-variant'} hover:text-lavender transition-colors" href="${item.href}">${item.label}</a>
           ${item.children.map(child => {
             const childActive = path === child.href || path.startsWith(child.href);
-            return `<a class="font-body text-base ${childActive ? 'text-lavender' : 'text-on-surface-variant'} hover:text-lavender transition-colors" href="${child.href}">${child.label}</a>`;
+            return `<a class="note-dropdown__item font-body text-base ink-link ${childActive ? 'text-lavender ink-link--active' : 'text-on-surface-variant'} hover:text-lavender transition-colors" href="${child.href}">${child.label}</a>`;
           }).join('')}
         </div>
       </div>
@@ -796,9 +796,9 @@ function escapeHtml(text) {
 
 function renderHero(page) {
   return `
-    <section class="hero-home-scene relative min-h-[80vh] sm:min-h-[40rem] md:min-h-screen px-4 md:px-6 pt-16 md:pt-20">
+    <section class="hero-home-scene paper-stack-section overlap-section anchored-section annotated-section relative min-h-[80vh] sm:min-h-[40rem] md:min-h-screen px-4 md:px-6 pt-16 md:pt-20">
       <div class="absolute inset-x-0 top-16 md:top-20 bottom-0 z-0 flex items-start justify-center">
-        <div class="hero-frame-backdrop hero-parallax-frame w-[90%] sm:w-[88%] md:w-[82%] max-w-[1150px] h-[80vh] sm:h-[28rem] md:h-full arch-frame overflow-hidden">
+        <div class="hero-frame-backdrop hero-parallax-frame tilt-card w-[90%] sm:w-[88%] md:w-[82%] max-w-[1150px] h-[80vh] sm:h-[28rem] md:h-full arch-frame overflow-hidden paper-card">
           <div class="hero-frame-tint hero-parallax-tint absolute inset-0"></div>
           <video class="hero-parallax-video block w-full h-full object-cover" autoplay muted loop playsinline preload="auto">
             <source src="https://ninalynn.nl/wp-content/uploads/2021/01/Slider_short.mp4" type="video/mp4"/>
@@ -812,14 +812,17 @@ function renderHero(page) {
         </div>
       </div>
       <div class="hero-parallax-content absolute inset-x-0 top-16 md:top-20 bottom-0 z-10 flex items-center justify-center px-4">
-        <div class="text-center max-w-2xl mx-auto">
-          ${page.eyebrow ? `<span class="font-handwriting text-lg md:text-2xl text-sage/80 block mb-4 md:mb-5">${page.eyebrow}</span>` : ''}
-          <h1 class="font-headline text-4xl sm:text-5xl md:text-7xl mb-4 md:mb-5"><span class="typewriter-anim typewriter-target" data-text="${escapeHtml(page.title || '')}"></span></h1>
-          <p class="font-body italic text-on-surface-variant mb-6 md:mb-8 text-[11px] md:text-sm bg-parchment/75 backdrop-blur-sm px-4 md:px-5 py-3 rounded-sm inline-block max-w-[36rem]">
-            ${page.intro || ''}
-          </p>
-          <div class="flex flex-wrap items-center justify-center gap-3 md:gap-4">
-            ${(page.primaryCtas || []).map(cta => `<a class="btn-pill btn-pill-hero font-body text-[10px] uppercase tracking-[0.25em] px-7 py-3" href="${cta.href}">${cta.label}</a>`).join('')}
+        <div class="text-center max-w-2xl mx-auto hero-copy-stack paper-stack-card">
+          ${page.eyebrow ? `<span class="font-handwriting text-lg md:text-2xl text-sage/80 block mb-4 md:mb-5 section-ornament archival-stamp">${page.eyebrow}</span>` : ''}
+          <div class="hero-entry-rule" aria-hidden="true"></div>
+          <h1 class="font-headline text-4xl sm:text-5xl md:text-7xl mb-4 md:mb-5 hero-title-stack"><span class="typewriter-anim typewriter-target" data-text="${escapeHtml(page.title || '')}"></span></h1>
+          <div class="hero-definition-card paper-note mb-6 md:mb-8 max-w-[42rem] mx-auto">
+            <p class="font-body italic text-on-surface-variant text-[11px] md:text-sm leading-relaxed md:leading-loose hero-definition-copy">
+              ${page.intro || ''}
+            </p>
+          </div>
+          <div class="hero-actions flex flex-wrap items-center justify-center gap-3 md:gap-4">
+            ${(page.primaryCtas || []).map(cta => `<a class="btn-pill-hero font-body text-[10px] uppercase tracking-[0.25em] px-7 py-3" href="${cta.href}">${cta.label}</a>`).join('')}
           </div>
         </div>
       </div>
@@ -1091,22 +1094,22 @@ function renderPrimarySection(page, lang) {
   if (!first) return '';
   return `
     <div class="w-48 mx-auto divider-motif my-0"></div>
-    <section class="py-24 md:py-32 px-6 max-w-6xl mx-auto relative reveal-section reveal-paper-lift">
-      <div class="absolute -left-10 top-0 opacity-15 hidden lg:block botanical-float pointer-events-none">
+    <section class="paper-stack-section offset-section anchored-section py-24 md:py-32 px-6 max-w-6xl mx-auto relative reveal-section reveal-paper-lift">
+      <div class="absolute -left-10 top-0 opacity-15 hidden lg:block botanical-float pointer-events-none ornament-layer">
         <span class="material-symbols-outlined text-8xl text-sage">local_florist</span>
       </div>
       <div class="reveal-up">
         <div class="mb-16 md:mb-20 text-center relative">
-          <span class="font-handwriting text-lavender block text-lg md:text-xl mb-2">${first.kicker || (lang === 'nl' ? 'Hoofdstuk' : 'Chapter')}</span>
+          <span class="font-handwriting text-lavender block text-lg md:text-xl mb-2 section-ornament archival-stamp">${first.kicker || (lang === 'nl' ? 'Hoofdstuk' : 'Chapter')}</span>
           <h2 class="font-headline text-3xl md:text-4xl text-on-surface">${first.heading || ''}</h2>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16">
           ${(first.cards || []).map((card, index) => `
-            <article class="reveal-up flex flex-col gap-6 ${index === 1 ? 'md:mt-10' : index === 2 ? 'md:-mt-4' : ''}" style="transition-delay:${index * 0.1}s">
-              <div class="p-8 md:p-10 hand-drawn-border bg-white/35 backdrop-blur-sm h-full">
+            <article class="reveal-up flex flex-col gap-6 tilt-card paper-stack-card ${index === 1 ? 'md:mt-10' : index === 2 ? 'md:-mt-4' : ''}" style="transition-delay:${index * 0.1}s">
+              <div class="p-8 md:p-10 hand-drawn-border bg-white/35 backdrop-blur-sm h-full paper-card">
                 <h3 class="font-headline text-2xl md:text-3xl mb-4">${card.title || ''}</h3>
                 <p class="font-body text-sm md:text-base leading-relaxed text-on-surface-variant">${card.text || ''}</p>
-                ${card.href && card.cta ? `<a class="btn-ghost font-body inline-block mt-8" href="${card.href}">${card.cta}</a>` : ''}
+                ${card.href && card.cta ? `<a class="btn-ghost stamp-button ink-link font-body inline-block mt-8" href="${card.href}">${card.cta}</a>` : ''}
               </div>
             </article>
           `).join('')}
@@ -1121,28 +1124,28 @@ function renderSecondarySection(page, lang) {
   const second = (page.sections || [])[1];
   if (!second) return '';
   return `
-    <section class="py-24 md:py-32 px-6 bg-surface-container-low/50 relative overflow-hidden reveal-section reveal-paper-lift">
-      <div class="absolute top-10 right-10 opacity-10 pointer-events-none botanical-float">
+    <section class="paper-stack-section overlap-section anchored-section py-24 md:py-32 px-6 bg-surface-container-low/50 relative overflow-hidden reveal-section reveal-paper-lift">
+      <div class="absolute top-10 right-10 opacity-10 pointer-events-none botanical-float ornament-layer">
         <span class="material-symbols-outlined text-[200px] text-lavender">wb_iridescent</span>
       </div>
-      <div class="absolute bottom-10 left-10 opacity-10 pointer-events-none botanical-float-delayed">
+      <div class="absolute bottom-10 left-10 opacity-10 pointer-events-none botanical-float-delayed ornament-layer">
         <span class="material-symbols-outlined text-[180px] text-sage">nest_eco_leaf</span>
       </div>
       <div class="max-w-7xl mx-auto">
         <div class="mb-16 md:mb-24 text-center reveal-up">
-          <span class="font-handwriting text-sage block text-lg md:text-xl mb-2">${second.kicker || (lang === 'nl' ? 'Verder' : 'Further')}</span>
+          <span class="font-handwriting text-sage block text-lg md:text-xl mb-2 section-ornament archival-stamp">${second.kicker || (lang === 'nl' ? 'Verder' : 'Further')}</span>
           <h2 class="font-headline text-4xl md:text-5xl mb-4">${second.heading || ''}</h2>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-24">
           ${(second.cards || []).map((card, index) => `
-            <div class="flex flex-col gap-8 ${index === 0 ? 'md:mt-16' : index === 2 ? 'md:-mt-8' : ''} group reveal-up" style="transition-delay:${index * 0.1}s">
-              <div class="relative overflow-hidden aspect-[4/5] watercolor-edge bg-white/50 flex items-center justify-center">
+            <div class="flex flex-col gap-8 ${index === 0 ? 'md:mt-16' : index === 2 ? 'md:-mt-8' : ''} group reveal-up tilt-card paper-stack-card" style="transition-delay:${index * 0.1}s">
+              <div class="relative overflow-hidden aspect-[4/5] watercolor-edge bg-white/50 flex items-center justify-center paper-card">
                 <span class="material-symbols-outlined text-[96px] ${index % 2 === 0 ? 'text-lavender/60' : 'text-sage/60'}">${index === 0 ? 'album' : index === 1 ? 'radio' : 'call_made'}</span>
               </div>
               <div class="text-center">
                 <h3 class="font-headline text-2xl mb-3">${card.title || ''}</h3>
                 <p class="font-body text-sm md:text-base leading-relaxed text-on-surface-variant">${card.text || ''}</p>
-                ${card.href && card.cta ? `<div class="mt-6"><a class="btn-pill font-body tracking-wider text-sm" href="${card.href}">${card.cta}</a></div>` : ''}
+                ${card.href && card.cta ? `<div class="mt-6"><a class="btn-pill stamp-button ink-link font-body tracking-wider text-sm" href="${card.href}">${card.cta}</a></div>` : ''}
               </div>
             </div>
           `).join('')}
@@ -1153,11 +1156,20 @@ function renderSecondarySection(page, lang) {
 }
 
 function bindUi() {
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reducedMotion) {
+    document.documentElement.classList.add('motion-ready');
+  }
+
   const header = document.getElementById('main-header');
   if (header) {
+    const syncHeader = () => {
+      header.classList.toggle('scrolled', window.scrollY > 0);
+    };
     window.addEventListener('scroll', () => {
-      header.classList.toggle('scrolled', window.scrollY > 80);
+      syncHeader();
     }, { passive: true });
+    syncHeader();
   }
 
   const menuToggle = document.getElementById('menu-toggle');
@@ -1174,6 +1186,25 @@ function bindUi() {
     mobileOverlay.classList.remove('pointer-events-none');
     menuToggle?.setAttribute('aria-expanded', 'true');
     document.body.style.overflow = 'hidden';
+    if (!reducedMotion) {
+      ensureGsap().then((gsapInstance) => {
+        if (!gsapInstance) return;
+        const items = mobileMenu.querySelectorAll('.mobile-subnav, .mobile-menu a, .mobile-menu .header-social-link');
+        gsapInstance.fromTo(items, {
+          opacity: 0,
+          y: 18,
+          rotate: -0.8
+        }, {
+          opacity: 1,
+          y: 0,
+          rotate: 0,
+          duration: 0.42,
+          stagger: 0.035,
+          ease: 'power2.out',
+          overwrite: true
+        });
+      });
+    }
   }
 
   function closeMenu() {
@@ -1200,39 +1231,47 @@ function bindUi() {
       const icon = toggle.querySelector('.material-symbols-outlined');
       const isOpen = toggle.getAttribute('aria-expanded') === 'true';
       toggle.setAttribute('aria-expanded', String(!isOpen));
-      panel?.classList.toggle('hidden', isOpen);
       icon?.classList.toggle('rotate-180', !isOpen);
-    });
-  });
+      if (!panel) return;
 
-  const revealElements = document.querySelectorAll('.reveal-up, .reveal-section');
-  if ('IntersectionObserver' in window) {
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('revealed');
-          revealObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
-    revealElements.forEach(el => revealObserver.observe(el));
-  }
+      if (reducedMotion || !window.gsap) {
+        panel.classList.toggle('hidden', isOpen);
+        return;
+      }
 
-  setTimeout(() => {
-    revealElements.forEach(el => el.classList.add('revealed'));
-  }, 2000);
-
-  function checkReveal() {
-    revealElements.forEach(el => {
-      const rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight - 50) {
-        el.classList.add('revealed');
+      if (!isOpen) {
+        panel.classList.remove('hidden');
+        window.gsap.fromTo(panel, {
+          height: 0,
+          opacity: 0,
+          y: -6
+        }, {
+          height: panel.scrollHeight,
+          opacity: 1,
+          y: 0,
+          duration: 0.32,
+          ease: 'power2.out',
+          onComplete: () => {
+            panel.style.height = 'auto';
+          }
+        });
+      } else {
+        window.gsap.to(panel, {
+          height: 0,
+          opacity: 0,
+          y: -6,
+          duration: 0.24,
+          ease: 'power2.in',
+          onComplete: () => {
+            panel.classList.add('hidden');
+            panel.style.height = '';
+            panel.style.opacity = '';
+            panel.style.transform = '';
+          }
+        });
       }
     });
-  }
-
-  window.addEventListener('scroll', checkReveal, { passive: true });
-  checkReveal();
+  });
 
   bindNewsletterForm();
   initTypewriters();
@@ -1251,6 +1290,13 @@ function bindNewsletterForm() {
   const defaultMessage = isNl
     ? 'Nieuws, nieuwe muziek en optredens landen hier als eerste.'
     : 'News, new music and performances arrive here first.';
+  const syncValidityState = () => {
+    form.classList.toggle('is-focused', document.activeElement === input);
+    form.classList.toggle('is-valid', Boolean(input.value.trim()) && input.checkValidity());
+  };
+
+  input.addEventListener('focus', syncValidityState);
+  input.addEventListener('blur', syncValidityState);
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -1282,7 +1328,10 @@ function bindNewsletterForm() {
   input.addEventListener('input', () => {
     feedback.classList.remove('newsletter-feedback-error');
     feedback.textContent = defaultMessage;
+    syncValidityState();
   });
+
+  syncValidityState();
 }
 
 function initTypewriters() {
@@ -1605,8 +1654,153 @@ function initHeroWillowBorder() {
 }
 
 function initHomepageMotion() {
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reducedMotion) {
+    document.documentElement.classList.remove('motion-ready');
+    document.querySelectorAll('.motion-paper-lift, .motion-margin-slide, .motion-annotation-pop, .motion-draw-divider, .motion-stagger-ledger, .motion-stagger-shop').forEach((node) => {
+      node.classList.add('motion-settled');
+    });
+    return;
+  }
+
   ensureGsap().then((gsapInstance) => {
     if (!gsapInstance) return;
+
+    const withIrregularity = (index, base = 0.08, variance = 0.03) => base + ((index % 2 === 0 ? 1 : -1) * variance * ((index % 3) + 1) * 0.25);
+    const paperLift = (elements, vars = {}) => {
+      const items = Array.from(elements || []);
+      if (!items.length) return;
+      gsapInstance.fromTo(items, {
+        opacity: 0,
+        y: vars.fromY ?? 28,
+        rotate: vars.fromRotate ?? -0.6,
+        filter: 'blur(4px)'
+      }, {
+        opacity: 1,
+        y: 0,
+        rotate: 0,
+        filter: 'blur(0px)',
+        duration: vars.duration ?? 0.78,
+        stagger: vars.stagger ?? 0.08,
+        ease: vars.ease ?? 'power3.out',
+        clearProps: 'opacity,transform,filter'
+      });
+    };
+    const marginSlide = (elements, vars = {}) => {
+      const items = Array.from(elements || []);
+      if (!items.length) return;
+      gsapInstance.fromTo(items, {
+        opacity: 0,
+        x: vars.fromX ?? -44,
+        y: vars.fromY ?? 14,
+        rotate: vars.fromRotate ?? -0.9
+      }, {
+        opacity: 1,
+        x: 0,
+        y: 0,
+        rotate: 0,
+        duration: vars.duration ?? 0.84,
+        stagger: vars.stagger ?? 0.08,
+        ease: vars.ease ?? 'power3.out',
+        clearProps: 'opacity,transform'
+      });
+    };
+    const annotationPop = (elements, vars = {}) => {
+      const items = Array.from(elements || []);
+      if (!items.length) return;
+      gsapInstance.fromTo(items, {
+        opacity: 0,
+        y: 8,
+        scale: 0.92,
+        rotate: -3
+      }, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        rotate: vars.rotate ?? -3,
+        duration: vars.duration ?? 0.46,
+        stagger: vars.stagger ?? 0.06,
+        ease: 'back.out(1.35)',
+        clearProps: 'opacity,transform'
+      });
+    };
+    const drawDivider = (elements) => {
+      const items = Array.from(elements || []);
+      items.forEach((divider) => {
+        gsapInstance.fromTo(divider, {
+          opacity: 0.18,
+          scaleX: 0.78,
+          filter: 'blur(1px)'
+        }, {
+          opacity: 1,
+          scaleX: 1,
+          filter: 'blur(0px)',
+          duration: 0.92,
+          ease: 'power2.out',
+          clearProps: 'opacity,transform,filter'
+        });
+      });
+    };
+    const staggerGroup = (items, opts = {}) => {
+      const list = Array.from(items || []);
+      if (!list.length) return;
+      list.forEach((item, index) => {
+        gsapInstance.fromTo(item, {
+          opacity: 0,
+          y: opts.fromY ?? 22,
+          rotate: opts.fromRotate ?? ((index % 2 === 0) ? -0.45 : 0.45)
+        }, {
+          opacity: 1,
+          y: 0,
+          rotate: 0,
+          duration: opts.duration ?? 0.68,
+          delay: index * withIrregularity(index, opts.baseDelay ?? 0.06, opts.variance ?? 0.02),
+          ease: opts.ease ?? 'power2.out',
+          clearProps: 'opacity,transform'
+        });
+      });
+    };
+    const observeOnce = (elements, callback, options = {}) => {
+      const items = Array.from(elements || []);
+      if (!items.length) return;
+      if (!('IntersectionObserver' in window)) {
+        items.forEach((item, index) => callback(item, index, items));
+        return;
+      }
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const index = items.indexOf(entry.target);
+          callback(entry.target, index, items);
+          observer.unobserve(entry.target);
+        });
+      }, {
+        threshold: options.threshold ?? 0.12,
+        rootMargin: options.rootMargin ?? '0px 0px -80px 0px'
+      });
+      items.forEach((item) => observer.observe(item));
+    };
+
+    const observeGroup = (elements, callback, options = {}) => {
+      const items = Array.from(elements || []);
+      if (!items.length) return;
+      if (!('IntersectionObserver' in window)) {
+        callback(items);
+        return;
+      }
+      const trigger = options.trigger || items[0];
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          callback(items);
+          observer.disconnect();
+        });
+      }, {
+        threshold: options.threshold ?? 0.12,
+        rootMargin: options.rootMargin ?? '0px 0px -80px 0px'
+      });
+      observer.observe(trigger);
+    };
 
     const hero = document.querySelector('.hero-home-scene');
     const frame = hero?.querySelector('.hero-parallax-frame');
@@ -1642,67 +1836,140 @@ function initHomepageMotion() {
       requestParallax();
     }
 
-    const dividerObserver = 'IntersectionObserver' in window
-      ? new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          gsapInstance.to(entry.target, {
-            opacity: 1,
-            scaleX: 1,
-            duration: 1.1,
-            ease: 'power2.out'
-          });
-          dividerObserver.unobserve(entry.target);
-        });
-      }, { threshold: 0.2, rootMargin: '0px 0px -60px 0px' })
-      : null;
+    observeOnce(document.querySelectorAll('.motion-paper-lift'), (item) => paperLift(item));
+    observeOnce(document.querySelectorAll('.motion-margin-slide'), (item) => marginSlide(item), { rootMargin: '0px 0px -70px 0px' });
+    observeOnce(document.querySelectorAll('.motion-annotation-pop'), (item) => annotationPop(item), { rootMargin: '0px 0px -120px 0px' });
+    observeOnce(document.querySelectorAll('.motion-draw-divider'), (item) => drawDivider(item), { threshold: 0.2, rootMargin: '0px 0px -60px 0px' });
 
-    document.querySelectorAll('.draw-divider').forEach((divider) => {
-      gsapInstance.set(divider, { opacity: 0.22, scaleX: 0.82 });
-      if (dividerObserver) {
-        dividerObserver.observe(divider);
-      } else {
-        gsapInstance.set(divider, { opacity: 1, scaleX: 1 });
-      }
-    });
+    const ledgerRows = document.querySelectorAll('.tour-row-stagger, .motion-stagger-ledger');
+    if (ledgerRows.length) {
+      observeGroup(ledgerRows, (items) => staggerGroup(items, { fromY: 18, duration: 0.56, baseDelay: 0.05, variance: 0.025 }), {
+        trigger: ledgerRows[0].parentElement || ledgerRows[0]
+      });
+    }
 
-    const staggerGroups = [
-      { selector: '.tour-row-stagger', y: 18, stagger: 0.08, duration: 0.62 },
-      { selector: '.shop-card-stagger', y: 26, stagger: 0.12, duration: 0.8 }
-    ];
+    const shopCards = document.querySelectorAll('.shop-card-stagger, .motion-stagger-shop');
+    if (shopCards.length) {
+      observeGroup(shopCards, (items) => staggerGroup(items, { fromY: 28, fromRotate: -1.1, duration: 0.74, baseDelay: 0.08, variance: 0.035 }), {
+        trigger: shopCards[0].parentElement || shopCards[0]
+      });
+    }
 
-    staggerGroups.forEach((group) => {
-      const items = Array.from(document.querySelectorAll(group.selector));
-      if (!items.length) return;
-
-      const animateItems = () => {
-        gsapInstance.fromTo(items, {
+    document.querySelectorAll('.note-dropdown').forEach((dropdown) => {
+      const panel = dropdown.querySelector('.note-dropdown__panel');
+      const card = dropdown.querySelector('.note-dropdown__card, .mobile-menu-card');
+      const items = dropdown.querySelectorAll('.note-dropdown__item');
+      if (!panel || !card) return;
+      let open = false;
+      const show = () => {
+        if (open) return;
+        open = true;
+        gsapInstance.killTweensOf([card, items]);
+        gsapInstance.set(panel, { pointerEvents: 'auto' });
+        gsapInstance.fromTo(card, {
           opacity: 0,
-          y: group.y,
-          rotate: 0.001
+          y: -10,
+          rotate: -1.2,
+          scale: 0.985
         }, {
           opacity: 1,
           y: 0,
           rotate: 0,
-          duration: group.duration,
-          stagger: group.stagger,
-          ease: 'power2.out',
-          clearProps: 'opacity,transform'
+          scale: 1,
+          duration: 0.24,
+          ease: 'power2.out'
+        });
+        gsapInstance.fromTo(items, {
+          opacity: 0,
+          y: -6
+        }, {
+          opacity: 1,
+          y: 0,
+          duration: 0.22,
+          stagger: 0.03,
+          ease: 'power2.out'
         });
       };
+      const hide = () => {
+        open = false;
+      };
+      dropdown.addEventListener('mouseenter', show);
+      dropdown.addEventListener('focusin', show);
+      dropdown.addEventListener('mouseleave', hide);
+      dropdown.addEventListener('focusout', () => {
+        if (!dropdown.contains(document.activeElement)) hide();
+      });
+    });
 
-      if ('IntersectionObserver' in window) {
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-            animateItems();
-            observer.disconnect();
+    document.querySelectorAll('.stamp-button').forEach((button) => {
+      const pressIn = () => gsapInstance.to(button, {
+        y: 1.5,
+        boxShadow: '0 8px 16px rgba(72, 60, 49, 0.08)',
+        duration: 0.18,
+        ease: 'power2.out',
+        overwrite: true
+      });
+      const pressOut = () => gsapInstance.to(button, {
+        y: 0,
+        boxShadow: '',
+        duration: 0.26,
+        ease: 'elastic.out(1, 0.55)',
+        overwrite: true
+      });
+      button.addEventListener('mouseenter', pressIn);
+      button.addEventListener('mouseleave', pressOut);
+      button.addEventListener('mousedown', pressIn);
+      button.addEventListener('mouseup', pressOut);
+      button.addEventListener('blur', pressOut);
+    });
+
+    document.querySelectorAll('.tilt-card').forEach((card) => {
+      card.addEventListener('pointermove', (event) => {
+        if (window.innerWidth < 768) return;
+        const rect = card.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width - 0.5;
+        const y = (event.clientY - rect.top) / rect.height - 0.5;
+        const chip = card.querySelector('.shop-card-chip');
+        gsapInstance.to(card, {
+          rotateX: y * -3,
+          rotateY: x * 4,
+          x: x * 2,
+          y: y * 2,
+          duration: 0.28,
+          ease: 'power2.out',
+          overwrite: true
+        });
+        if (chip) {
+          gsapInstance.to(chip, {
+            x: x * 4,
+            y: y * 3,
+            duration: 0.28,
+            ease: 'power2.out',
+            overwrite: true
           });
-        }, { threshold: 0.12, rootMargin: '0px 0px -90px 0px' });
-        observer.observe(items[0].parentElement || items[0]);
-      } else {
-        animateItems();
-      }
+        }
+      });
+      card.addEventListener('pointerleave', () => {
+        gsapInstance.to(card, {
+          rotateX: 0,
+          rotateY: 0,
+          x: 0,
+          y: 0,
+          duration: 0.45,
+          ease: 'power3.out',
+          overwrite: true
+        });
+        const chip = card.querySelector('.shop-card-chip');
+        if (chip) {
+          gsapInstance.to(chip, {
+            x: 0,
+            y: 0,
+            duration: 0.4,
+            ease: 'power3.out',
+            overwrite: true
+          });
+        }
+      });
     });
   });
 }
