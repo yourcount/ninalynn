@@ -585,7 +585,9 @@ function renderHero(page) {
   return `
     <section class="relative min-h-screen flex items-center justify-center pt-20">
       <div class="absolute inset-0 z-0 overflow-hidden">
-        <img class="w-full h-full object-cover opacity-40 scale-105" alt="Dreamy flower field" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJT_cDqe7_w_msSikUjE1pbfPucN15Et2DzA6MdRQ0pNpu4LZt9sVM8BsYzR42PPQvjejfIAmmqVOvp8NDngagUiyONhQXM-tEYmQ_UlPZ-fpg4c17JCWm-vHTaFaqDPOSRh-a_S3H7egihvivfn4NYFiuVQ2T8jf2TzlTMm4ZPNP0Cgmn2geIuWsZ7UlCZkQsCkFT6TASf_ml9lkx5oVMfU9f5hLBg4F6ovJp4VBV_rwJM992EJE3eRLDejQ6qmizlhuja2Caiw"/>
+        <video class="w-full h-full object-cover opacity-40 scale-105" autoplay muted loop playsinline preload="auto">
+          <source src="https://ninalynn.nl/wp-content/uploads/2021/01/Slider_short.mp4" type="video/mp4"/>
+        </video>
         <div class="absolute inset-0 bg-gradient-to-b from-parchment/20 via-transparent to-parchment"></div>
       </div>
       <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
