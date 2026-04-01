@@ -108,5 +108,5 @@ body {
 .mobile-menu.open { transform: translateX(0); }
 
 .arch-frame {
-    border-radius: 12rem 12rem 2rem 2rem;
+    border-radius: 12rem 12rem 0 0;
 }
