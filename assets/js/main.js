@@ -583,15 +583,15 @@ function mobileNavLink(item, path) {
 
 function renderHero(page) {
   return `
-    <section class="relative min-h-screen flex items-center justify-center pt-20 px-6">
-      <div class="absolute inset-0 z-0 flex items-center justify-center">
+    <section class="relative pt-28 pb-6 px-6">
+      <div class="absolute inset-0 z-0 flex items-start justify-center pt-28">
         <div class="w-[82%] max-w-[1150px] h-[72vh] min-h-[30rem] max-h-[820px] arch-frame overflow-hidden opacity-60">
           <video class="block w-full h-full object-cover" autoplay muted loop playsinline preload="auto">
             <source src="https://ninalynn.nl/wp-content/uploads/2021/01/Slider_short.mp4" type="video/mp4"/>
           </video>
         </div>
       </div>
-      <div class="relative z-10 text-center max-w-2xl -mt-8">
+      <div class="relative z-10 text-center max-w-2xl mx-auto pt-[12vh]">
         ${page.eyebrow ? `<span class="font-handwriting text-xl md:text-2xl text-sage/80 block mb-5">${page.eyebrow}</span>` : ''}
         <h1 class="font-headline text-5xl md:text-7xl mb-5 typewriter-cursor">${page.title || ''}</h1>
         <p class="font-body italic text-on-surface-variant mb-8 text-xs md:text-sm bg-parchment/75 backdrop-blur-sm px-5 py-3 rounded-sm inline-block max-w-[36rem]">
@@ -600,9 +600,6 @@ function renderHero(page) {
         <div class="flex flex-wrap items-center justify-center gap-4">
           ${(page.primaryCtas || []).map(cta => `<a class="btn-pill font-body text-[10px] uppercase tracking-[0.25em] px-7 py-3" href="${cta.href}">${cta.label}</a>`).join('')}
         </div>
-      </div>
-      <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 opacity-40 animate-bounce">
-        <span class="material-symbols-outlined text-sage text-lg">expand_more</span>
       </div>
     </section>
   `;
