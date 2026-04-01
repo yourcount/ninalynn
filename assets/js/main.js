@@ -585,20 +585,18 @@ function renderHero(page) {
   return `
     <section class="relative min-h-screen flex items-center justify-center pt-20 px-6">
       <div class="absolute inset-0 z-0 flex items-center justify-center">
-        <div class="w-4/5 max-w-5xl h-[68vh] min-h-[28rem] max-h-[52rem] arch-frame overflow-hidden opacity-60">
-          <video class="w-full h-full object-cover" autoplay muted loop playsinline preload="auto">
-            <source src="https://ninalynn.nl/wp-content/uploads/2021/01/Slider_short.mp4" type="video/mp4"/>
-          </video>
+        <div class="w-[82%] max-w-[1150px] h-[72vh] min-h-[30rem] max-h-[820px] arch-frame overflow-hidden opacity-60">
+          <img class="w-full h-full object-cover" alt="Hero" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJT_cDqe7_w_msSikUjE1pbfPucN15Et2DzA6MdRQ0pNpu4LZt9sVM8BsYzR42PPQvjejfIAmmqVOvp8NDngagUiyONhQXM-tEYmQ_UlPZ-fpg4c17JCWm-vHTaFaqDPOSRh-a_S3H7egihvivfn4NYFiuVQ2T8jf2TzlTMm4ZPNP0Cgmn2geIuWsZ7UlCZkQsCkFT6TASf_ml9lkx5oVMfU9f5hLBg4F6ovJp4VBV_rwJM992EJE3eRLDejQ6qmizlhuja2Caiw"/>
         </div>
       </div>
-      <div class="relative z-10 text-center max-w-2xl">
-        ${page.eyebrow ? `<span class="font-handwriting text-2xl text-sage block mb-6">${page.eyebrow}</span>` : ''}
-        <h1 class="font-headline text-5xl md:text-8xl mb-6 typewriter-cursor">${page.title || ''}</h1>
-        <p class="font-body italic text-on-surface-variant mb-12 text-sm md:text-base bg-parchment/60 backdrop-blur-sm p-4 rounded-lg inline-block">
+      <div class="relative z-10 text-center max-w-2xl -mt-8">
+        ${page.eyebrow ? `<span class="font-handwriting text-xl md:text-2xl text-sage/80 block mb-5">${page.eyebrow}</span>` : ''}
+        <h1 class="font-headline text-5xl md:text-7xl mb-5 typewriter-cursor">${page.title || ''}</h1>
+        <p class="font-body italic text-on-surface-variant mb-8 text-xs md:text-sm bg-parchment/75 backdrop-blur-sm px-5 py-3 rounded-sm inline-block max-w-[36rem]">
           ${page.intro || ''}
         </p>
         <div class="flex flex-wrap items-center justify-center gap-4">
-          ${(page.primaryCtas || []).map(cta => `<a class="btn-pill font-body text-xs uppercase tracking-widest" href="${cta.href}">${cta.label}</a>`).join('')}
+          ${(page.primaryCtas || []).map(cta => `<a class="btn-pill font-body text-[10px] uppercase tracking-[0.25em] px-7 py-3" href="${cta.href}">${cta.label}</a>`).join('')}
         </div>
       </div>
       <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 opacity-40 animate-bounce">
