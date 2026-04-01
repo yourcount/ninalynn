@@ -1,5 +1,5 @@
 /* ====================================================
-   Nina Lynn — content-driven renderer
+   NinaLynn — content-driven renderer
    ==================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -405,7 +405,7 @@ function renderPage({ page, menu, footerLinks, path, lang }) {
           ${menu.slice(0, 3).map(item => navLink(item, path)).join('')}
         </div>
         <div class="flex-none flex justify-center items-center gap-2 md:gap-4">
-          <a href="/${lang}/" class="font-headline text-xl md:text-2xl tracking-[0.18em] uppercase text-on-surface hover:text-lavender transition-colors">Nina Lynn</a>
+          <a href="/${lang}/" class="font-headline text-xl md:text-2xl tracking-[0.18em] uppercase text-on-surface hover:text-lavender transition-colors">NinaLynn</a>
           <div class="hidden md:flex gap-2 items-center text-[11px] uppercase tracking-[0.25em] text-on-surface-variant">
             <a class="text-on-surface" href="${path}">${lang.toUpperCase()}</a>
             <span>/</span>
@@ -434,7 +434,7 @@ function renderPage({ page, menu, footerLinks, path, lang }) {
       <div class="absolute inset-0 bg-on-surface/20 opacity-0 transition-opacity duration-300 pointer-events-none" id="overlay-bg"></div>
       <div class="mobile-menu absolute right-0 top-0 h-full w-full max-w-[22rem] bg-parchment/95 backdrop-blur-xl px-6 py-8 flex flex-col gap-8 pointer-events-auto shadow-2xl overflow-y-auto" id="mobile-menu">
         <div class="flex items-center justify-between mb-2">
-          <a href="/${lang}/" class="font-headline text-lg tracking-[0.18em] uppercase text-on-surface hover:text-lavender transition-colors">Nina Lynn</a>
+          <a href="/${lang}/" class="font-headline text-lg tracking-[0.18em] uppercase text-on-surface hover:text-lavender transition-colors">NinaLynn</a>
           <button id="menu-close" aria-label="Menu sluiten">
             <span class="material-symbols-outlined text-2xl">close</span>
           </button>
@@ -480,7 +480,7 @@ function renderPage({ page, menu, footerLinks, path, lang }) {
           <span class="material-symbols-outlined">mail</span>
         </div>
         <div class="text-[10px] font-body uppercase tracking-[0.2em] opacity-40 text-center">
-          &copy; Nina Lynn. Hand-annotated in the Botanical Archive.
+          &copy; NinaLynn. Hand-annotated in the Botanical Archive.
         </div>
       </div>
     </footer>
@@ -596,13 +596,17 @@ function navLink(item, path) {
     return `<a class="font-body text-sm ${active ? 'text-lavender' : 'text-on-surface'} hover:text-lavender transition-colors" href="${item.href}">${item.label}</a>`;
   }
 
+  const menuPositionClass = item.label === 'Muziek' || item.label === 'Music'
+    ? 'left-0 translate-x-0'
+    : 'left-1/2 -translate-x-1/2';
+
   return `
     <div class="relative group">
       <a class="font-body text-sm inline-flex items-center gap-2 ${active ? 'text-lavender' : 'text-on-surface'} hover:text-lavender transition-colors" href="${item.href}">
         <span>${item.label}</span>
         <span class="material-symbols-outlined text-base leading-none submenu-caret">expand_more</span>
       </a>
-      <div class="absolute left-1/2 top-full pt-4 -translate-x-1/2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto transition-all duration-300">
+      <div class="absolute ${menuPositionClass} top-full pt-4 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto transition-all duration-300">
         <div class="min-w-[220px] rounded-[28px] border border-sage/15 bg-parchment/95 backdrop-blur-xl shadow-[0_20px_60px_rgba(58,50,45,0.12)] px-5 py-5">
           <div class="flex flex-col gap-3">
             ${item.children.map(child => {
@@ -652,16 +656,16 @@ function escapeHtml(text) {
 
 function renderHero(page) {
   return `
-    <section class="relative min-h-[36rem] sm:min-h-[40rem] md:min-h-screen px-4 md:px-6 pt-24 md:pt-28">
+    <section class="relative min-h-[80vh] sm:min-h-[40rem] md:min-h-screen px-4 md:px-6 pt-24 md:pt-28">
       <div class="absolute inset-x-0 top-24 md:top-28 bottom-0 z-0 flex items-start justify-center">
-        <div class="w-[90%] sm:w-[88%] md:w-[82%] max-w-[1150px] h-[23rem] sm:h-[28rem] md:h-full arch-frame overflow-hidden opacity-60">
+        <div class="w-[90%] sm:w-[88%] md:w-[82%] max-w-[1150px] h-[80vh] sm:h-[28rem] md:h-full arch-frame overflow-hidden opacity-60">
           <video class="block w-full h-full object-cover" autoplay muted loop playsinline preload="auto">
             <source src="https://ninalynn.nl/wp-content/uploads/2021/01/Slider_short.mp4" type="video/mp4"/>
           </video>
         </div>
       </div>
       <div class="absolute inset-x-0 top-24 md:top-28 bottom-0 z-10 pointer-events-none flex justify-center">
-        <div class="w-[90%] sm:w-[88%] md:w-[82%] max-w-[1150px] h-[23rem] sm:h-[28rem] md:h-full relative">
+        <div class="w-[90%] sm:w-[88%] md:w-[82%] max-w-[1150px] h-[80vh] sm:h-[28rem] md:h-full relative">
           ${renderHeroBloom('left')}
           ${renderHeroBloom('right')}
         </div>
@@ -686,9 +690,22 @@ function renderHeroBloom(side) {
     : 'left-0 -translate-x-[85%] md:-translate-x-[92%]';
   const mirrored = side === 'right' ? '-scale-x-100' : '';
   return `
-    <div class="hero-bloom-wrap absolute bottom-0 ${sideClass} ${mirrored} origin-bottom pointer-events-none" data-side="${side}">
+    <div class="hero-bloom-wrap absolute -bottom-[6px] ${sideClass} ${mirrored} origin-bottom pointer-events-none" data-side="${side}">
       <div class="relative w-[170px] md:w-[220px] h-[300px] md:h-[390px] overflow-visible">
-        <svg class="hero-bloom-svg absolute inset-x-0 bottom-0 z-10 w-full h-full overflow-visible" viewBox="0 0 185 330" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <svg class="hero-soil-svg absolute inset-x-0 -bottom-[6px] z-[14] w-full h-[5.1rem] md:h-[5.7rem] overflow-visible" viewBox="0 0 185 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <g class="soil-bed">
+            <path class="soil-fill" d="M2 50C18 47 31 45 46 43C63 41 80 42 97 39C118 35 138 28 183 18V56H2V50Z" fill="#83705D" fill-opacity="0.96"/>
+            <path class="soil-fill-secondary" d="M3 54C22 50 37 48 55 47C72 46 88 48 105 45C128 41 148 34 181 26V56H3V54Z" fill="#685647" fill-opacity="0.84"/>
+            <path class="soil-ridge" d="M2 50C18 47 31 45 46 43C63 41 80 42 97 39C118 35 138 28 183 18" stroke="#655345" stroke-opacity="0.9" stroke-width="1.9" stroke-linecap="round"/>
+            <path class="soil-ridge" d="M13 47C29 45 42 43 56 43C72 43 87 45 102 43C123 39 143 34 171 25" stroke="#A7917A" stroke-opacity="0.34" stroke-width="0.95" stroke-linecap="round"/>
+            <circle class="soil-speck" cx="24" cy="48" r="1.4" fill="#5D4A3C" fill-opacity="0.55"/>
+            <circle class="soil-speck" cx="58" cy="46" r="1.2" fill="#5D4A3C" fill-opacity="0.46"/>
+            <circle class="soil-speck" cx="86" cy="45" r="1.3" fill="#5D4A3C" fill-opacity="0.5"/>
+            <circle class="soil-speck" cx="114" cy="41" r="1.15" fill="#5D4A3C" fill-opacity="0.44"/>
+            <circle class="soil-speck" cx="143" cy="34" r="1.35" fill="#5D4A3C" fill-opacity="0.54"/>
+          </g>
+        </svg>
+        <svg class="hero-bloom-svg absolute inset-x-0 bottom-[6px] z-10 w-full h-full overflow-visible" viewBox="0 0 185 330" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <g class="grass-cluster" stroke="#8BA88E" stroke-linecap="round" opacity="0.75">
             <path class="grass-blade" d="M8 326C12 298 12 274 10 248C8 220 10 194 16 164" stroke-width="0.9"/>
             <path class="grass-blade" d="M16 326C22 286 26 246 34 198" stroke-width="1.1"/>
@@ -1045,8 +1062,23 @@ function initHeroBlooms() {
   ensureGsap().then((gsapInstance) => {
     if (!gsapInstance) return;
 
+    const soilLayers = document.querySelectorAll('.hero-soil-svg');
+    if (soilLayers.length) {
+      gsapInstance.set(soilLayers, {
+        y: 18,
+        opacity: 0
+      });
+      gsapInstance.to(soilLayers, {
+        y: 0,
+        opacity: 1,
+        duration: 1.15,
+        stagger: 0.08,
+        ease: 'power2.out'
+      });
+    }
+
     document.querySelectorAll('.hero-bloom-svg').forEach((svg, index) => {
-      const tl = gsapInstance.timeline({ delay: 0.35 + index * 0.18 });
+      const tl = gsapInstance.timeline({ delay: 0.75 + index * 0.18 });
       const grasses = svg.querySelectorAll('.grass-blade');
       const blooms = svg.querySelectorAll('.bloom');
       const stems = svg.querySelectorAll('.bloom-stem');

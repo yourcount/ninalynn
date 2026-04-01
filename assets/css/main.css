@@ -278,6 +278,19 @@ main {
     isolation: isolate;
 }
 
+.hero-soil-svg {
+    width: 94%;
+}
+
+.hero-bloom-wrap[data-side="left"] .hero-soil-svg {
+    left: 0;
+}
+
+.hero-bloom-wrap[data-side="right"] .hero-soil-svg {
+    left: auto;
+    right: 0;
+}
+
 @media (max-width: 767px) {
     .arch-frame {
         border-radius: 5rem 5rem 0 0;
@@ -303,6 +316,14 @@ main {
     .hero-bloom-wrap > div {
         width: 96px;
         height: 188px;
+    }
+
+    .hero-soil-svg {
+        width: 92%;
+    }
+
+    .hero-bloom-wrap[data-side="left"] .hero-soil-svg {
+        left: 0;
     }
 
     .hero-bloom-wrap[data-side="left"] {
