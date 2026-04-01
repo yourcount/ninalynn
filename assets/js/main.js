@@ -400,11 +400,11 @@ function renderPage({ page, menu, footerLinks, path, lang }) {
     </svg>
 
     <header class="fixed top-0 w-full z-50 sticky-nav" id="main-header">
-      <nav class="max-w-[1600px] mx-auto px-6 md:px-16 py-6 flex items-center justify-between">
+      <nav class="max-w-[1600px] mx-auto px-4 md:px-16 py-4 md:py-6 flex items-center justify-between">
         <div class="hidden md:flex gap-10 items-center flex-1">
           ${menu.slice(0, 3).map(item => navLink(item, path)).join('')}
         </div>
-        <div class="flex-none flex justify-center items-center gap-4">
+        <div class="flex-none flex justify-center items-center gap-2 md:gap-4">
           <a href="/${lang}/" class="font-headline text-xl md:text-2xl tracking-[0.18em] uppercase text-on-surface hover:text-lavender transition-colors">Nina Lynn</a>
           <div class="hidden md:flex gap-2 items-center text-[11px] uppercase tracking-[0.25em] text-on-surface-variant">
             <a class="text-on-surface" href="${path}">${lang.toUpperCase()}</a>
@@ -419,24 +419,32 @@ function renderPage({ page, menu, footerLinks, path, lang }) {
             <span class="material-symbols-outlined text-sage text-xl">eco</span>
           </div>
         </div>
-        <button class="md:hidden flex flex-col gap-1.5 p-2" id="menu-toggle" aria-label="Menu openen">
-          <span class="block w-6 h-px bg-on-surface transition-all"></span>
-          <span class="block w-6 h-px bg-on-surface transition-all"></span>
-          <span class="block w-4 h-px bg-on-surface transition-all"></span>
-        </button>
+        <div class="md:hidden flex items-center gap-3">
+          <a class="font-body text-[11px] uppercase tracking-[0.22em] text-on-surface-variant hover:text-lavender transition-colors" href="${page.switchHref}">${page.switchLabel}</a>
+          <button class="flex flex-col gap-1.5 p-2 -mr-2" id="menu-toggle" aria-label="Menu openen" aria-expanded="false" aria-controls="mobile-menu">
+            <span class="block w-6 h-px bg-on-surface transition-all"></span>
+            <span class="block w-6 h-px bg-on-surface transition-all"></span>
+            <span class="block w-4 h-px bg-on-surface transition-all"></span>
+          </button>
+        </div>
       </nav>
     </header>
 
     <div class="fixed inset-0 z-[60] pointer-events-none" id="mobile-overlay">
       <div class="absolute inset-0 bg-on-surface/20 opacity-0 transition-opacity duration-300 pointer-events-none" id="overlay-bg"></div>
-      <div class="mobile-menu absolute right-0 top-0 h-full w-72 bg-parchment/95 backdrop-blur-xl p-12 flex flex-col gap-8 pointer-events-auto shadow-2xl" id="mobile-menu">
-        <button class="self-end mb-8" id="menu-close" aria-label="Menu sluiten">
-          <span class="material-symbols-outlined text-2xl">close</span>
-        </button>
+      <div class="mobile-menu absolute right-0 top-0 h-full w-full max-w-[22rem] bg-parchment/95 backdrop-blur-xl px-6 py-8 flex flex-col gap-8 pointer-events-auto shadow-2xl overflow-y-auto" id="mobile-menu">
+        <div class="flex items-center justify-between mb-2">
+          <a href="/${lang}/" class="font-headline text-lg tracking-[0.18em] uppercase text-on-surface hover:text-lavender transition-colors">Nina Lynn</a>
+          <button id="menu-close" aria-label="Menu sluiten">
+            <span class="material-symbols-outlined text-2xl">close</span>
+          </button>
+        </div>
         <div class="flex flex-col gap-6">
           ${menu.map(item => mobileNavLink(item, path)).join('')}
         </div>
-        <a class="font-handwriting text-xl hover:text-lavender transition-colors" href="${page.switchHref}">${page.switchLabel}</a>
+        <div class="pt-2 border-t border-sage/10">
+          <a class="font-body text-sm uppercase tracking-[0.2em] text-on-surface-variant hover:text-lavender transition-colors" href="${page.switchHref}">${lang.toUpperCase()} / ${page.switchLabel}</a>
+        </div>
         <div class="flex gap-6 mt-auto">
           <span class="material-symbols-outlined text-lavender">filter_vintage</span>
           <span class="material-symbols-outlined text-sage">eco</span>
@@ -483,12 +491,12 @@ function renderHome(page, lang) {
   return `
     ${renderHero(page)}
     <div class="w-48 mx-auto divider-motif my-0"></div>
-    <section class="py-24 md:py-32 px-6 max-w-5xl mx-auto relative editorial-divider">
+    <section class="py-20 md:py-32 px-4 md:px-6 max-w-5xl mx-auto relative editorial-divider">
       <div class="absolute -left-10 top-0 opacity-15 hidden lg:block botanical-float pointer-events-none">
         <span class="material-symbols-outlined text-8xl text-sage">local_florist</span>
       </div>
       <div class="reveal-up">
-        <div class="mb-16 md:mb-20 text-center relative">
+        <div class="mb-12 md:mb-20 text-center relative">
           <span class="font-handwriting text-lavender block text-lg md:text-xl mb-2">${page.tour.kicker}</span>
           <h2 class="font-headline text-3xl md:text-4xl text-on-surface">${page.tour.heading}</h2>
         </div>
@@ -501,13 +509,16 @@ function renderHome(page, lang) {
           ${page.tour.rows.map(row => `
             <div class="tour-row md:col-span-12 group hover:bg-sage/5 transition-colors grid grid-cols-1 md:grid-cols-12 items-center">
               <div class="md:col-span-3 pt-8 md:py-8 px-6 md:border-r border-sage/15">
+                <span class="md:hidden font-handwriting text-sage text-xs block mb-2">${lang === 'nl' ? 'Datum' : 'Date'}</span>
                 <span class="font-body text-xs text-sage block tracking-widest">${row.date}</span>
               </div>
               <div class="md:col-span-5 px-6 py-2 md:py-8 md:border-r border-sage/15">
+                <span class="md:hidden font-handwriting text-sage text-xs block mb-2">${lang === 'nl' ? 'Locatie' : 'Venue'}</span>
                 <h3 class="font-headline text-2xl">${row.venue}</h3>
                 <p class="font-handwriting text-sm text-on-surface-variant">${row.location}</p>
               </div>
               <div class="md:col-span-4 pb-8 md:py-8 px-6 flex md:justify-end">
+                <span class="md:hidden font-handwriting text-sage text-xs block mb-2 w-full">${lang === 'nl' ? 'Toegang' : 'Access'}</span>
                 <a class="btn-ghost font-body" href="${row.href}">${row.cta}</a>
               </div>
             </div>
@@ -641,27 +652,27 @@ function escapeHtml(text) {
 
 function renderHero(page) {
   return `
-    <section class="relative min-h-screen px-6 pt-28">
-      <div class="absolute inset-x-0 top-28 bottom-0 z-0 flex items-start justify-center">
-        <div class="w-[82%] max-w-[1150px] h-full arch-frame overflow-hidden opacity-60">
+    <section class="relative min-h-[36rem] sm:min-h-[40rem] md:min-h-screen px-4 md:px-6 pt-24 md:pt-28">
+      <div class="absolute inset-x-0 top-24 md:top-28 bottom-0 z-0 flex items-start justify-center">
+        <div class="w-[90%] sm:w-[88%] md:w-[82%] max-w-[1150px] h-[23rem] sm:h-[28rem] md:h-full arch-frame overflow-hidden opacity-60">
           <video class="block w-full h-full object-cover" autoplay muted loop playsinline preload="auto">
             <source src="https://ninalynn.nl/wp-content/uploads/2021/01/Slider_short.mp4" type="video/mp4"/>
           </video>
         </div>
       </div>
-      <div class="absolute inset-x-0 top-28 bottom-0 z-10 pointer-events-none flex justify-center">
-        <div class="w-[82%] max-w-[1150px] h-full relative">
+      <div class="absolute inset-x-0 top-24 md:top-28 bottom-0 z-10 pointer-events-none flex justify-center">
+        <div class="w-[90%] sm:w-[88%] md:w-[82%] max-w-[1150px] h-[23rem] sm:h-[28rem] md:h-full relative">
           ${renderHeroBloom('left')}
           ${renderHeroBloom('right')}
         </div>
       </div>
-      <div class="relative z-10 text-center max-w-2xl mx-auto pt-[18vh]">
-        ${page.eyebrow ? `<span class="font-handwriting text-xl md:text-2xl text-sage/80 block mb-5">${page.eyebrow}</span>` : ''}
-        <h1 class="font-headline text-5xl md:text-7xl mb-5"><span class="typewriter-anim typewriter-target" data-text="${escapeHtml(page.title || '')}"></span></h1>
-        <p class="font-body italic text-on-surface-variant mb-8 text-xs md:text-sm bg-parchment/75 backdrop-blur-sm px-5 py-3 rounded-sm inline-block max-w-[36rem]">
+      <div class="relative z-10 text-center max-w-2xl mx-auto pt-24 sm:pt-28 md:pt-[18vh] px-4">
+        ${page.eyebrow ? `<span class="font-handwriting text-lg md:text-2xl text-sage/80 block mb-4 md:mb-5">${page.eyebrow}</span>` : ''}
+        <h1 class="font-headline text-4xl sm:text-5xl md:text-7xl mb-4 md:mb-5"><span class="typewriter-anim typewriter-target" data-text="${escapeHtml(page.title || '')}"></span></h1>
+        <p class="font-body italic text-on-surface-variant mb-6 md:mb-8 text-[11px] md:text-sm bg-parchment/75 backdrop-blur-sm px-4 md:px-5 py-3 rounded-sm inline-block max-w-[36rem]">
           ${page.intro || ''}
         </p>
-        <div class="flex flex-wrap items-center justify-center gap-4">
+        <div class="flex flex-wrap items-center justify-center gap-3 md:gap-4">
           ${(page.primaryCtas || []).map(cta => `<a class="btn-pill btn-pill-hero font-body text-[10px] uppercase tracking-[0.25em] px-7 py-3" href="${cta.href}">${cta.label}</a>`).join('')}
         </div>
       </div>
@@ -675,7 +686,7 @@ function renderHeroBloom(side) {
     : 'left-0 -translate-x-[85%] md:-translate-x-[92%]';
   const mirrored = side === 'right' ? '-scale-x-100' : '';
   return `
-    <div class="hero-bloom-wrap absolute bottom-0 ${sideClass} ${mirrored} origin-bottom pointer-events-none">
+    <div class="hero-bloom-wrap absolute bottom-0 ${sideClass} ${mirrored} origin-bottom pointer-events-none" data-side="${side}">
       <div class="relative w-[170px] md:w-[220px] h-[300px] md:h-[390px] overflow-visible">
         <svg class="hero-bloom-svg absolute inset-x-0 bottom-0 z-10 w-full h-full overflow-visible" viewBox="0 0 185 330" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <g class="grass-cluster" stroke="#8BA88E" stroke-linecap="round" opacity="0.75">
@@ -940,6 +951,8 @@ function bindUi() {
     overlayBg.style.opacity = '1';
     overlayBg.classList.remove('pointer-events-none');
     mobileOverlay.classList.remove('pointer-events-none');
+    menuToggle?.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
   }
 
   function closeMenu() {
@@ -948,6 +961,8 @@ function bindUi() {
     overlayBg.style.opacity = '0';
     overlayBg.classList.add('pointer-events-none');
     mobileOverlay.classList.add('pointer-events-none');
+    menuToggle?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
   }
 
   if (menuToggle && menuClose && mobileMenu && overlayBg) {
